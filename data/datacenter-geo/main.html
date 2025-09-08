@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de GeoJSON</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .upload-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .file-input-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-label {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .file-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .file-info {
+            margin-left: 15px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .control-group input, .control-group select {
+            padding: 8px 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .control-group input:focus, .control-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .map-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #map {
+            height: 600px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-panel h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .feature-count {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #c33;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .popup-content {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .popup-content table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .popup-content th, .popup-content td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .popup-content th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .control-group {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗺️ Visualizador de GeoJSON</h1>
+            <p>Carga tu archivo GeoJSON y explora tus datos geoespaciales de forma interactiva</p>
+        </div>
+
+        <div class="upload-section">
+            <div class="file-input-container">
+                <input type="file" id="fileInput" class="file-input" accept=".geojson,.json" />
+                <label for="fileInput" class="file-label">📁 Seleccionar archivo GeoJSON</label>
+                <span class="file-info" id="fileInfo">Ningún archivo seleccionado</span>
+            </div>
+
+            <div class="controls">
+                <div class="control-group">
+                    <label for="fillColor">Color de relleno:</label>
+                    <input type="color" id="fillColor" value="#3388ff">
+                </div>
+                <div class="control-group">
+                    <label for="strokeColor">Color del borde:</label>
+                    <input type="color" id="strokeColor" value="#3388ff">
+                </div>
+                <div class="control-group">
+                    <label for="opacity">Opacidad:</label>
+                    <input type="range" id="opacity" min="0" max="1" step="0.1" value="0.6">
+                    <span id="opacityValue">0.6</span>
+                </div>
+                <div class="control-group">
+                    <label for="strokeWidth">Grosor del borde:</label>
+                    <input type="range" id="strokeWidth" min="1" max="10" step="1" value="2">
+                    <span id="strokeWidthValue">2</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+
+        <div class="info-panel" id="infoPanel" style="display: none;">
+            <h3>📊 Información del GeoJSON</h3>
+            <div id="infoContent"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script>
+        // Inicializar el mapa
+        const map = L.map('map').setView([40.4168, -3.7038], 6); // Centrado en España por defecto
+
+        // Añadir capa base de OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        let currentGeoJSONLayer = null;
+        let geojsonData = null;
+
+        // Referencias a elementos del DOM
+        const fileInput = document.getElementById('fileInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const fillColorInput = document.getElementById('fillColor');
+        const strokeColorInput = document.getElementById('strokeColor');
+        const opacityInput = document.getElementById('opacity');
+        const strokeWidthInput = document.getElementById('strokeWidth');
+        const opacityValue = document.getElementById('opacityValue');
+        const strokeWidthValue = document.getElementById('strokeWidthValue');
+        const infoPanel = document.getElementById('infoPanel');
+        const infoContent = document.getElementById('infoContent');
+
+        // Actualizar valores mostrados de los controles
+        opacityInput.addEventListener('input', (e) => {
+            opacityValue.textContent = e.target.value;
+            updateLayerStyle();
+        });
+
+        strokeWidthInput.addEventListener('input', (e) => {
+            strokeWidthValue.textContent = e.target.value;
+            updateLayerStyle();
+        });
+
+        // Event listeners para cambios de estilo
+        [fillColorInput, strokeColorInput].forEach(input => {
+            input.addEventListener('change', updateLayerStyle);
+        });
+
+        // Manejar la carga de archivos
+        fileInput.addEventListener('change', handleFileLoad);
+
+        function handleFileLoad(event) {
+            const file = event.target.files[0];
+            
+            if (!file) return;
+
+            fileInfo.textContent = `${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    showLoading();
+                    const jsonData = JSON.parse(e.target.result);
+                    loadGeoJSON(jsonData);
+                } catch (error) {
+                    showError('Error al parsear el archivo JSON: ' + error.message);
+                }
+            };
+
+            reader.onerror = function() {
+                showError('Error al leer el archivo');
+            };
+
+            reader.readAsText(file);
+        }
+
+        function loadGeoJSON(data) {
+            try {
+                // Remover capa anterior si existe
+                if (currentGeoJSONLayer) {
+                    map.removeLayer(currentGeoJSONLayer);
+                }
+
+                geojsonData = data;
+
+                // Crear nueva capa GeoJSON
+                currentGeoJSONLayer = L.geoJSON(data, {
+                    style: getLayerStyle,
+                    onEachFeature: function(feature, layer) {
+                        // Añadir popup con información de la feature
+                        if (feature.properties) {
+                            const popupContent = createPopupContent(feature.properties);
+                            layer.bindPopup(popupContent);
+                        }
+
+                        // Añadir eventos hover
+                        layer.on({
+                            mouseover: function(e) {
+                                const layer = e.target;
+                                layer.setStyle({
+                                    weight: parseInt(strokeWidthInput.value) + 2,
+                                    fillOpacity: Math.min(parseFloat(opacityInput.value) + 0.2, 1)
+                                });
+                            },
+                            mouseout: function(e) {
+                                currentGeoJSONLayer.resetStyle(e.target);
+                            }
+                        });
+                    },
+                    pointToLayer: function(feature, latlng) {
+                        return L.circleMarker(latlng, {
+                            radius: 8,
+                            ...getLayerStyle()
+                        });
+                    }
+                }).addTo(map);
+
+                // Ajustar vista al contenido
+                map.fitBounds(currentGeoJSONLayer.getBounds(), { padding: [10, 10] });
+
+                // Mostrar información
+                showInfo(data);
+                hideLoading();
+
+            } catch (error) {
+                showError('Error al cargar GeoJSON: ' + error.message);
+                hideLoading();
+            }
+        }
+
+        function getLayerStyle() {
+            return {
+                fillColor: fillColorInput.value,
+                color: strokeColorInput.value,
+                weight: parseInt(strokeWidthInput.value),
+                opacity: 1,
+                fillOpacity: parseFloat(opacityInput.value)
+            };
+        }
+
+        function updateLayerStyle() {
+            if (currentGeoJSONLayer) {
+                currentGeoJSONLayer.setStyle(getLayerStyle);
+            }
+        }
+
+        function createPopupContent(properties) {
+            let content = '<div class="popup-content"><table>';
+            
+            for (const [key, value] of Object.entries(properties)) {
+                content += `<tr><th>${key}</th><td>${value !== null && value !== undefined ? value : 'N/A'}</td></tr>`;
+            }
+            
+            content += '</table></div>';
+            return content;
+        }
+
+        function showInfo(data) {
+            const features = data.features || [];
+            const featureTypes = {};
+            
+            features.forEach(feature => {
+                const type = feature.geometry ? feature.geometry.type : 'Unknown';
+                featureTypes[type] = (featureTypes[type] || 0) + 1;
+            });
+
+            let infoHtml = `<div class="feature-count">Total de features: ${features.length}</div>`;
+            
+            if (Object.keys(featureTypes).length > 0) {
+                infoHtml += '<h4>Tipos de geometría:</h4><ul>';
+                for (const [type, count] of Object.entries(featureTypes)) {
+                    infoHtml += `<li><strong>${type}:</strong> ${count}</li>`;
+                }
+                infoHtml += '</ul>';
+            }
+
+            // Mostrar algunas propiedades de ejemplo
+            if (features.length > 0 && features[0].properties) {
+                const sampleProps = Object.keys(features[0].properties).slice(0, 5);
+                if (sampleProps.length > 0) {
+                    infoHtml += '<h4>Propiedades disponibles (muestra):</h4><ul>';
+                    sampleProps.forEach(prop => {
+                        infoHtml += `<li>${prop}</li>`;
+                    });
+                    if (Object.keys(features[0].properties).length > 5) {
+                        infoHtml += `<li><em>... y ${Object.keys(features[0].properties).length - 5} más</em></li>`;
+                    }
+                    infoHtml += '</ul>';
+                }
+            }
+
+            infoContent.innerHTML = infoHtml;
+            infoPanel.style.display = 'block';
+        }
+
+        function showLoading() {
+            infoContent.innerHTML = '<div class="loading">Cargando GeoJSON...</div>';
+            infoPanel.style.display = 'block';
+        }
+
+        function hideLoading() {
+            // La función showInfo se encargará de mostrar el contenido correcto
+        }
+
+        function showError(message) {
+            infoContent.innerHTML = `<div class="error-message">${message}</div>`;
+            infoPanel.style.display = 'block';
+        }
+
+        // Añadir controles adicionales al mapa
+        const legend = L.control({ position: 'bottomright' });
+        legend.onAdd = function() {
+            const div = L.DomUtil.create('div', 'info legend');
+            div.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+            div.style.padding = '10px';
+            div.style.borderRadius = '8px';
+            div.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+            div.innerHTML = '<h4>💡 Controles</h4>' +
+                           '<small>• Haz clic en las features para ver detalles<br>' +
+                           '• Usa la rueda del ratón para zoom<br>' +
+                           '• Arrastra para mover el mapa</small>';
+            return div;
+        };
+        legend.addTo(map);
+    </script>
+</body>
+</html>

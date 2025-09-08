@@ -1,0 +1,923 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.33558968403438,
+          -70.70639242972275
+        ]
+      },
+      "properties": {
+        "name": "Ascenty - Santiago SCL1",
+        "company_name": "Ascenty",
+        "address": "C. Guacolda 2100, Bldg 1, Quilicura, Renca",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.33558968403438,
+          -70.70639242972275
+        ]
+      },
+      "properties": {
+        "name": "Ascenty - Santiago SCL2",
+        "company_name": "Ascenty",
+        "address": "C. Guacolda 2100, Bldg 2, Quilicura, Renca",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.33558968403438,
+          -70.70639242972275
+        ]
+      },
+      "properties": {
+        "name": "Ascenty - Santiago SCL3",
+        "company_name": "Ascenty",
+        "address": "C. Guacolda 2100, Bldg 3, Quilicura, Renca",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.24001717805202,
+          -70.74398488335373
+        ]
+      },
+      "properties": {
+        "name": "Claro Data Center Liray",
+        "company_name": "Claro",
+        "address": "Liray 18",
+        "city": "Colina",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.45010665921085,
+          -70.62796057863828
+        ]
+      },
+      "properties": {
+        "name": "HN Datacenter",
+        "company_name": "Hostname",
+        "address": "Seminario 687",
+        "city": "Ñuñoa",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.35840113563164,
+          -70.69723671291842
+        ]
+      },
+      "properties": {
+        "name": "Google Quilicura Data Center",
+        "company_name": "Google",
+        "address": "El Molino 2130, Quilicura",
+        "city": "Quilicura",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.418313146651734,
+          -70.5993298637782
+        ]
+      },
+      "properties": {
+        "name": "IPXON Santiago",
+        "company_name": "IPXON Networks",
+        "address": "Avenida El Bosque 90",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.480460155693706,
+          -70.54606812183184
+        ]
+      },
+      "properties": {
+        "name": "Chilecom Datacenter",
+        "company_name": "Chilecom Datacenter Ltda.",
+        "address": "Océano Pacífico Nte. 8496",
+        "city": "Peñalolén",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.44288760330452,
+          -70.64495035078461
+        ]
+      },
+      "properties": {
+        "name": "Entel",
+        "company_name": "Entel Central",
+        "address": "Av. Alameda Libertador Bernardo O'Higgins 600",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.29703262250613,
+          -70.70448628272023
+        ]
+      },
+      "properties": {
+        "name": "EdgeConnex Santiago - SCL01",
+        "company_name": "EdgeConnex",
+        "address": "Carretera General San Martin 8400",
+        "city": "Colina2",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.29703262250613,
+          -70.70448628272023
+        ]
+      },
+      "properties": {
+        "name": "EdgeConnex Santiago - SCL02",
+        "company_name": "EdgeConnex",
+        "address": "Carretera General San Martin 8400",
+        "city": "Colina",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.43769279976376,
+          -70.60808239785086
+        ]
+      },
+      "properties": {
+        "name": "S&A Chile",
+        "company_name": "S&A Chile",
+        "address": "Pedro de Valdivia 1609",
+        "city": "Providencia",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.454912304617764,
+          -70.63287225945061
+        ]
+      },
+      "properties": {
+        "name": "IIA Data Center",
+        "company_name": "Ingeniería e Informática Asociada (IIA)",
+        "address": "Porvenir 245",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.44367742281427,
+          -70.65765226838984
+        ]
+      },
+      "properties": {
+        "name": "NextStream San Martin",
+        "company_name": "NextStream",
+        "address": "San Martín 48",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.408157233892084,
+          -70.5571338539328
+        ]
+      },
+      "properties": {
+        "name": "NextStream Apoquindo",
+        "company_name": "NextStream",
+        "address": "Av. Apoquindo 7071, Las Condes",
+        "city": "Las Condes",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.431947383638665,
+          -70.6019953915958
+        ]
+      },
+      "properties": {
+        "name": "InterNexa Santiago",
+        "company_name": "InterNexa",
+        "address": "1380 Avenida Los Leones",
+        "city": "Providencia",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.553278701658876,
+          -70.71159723536316
+        ]
+      },
+      "properties": {
+        "name": "Kyndryl DC San Bernardo",
+        "company_name": "Kyndryl",
+        "address": "Av. Prta Sur, Sitio 6",
+        "city": "San Bernardo",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.44829714126663,
+          -70.85101067840934
+        ]
+      },
+      "properties": {
+        "name": "Equinix ST1",
+        "company_name": "Equinix",
+        "address": "Avenida los Vientos, 20239",
+        "city": "Pudahuel",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.44829714126663,
+          -70.85101067840934
+        ]
+      },
+      "properties": {
+        "name": "Equinix ST2",
+        "company_name": "Equinix",
+        "address": "Avenida los Vientos, 20239",
+        "city": "Pudahuel",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.44401975555992,
+          -70.65577998410814
+        ]
+      },
+      "properties": {
+        "name": "Equinix ST3",
+        "company_name": "Equinix",
+        "address": "Pasaje Nueva Amunátegui 26, de 105",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.387208757524476,
+          -70.61649525466099
+        ]
+      },
+      "properties": {
+        "name": "UFINET Magnus I",
+        "company_name": "Ufinet",
+        "address": "Del Valle 928",
+        "city": "Huechuraba",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.386641456937255,
+          -70.61632934958608
+        ]
+      },
+      "properties": {
+        "name": "UFINET Magnus II",
+        "company_name": "Ufinet",
+        "address": "Avenida Los Jardines 927",
+        "city": "Huechuraba",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.306971818279905,
+          -70.7277890745776
+        ]
+      },
+      "properties": {
+        "name": "ODATA ST01",
+        "company_name": "ODATA",
+        "address": "Av. Presidente Eduardo Frei Montalva",
+        "city": "Lampa",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.531548416640746,
+          -70.70976748045028
+        ]
+      },
+      "properties": {
+        "name": "ODATA ST02",
+        "company_name": "ODATA",
+        "address": "Avenida Lo Espejo 03474",
+        "city": "San Bernardo",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.42610022148325,
+          -70.59841086953732
+        ]
+      },
+      "properties": {
+        "name": "Databyte Santiago",
+        "company_name": "Databyte",
+        "address": "Av. Hernando de Aguirre 906",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.42652278701628,
+          -70.61598423440219
+        ]
+      },
+      "properties": {
+        "name": "HostingPlus Chile",
+        "company_name": "HostingPlus",
+        "address": "Av. Providencia 1650, Office 303",
+        "city": "Providencia",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.35654092322809,
+          -70.69888493057717
+        ]
+      },
+      "properties": {
+        "name": "Sonda Kudos",
+        "company_name": "Sonda S.A",
+        "address": "Victor Uribe 2211",
+        "city": "Quilicura",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.35795421471603,
+          -70.67576945934924
+        ]
+      },
+      "properties": {
+        "name": "Cirion SAN1",
+        "company_name": "Cirion",
+        "address": "Avenida Santa Marta de Huechuraba 6951",
+        "city": "Huechuraba",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.44789716380653,
+          -70.61995638338558
+        ]
+      },
+      "properties": {
+        "name": "Datacenter PowerHost IXMetro",
+        "company_name": "PowerHost Datacenter",
+        "address": "Luis Beltran 1647",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.44268378209591,
+          -70.64443066697514
+        ]
+      },
+      "properties": {
+        "name": "Anacondaweb Santiago",
+        "company_name": "Anacondaweb S.A",
+        "address": "Av. Alameda Libertador Bernardo O'Higgins 580",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.41831047816306,
+          -70.59937358102815
+        ]
+      },
+      "properties": {
+        "name": "NXnet Chile",
+        "company_name": "NXnet Solutions",
+        "address": "Av. El Bosque Sur 90",
+        "city": "Las Condes",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.4373521596738,
+          -70.64936271542932
+        ]
+      },
+      "properties": {
+        "name": "IFX Phillips",
+        "company_name": "IFX Networks",
+        "address": "Calle Phillips # 15 Piso 2",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.41830707446522,
+          -70.59935777042176
+        ]
+      },
+      "properties": {
+        "name": "IFX Elbosque",
+        "company_name": "IFX Networks",
+        "address": "Av ElBosque Sur 90",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.387154309506755,
+          -70.61649107727735
+        ]
+      },
+      "properties": {
+        "name": "IFX Magnus I",
+        "company_name": "IFX Networks",
+        "address": "Avenida del Valle # 928, Oficina 101",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.435265679633645,
+          -70.64907568853998
+        ]
+      },
+      "properties": {
+        "name": "Lídice I",
+        "company_name": "GTD",
+        "address": "Lidice 814",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.435378330942875,
+          -70.64918642851646
+        ]
+      },
+      "properties": {
+        "name": "Lídice II",
+        "company_name": "GTD",
+        "address": "Lidice 652",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.4335596927796,
+          -70.62150809941565
+        ]
+      },
+      "properties": {
+        "name": "GTD Providencia",
+        "company_name": "GTD",
+        "address": "Eliodoro Yáñez 996",
+        "city": "Providencia",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.419887270049756,
+          -70.60421838641685
+        ]
+      },
+      "properties": {
+        "name": "GTD Holanda",
+        "company_name": "GTD",
+        "address": "Av. Holanda 65",
+        "city": "Providencia",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.441875006726754,
+          -70.64951762006783
+        ]
+      },
+      "properties": {
+        "name": "GTD Moneda",
+        "company_name": "GTD",
+        "address": "Moneda 920",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.43964357391443,
+          -70.6526498183621
+        ]
+      },
+      "properties": {
+        "name": "GTD Huerfanos",
+        "company_name": "GTD",
+        "address": "Huérfanos 1117",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.38794965709419,
+          -70.68914915183454
+        ]
+      },
+      "properties": {
+        "name": "GTD Panamericana",
+        "company_name": "GTD",
+        "address": "Panamericana Nte. 3615",
+        "city": "Santiago",
+        "state": "Región Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.48067985528425,
+          -70.54603350945861
+        ]
+      },
+      "properties": {
+        "name": "WireNet Chile Datacenter",
+        "company_name": "WireNet Chile Ltda.",
+        "address": "Oceano Pacifico Norte 8506",
+        "city": "Peñalolen",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.428157134696455,
+          -70.61132440506557
+        ]
+      },
+      "properties": {
+        "name": "Intercity Datacenter",
+        "company_name": "Intercity Networks",
+        "address": "Europa 1969",
+        "city": "Santiago",
+        "state": "Region Metropolitana",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -53.04364438579832,
+          -70.86982450631442
+        ]
+      },
+      "properties": {
+        "name": "Apoapsis",
+        "company_name": "Apoapsis SpA",
+        "address": "Av. Las Loicas 1160, Ojo Bueno",
+        "city": "Punta Arenas",
+        "state": "Magallanes y la Antartica Chilena",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -38.742746349293554,
+          -72.59600232442152
+        ]
+      },
+      "properties": {
+        "name": "Anacondaweb Temuco",
+        "company_name": "Anacondaweb S.A",
+        "address": "Bernardo O'Higgins 485",
+        "city": "Temuco",
+        "state": "Aisén",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -32.84211624349566,
+          -70.60092929471702
+        ]
+      },
+      "properties": {
+        "name": "OpenHost Datacenter",
+        "company_name": "Hosted Ltda.",
+        "address": "Av. Chile 474",
+        "city": "Los Andes",
+        "state": "Valparaíso",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.135984979195726,
+          -71.55881037120824
+        ]
+      },
+      "properties": {
+        "name": "SSCLCR01",
+        "company_name": "Scala Data Centers",
+        "address": "Av. Tupungato 3371",
+        "city": "Placilla",
+        "state": "Vaparaíso",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -33.81243486061017,
+          -70.74882960695342
+        ]
+      },
+      "properties": {
+        "name": "NextStream Paine",
+        "company_name": "NextStream",
+        "address": "Presidente Prieto 226",
+        "city": "Paine",
+        "state": "O'Higgins",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -36.81560823871166,
+          -73.04836452059571
+        ]
+      },
+      "properties": {
+        "name": "Opciones Concepción",
+        "company_name": "Opciones S.A",
+        "address": "Ongolmo 1280",
+        "city": "Concepción",
+        "state": "Biobío",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -41.48707590192612,
+          -73.0229677048695
+        ]
+      },
+      "properties": {
+        "name": "GTD Puerto Montt",
+        "company_name": "GTD Chile",
+        "address": "Ruta 5 Sur 1028",
+        "city": "Puerto Montt",
+        "state": "Los Ríos",
+        "country": "Chile"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -41.467543585864384,
+          -72.94030037180688
+        ]
+      },
+      "properties": {
+        "name": "Opciones Puerto Montt",
+        "company_name": "Opciones S.A",
+        "address": "Seminario 372",
+        "city": "Puerto Montt",
+        "state": "Los Ríos",
+        "country": "Chile"
+      }
+    }
+  ]
+}

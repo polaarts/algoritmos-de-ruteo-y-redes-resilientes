@@ -1,0 +1,1020 @@
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.33558968403438, -70.70639242972275] },
+"properties": {
+"name": "Ascenty - Santiago SCL1",
+"id": ,
+"company_name": "Ascenty",
+"company_id": ,
+"link_company": "https://ascenty.com/data-centers/localizacao/chile/",
+"link_profile": "https://www.datacentermap.com/c/ascenty-data-centers/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.70639242972275,
+"longitude": -33.33558968403438,
+"address": "C. Guacolda 2100, Bldg 1, Quilicura, Renca",
+"postal": "8710067",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.33558968403438, -70.70639242972275] },
+"properties": {
+"name": "Ascenty - Santiago SCL2",
+"id": ,
+"company_name": "Ascenty",
+"company_id": ,
+"link_company": "https://ascenty.com/data-centers/localizacao/chile/",
+"link_profile": "https://www.datacentermap.com/c/ascenty-data-centers/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.70639242972275,
+"longitude": -33.33558968403438,
+"address": "C. Guacolda 2100, Bldg 2, Quilicura, Renca",
+"postal": "8710067",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.33558968403438, -70.70639242972275] },
+"properties": {
+"name": "Ascenty - Santiago SCL3",
+"id": ,
+"company_name": "Ascenty",
+"company_id": ,
+"link_company": "https://ascenty.com/data-centers/localizacao/chile/",
+"link_profile": "https://www.datacentermap.com/c/ascenty-data-centers/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.70639242972275,
+"longitude": -33.33558968403438,
+"address": "C. Guacolda 2100, Bldg 3, Quilicura, Renca",
+"postal": "8710067",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.24001717805202, -70.74398488335373] },
+"properties": {
+"name": "Claro Data Center Liray",
+"id": ,
+"company_name": "Claro",
+"company_id": ,
+"link_company": "http://www.clarochile.cl/",
+"link_profile": "https://www.datacentermap.com/chile/santiago/claro-data-center-liray/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.74398488335373,
+"longitude": -33.24001717805202,
+"address": "Liray 18",
+"postal": "9390000",
+"city": "Colina",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.45010665921085, -70.62796057863828] },
+"properties": {
+"name": "HN Datacenter",
+"id": ,
+"company_name": "Hostname",
+"company_id": ,
+"link_company": "https://www.hn.cl/",
+"link_profile": "https://www.datacentermap.com/c/hostnamecl/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.62796057863828,
+"longitude": -33.45010665921085,
+"address": "Seminario 687",
+"postal": "7770266",
+"city": "Ñuñoa",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.35840113563164, -70.69723671291842] },
+"properties": {
+"name": "Google Quilicura Data Center",
+"id": ,
+"company_name": "Google",
+"company_id": ,
+"link_company": "https://datacenters.google/locations/quilicura-chile/",
+"link_profile": "https://www.datacentermap.com/c/google/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.69723671291842,
+"longitude": -33.35840113563164,
+"address": "El Molino 2130, Quilicura",
+"postal": "8710017",
+"city": "Quilicura",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.418313146651734, -70.5993298637782] },
+"properties": {
+"name": "IPXON Santiago",
+"id": ,
+"company_name": "IPXON Networks",
+"company_id": ,
+"link_company": "https://www.ipxon.com/",
+"link_profile": "https://www.datacentermap.com/c/ipxon-networks/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.5993298637782,
+"longitude": -33.418313146651734,
+"address": "Avenida El Bosque 90",
+"postal": "7550248",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.480460155693706, -70.54606812183184] },
+"properties": {
+"name": "Chilecom Datacenter",
+"id": ,
+"company_name": "Chilecom Datacenter Ltda.",
+"company_id": ,
+"link_company": "https://www.chilecom.net/",
+"link_profile": "https://www.datacentermap.com/c/chilecom-datacenter-ltda/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.54606812183184,
+"longitude": -33.480460155693706,
+"address": "Océano Pacífico Nte. 8496",
+"postal": "7941292",
+"city": "Peñalolén",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.44288760330452, -70.64495035078461] },
+"properties": {
+"name": "Entel",
+"id": ,
+"company_name": "Entel Central",
+"company_id": ,
+"link_company": "https://www.entel.cl/",
+"link_profile": "https://www.datacentermap.com/c/entel/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.64495035078461,
+"longitude": -33.44288760330452,
+"address": "Av. Alameda Libertador Bernardo O'Higgins 600",
+"postal": "8320255",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.29703262250613, -70.70448628272023] },
+"properties": {
+"name": "EdgeConnex Santiago - SCL01",
+"id": ,
+"company_name": "EdgeConnex",
+"company_id": ,
+"link_company": "https://www.edgeconnex.com/es/locations/americas/santiago/",
+"link_profile": "https://www.datacentermap.com/c/edgeconnex/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.70448628272023,
+"longitude": -33.29703262250613,
+"address": "Carretera General San Martin 8400",
+"postal": "9360897",
+"city": "Colina2",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.29703262250613, -70.70448628272023] },
+"properties": {
+"name": "EdgeConnex Santiago - SCL02",
+"id": ,
+"company_name": "EdgeConnex",
+"company_id": ,
+"link_company": "https://www.edgeconnex.com/es/locations/americas/santiago/",
+"link_profile": "https://www.datacentermap.com/c/edgeconnex/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.70448628272023,
+"longitude": -33.29703262250613,
+"address": "Carretera General San Martin 8400",
+"postal": "9360897",
+"city": "Colina",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.43769279976376, -70.60808239785086] },
+"properties": {
+"name": "S&A Chile",
+"id": ,
+"company_name": "S&A Chile",
+"company_id": ,
+"link_company": "https://syachile.cl/servicio/data-center/",
+"link_profile": "https://www.datacentermap.com/c/sa-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.60808239785086,
+"longitude": -33.43769279976376,
+"address": "Pedro de Valdivia 1609",
+"postal": "7500000",
+"city": "Providencia",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.454912304617764, -70.63287225945061] },
+"properties": {
+"name": "IIA Data Center",
+"id": ,
+"company_name": "Ingeniería e Informática Asociada (IIA)",
+"company_id": ,
+"link_company": "https://www.iia.cl/servicios-internet/datacenter",
+"link_profile": "https://www.datacentermap.com/c/ingeniera-e-informtica-asociada-iia/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.63287225945061,
+"longitude": -33.454912304617764,
+"address": "Porvenir 245",
+"postal": "8330700",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.44367742281427, -70.65765226838984] },
+"properties": {
+"name": "NextStream San Martin",
+"id": ,
+"company_name": "NextStream",
+"company_id": ,
+"link_company": "https://nextstream.com/es/data-centers/",
+"link_profile": "https://www.datacentermap.com/c/actis/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.65765226838984,
+"longitude": -33.44367742281427,
+"address": "San Martín 48",
+"postal": "8340526",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.408157233892084, -70.5571338539328] },
+"properties": {
+"name": "NextStream Apoquindo",
+"id": ,
+"company_name": "NextStream",
+"company_id": ,
+"link_company": "https://nextstream.com/es/data-centers/",
+"link_profile": "https://www.datacentermap.com/c/actis/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.5571338539328,
+"longitude": -33.408157233892084,
+"address": "Av. Apoquindo 7071, Las Condes",
+"postal": "7500000",
+"city": "Las Condes",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.431947383638665, -70.6019953915958] },
+"properties": {
+"name": "InterNexa Santiago",
+"id": ,
+"company_name": "InterNexa",
+"company_id": ,
+"link_company": "https://www.internexa.com/en/",
+"link_profile": "https://www.datacentermap.com/c/internexa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.6019953915958,
+"longitude": -33.431947383638665,
+"address": "1380 Avenida Los Leones",
+"postal": "7510608",
+"city": "Providencia",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.553278701658876, -70.71159723536316] },
+"properties": {
+"name": "Kyndryl DC San Bernardo",
+"id": ,
+"company_name": "Kyndryl",
+"company_id": ,
+"link_company": "https://www.kyndryl.com/us/en/services/cyber-resilience/incident-recovery/data-center",
+"link_profile": "https://www.datacentermap.com/c/kyndryl/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.71159723536316,
+"longitude": -33.553278701658876,
+"address": "Av. Prta Sur, Sitio 6",
+"postal": "8060056",
+"city": "San Bernardo",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.44829714126663, -70.85101067840934] },
+"properties": {
+"name": "Equinix ST1",
+"id": ,
+"company_name": "Equinix",
+"company_id": ,
+"link_company": "https://www.equinix.com/es/es/data-centers/americas-colocation/chile-colocation/santiago-data-centers",
+"link_profile": "https://www.datacentermap.com/c/equinix/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.85101067840934,
+"longitude": -33.44829714126663,
+"address": "Avenida los Vientos, 20239",
+"postal": "8340519",
+"city": "Pudahuel",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.44829714126663, -70.85101067840934] },
+"properties": {
+"name": "Equinix ST2",
+"id": ,
+"company_name": "Equinix",
+"company_id": ,
+"link_company": "https://www.equinix.com/es/es/data-centers/americas-colocation/chile-colocation/santiago-data-centers",
+"link_profile": "https://www.datacentermap.com/c/equinix/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.85101067840934,
+"longitude": -33.44829714126663,
+"address": "Avenida los Vientos, 20239",
+"postal": "8340519",
+"city": "Pudahuel",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.44401975555992, -70.65577998410814] },
+"properties": {
+"name": "Equinix ST3",
+"id": ,
+"company_name": "Equinix",
+"company_id": ,
+"link_company": "https://www.equinix.com/es/es/data-centers/americas-colocation/chile-colocation/santiago-data-centers",
+"link_profile": "https://www.datacentermap.com/c/equinix/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.65577998410814,
+"longitude": -33.44401975555992,
+"address": "Pasaje Nueva Amunátegui 26, de 105",
+"postal": "8340519",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.387208757524476, -70.61649525466099] },
+"properties": {
+"name": "UFINET Magnus I",
+"id": ,
+"company_name": "Ufinet",
+"company_id": ,
+"link_company": "https://www.ufinet.com/data-center/",
+"link_profile": "https://www.datacentermap.com/c/ufinet-fenosa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.61649525466099,
+"longitude": -33.387208757524476,
+"address": "Del Valle 928",
+"postal": "8581122",
+"city": "Huechuraba",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.386641456937255, -70.61632934958608] },
+"properties": {
+"name": "UFINET Magnus II",
+"id": ,
+"company_name": "Ufinet",
+"company_id": ,
+"link_company": "https://www.ufinet.com/data-center/",
+"link_profile": "https://www.datacentermap.com/c/ufinet-fenosa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.61632934958608,
+"longitude": -33.386641456937255,
+"address": "Avenida Los Jardines 927",
+"postal": "8580670",
+"city": "Huechuraba",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.306971818279905, -70.7277890745776] },
+"properties": {
+"name": "ODATA ST01",
+"id": ,
+"company_name": "ODATA",
+"company_id": ,
+"link_company": "https://odatacolocation.com/en/data-center/",
+"link_profile": "https://www.datacentermap.com/c/odata-an-aligned-data-centers-company/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.7277890745776,
+"longitude": -33.306971818279905,
+"address": "Av. Presidente Eduardo Frei Montalva",
+"postal": "9380000",
+"city": "Lampa",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.531548416640746, -70.70976748045028] },
+"properties": {
+"name": "ODATA ST02",
+"id": ,
+"company_name": "ODATA",
+"company_id": ,
+"link_company": "https://odatacolocation.com/en/data-center/",
+"link_profile": "https://www.datacentermap.com/c/odata-an-aligned-data-centers-company/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.70976748045028,
+"longitude": -33.531548416640746,
+"address": "Avenida Lo Espejo 03474",
+"postal": "8050000",
+"city": "San Bernardo",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.42610022148325, -70.59841086953732] },
+"properties": {
+"name": "Databyte Santiago",
+"id": ,
+"company_name": "Databyte",
+"company_id": ,
+"link_company": "https://www.databyte.cl/",
+"link_profile": "https://www.datacentermap.com/c/databyte/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.59841086953732,
+"longitude": -33.42610022148325,
+"address": "Av. Hernando de Aguirre 906",
+"postal": "7510274",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.42652278701628, -70.61598423440219] },
+"properties": {
+"name": "HostingPlus Chile",
+"id": ,
+"company_name": "HostingPlus",
+"company_id": ,
+"link_company": "https://www.hostingplus.cl/",
+"link_profile": "https://www.datacentermap.com/c/hostingplus/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.61598423440219,
+"longitude": -33.42652278701628,
+"address": "Av. Providencia 1650, Office 303",
+"postal": "7500027",
+"city": "Providencia",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.35654092322809, -70.69888493057717] },
+"properties": {
+"name": "Sonda Kudos",
+"id": ,
+"company_name": "Sonda S.A",
+"company_id": ,
+"link_company": "https://www.sonda.com/soluciones/digital-services/cloud-datacenter",
+"link_profile": "https://www.datacentermap.com/c/sonda-sa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.69888493057717,
+"longitude": -33.35654092322809,
+"address": "Victor Uribe 2211",
+"postal": "8710000",
+"city": "Quilicura",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.35795421471603, -70.67576945934924] },
+"properties": {
+"name": "Cirion SAN1",
+"id": ,
+"company_name": "Cirion",
+"company_id": ,
+"link_company": "https://www.ciriontechnologies.com/es/data-center/",
+"link_profile": "https://www.datacentermap.com/c/cirion/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.67576945934924,
+"longitude": -33.35795421471603,
+"address": "Avenida Santa Marta de Huechuraba 6951",
+"postal": "8600360",
+"city": "Huechuraba",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.44789716380653, -70.61995638338558] },
+"properties": {
+"name": "Datacenter PowerHost IXMetro",
+"id": ,
+"company_name": "PowerHost Datacenter",
+"company_id": ,
+"link_company": "https://www.powerhost.cl/",
+"link_profile": "https://www.datacentermap.com/c/powerhost-telecomunicaciones/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.61995638338558,
+"longitude": -33.44789716380653,
+"address": "Luis Beltran 1647",
+"postal": "75000000",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.44268378209591, -70.64443066697514] },
+"properties": {
+"name": "Anacondaweb Santiago",
+"id": ,
+"company_name": "Anacondaweb S.A",
+"company_id": ,
+"link_company": "https://www.anacondaweb.com/",
+"link_profile": "https://www.datacentermap.com/c/anacondaweb-sa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.64443066697514,
+"longitude": -33.44268378209591,
+"address": "Av. Alameda Libertador Bernardo O'Higgins 580",
+"postal": "8330045",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.41831047816306, -70.59937358102815] },
+"properties": {
+"name": "NXnet Chile",
+"id": ,
+"company_name": "NXnet Solutions",
+"company_id": ,
+"link_company": "http://nxnetsolutions.com/",
+"link_profile": "https://www.datacentermap.com/c/nxnet-solutions/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.59937358102815,
+"longitude": -33.41831047816306,
+"address": "Av. El Bosque Sur 90",
+"postal": "3536",
+"city": "Las Condes",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.4373521596738, -70.64936271542932] },
+"properties": {
+"name": "IFX Phillips",
+"id": ,
+"company_name": "IFX Networks",
+"company_id": ,
+"link_company": "https://ifxnetworks.com/",
+"link_profile": "https://www.datacentermap.com/c/ifxnetworks/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.64936271542932,
+"longitude": -33.4373521596738,
+"address": "Calle Phillips # 15 Piso 2",
+"postal": "8320325",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.41830707446522, -70.59935777042176] },
+"properties": {
+"name": "IFX Elbosque",
+"id": ,
+"company_name": "IFX Networks",
+"company_id": ,
+"link_company": "https://ifxnetworks.com/",
+"link_profile": "https://www.datacentermap.com/c/ifxnetworks/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.59935777042176,
+"longitude": -33.41830707446522,
+"address": "Av ElBosque Sur 90",
+"postal": "7550248",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.387154309506755, -70.61649107727735] },
+"properties": {
+"name": "IFX Magnus I",
+"id": ,
+"company_name": "IFX Networks",
+"company_id": ,
+"link_company": "https://ifxnetworks.com/",
+"link_profile": "https://www.datacentermap.com/c/ifxnetworks/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.61649107727735,
+"longitude": -33.387154309506755,
+"address": "Avenida del Valle # 928, Oficina 101",
+"postal": "8581122",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.435265679633645, -70.64907568853998]},
+"properties": {
+"name": "Lídice I",
+"id": ,
+"company_name": "GTD",
+"company_id": ,
+"link_company": "https://www.gtd.cl/corporaciones/red-de-datacenter",
+"link_profile": "https://www.datacentermap.com/c/gtd-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.64907568853998,
+"longitude": -33.435265679633645,
+"address": "Lidice 814",
+"postal": "8320043",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.435378330942875, -70.64918642851646]},
+"properties": {
+"name": "Lídice II",
+"id": ,
+"company_name": "GTD",
+"company_id": ,
+"link_company": "https://www.gtd.cl/corporaciones/red-de-datacenter",
+"link_profile": "https://www.datacentermap.com/c/gtd-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.64918642851646,
+"longitude": -33.435378330942875,
+"address": "Lidice 652",
+"postal": "8320043",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.4335596927796, -70.62150809941565]},
+"properties": {
+"name": "GTD Providencia",
+"id": ,
+"company_name": "GTD",
+"company_id": ,
+"link_company": "https://www.gtd.cl/corporaciones/red-de-datacenter",
+"link_profile": "https://www.datacentermap.com/c/gtd-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.62150809941565,
+"longitude": -33.4335596927796,
+"address": "Eliodoro Yáñez 996",
+"postal": "7500644",
+"city": "Providencia",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.419887270049756, -70.60421838641685]},
+"properties": {
+"name": "GTD Holanda",
+"id": ,
+"company_name": "GTD",
+"company_id": ,
+"link_company": "https://www.gtd.cl/corporaciones/red-de-datacenter",
+"link_profile": "https://www.datacentermap.com/c/gtd-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.60421838641685,
+"longitude": -33.419887270049756,
+"address": "Av. Holanda 65",
+"postal": "7510006",
+"city": "Providencia",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.441875006726754, -70.64951762006783]},
+"properties": {
+"name": "GTD Moneda",
+"id": ,
+"company_name": "GTD",
+"company_id": ,
+"link_company": "https://www.gtd.cl/corporaciones/red-de-datacenter",
+"link_profile": "https://www.datacentermap.com/c/gtd-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.64951762006783,
+"longitude": -33.441875006726754,
+"address": "Moneda 920",
+"postal": "8320254",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.43964357391443, -70.6526498183621]},
+"properties": {
+"name": "GTD Huerfanos",
+"id": ,
+"company_name": "GTD",
+"company_id": ,
+"link_company": "https://www.gtd.cl/corporaciones/red-de-datacenter",
+"link_profile": "https://www.datacentermap.com/c/gtd-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.6526498183621,
+"longitude": -33.43964357391443,
+"address": "Huérfanos 1117",
+"postal": "8320186",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.38794965709419, -70.68914915183454]},
+"properties": {
+"name": "GTD Panamericana",
+"id": ,
+"company_name": "GTD",
+"company_id": ,
+"link_company": "https://www.gtd.cl/corporaciones/red-de-datacenter",
+"link_profile": "https://www.datacentermap.com/c/gtd-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.68914915183454,
+"longitude": -33.38794965709419,
+"address": "Panamericana Nte. 3615",
+"postal": "8551135",
+"city": "Santiago",
+"market": "",
+"state": "Región Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.48067985528425, -70.54603350945861] },
+"properties": {
+"name": "WireNet Chile Datacenter",
+"id": ,
+"company_name": "WireNet Chile Ltda.",
+"company_id": ,
+"link_company": "https://www.wirenetchile.com/datacenter/",
+"link_profile": "https://www.datacentermap.com/c/wirenet-chile-ltda/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.54603350945861,
+"longitude": -33.48067985528425,
+"address": "Oceano Pacifico Norte 8506",
+"postal": "7941292",
+"city": "Peñalolen",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.428157134696455, -70.61132440506557] },
+"properties": {
+"name": "Intercity Datacenter",
+"id": ,
+"company_name": "Intercity Networks",
+"company_id": ,
+"link_company": "https://www.intercity.cl/",
+"link_profile": "https://www.datacentermap.com/c/intercity-networks/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.61132440506557,
+"longitude": -33.428157134696455,
+"address": "Europa 1969",
+"postal": "7500568",
+"city": "Santiago",
+"market": "",
+"state": "Region Metropolitana",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-53.04364438579832, -70.86982450631442] },
+"properties": {
+"name": "Apoapsis",
+"id": ,
+"company_name": "Apoapsis SpA",
+"company_id": ,
+"link_company": "https://www.apoapsis.cl/",
+"link_profile": "https://www.datacentermap.com/c/apoapsis-spa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.86982450631442,
+"longitude": -53.04364438579832,
+"address": "Av. Las Loicas 1160, Ojo Bueno",
+"postal": "6200000",
+"city": "Punta Arenas",
+"market": "",
+"state": "Magallanes y la Antartica Chilena",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-38.742746349293554, -72.59600232442152] },
+"properties": {
+"name": "Anacondaweb Temuco",
+"id": ,
+"company_name": "Anacondaweb S.A",
+"company_id": ,
+"link_company": "https://www.anacondaweb.com/",
+"link_profile": "https://www.datacentermap.com/c/anacondaweb-sa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -72.59600232442152,
+"longitude": -38.742746349293554,
+"address": "Bernardo O'Higgins 485",
+"postal": "4780000",
+"city": "Temuco",
+"market": "",
+"state": "Aisén",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-32.84211624349566, -70.60092929471702] },
+"properties": {
+"name": "OpenHost Datacenter",
+"id": ,
+"company_name": "Hosted Ltda.",
+"company_id": ,
+"link_company": "https://www.openhost.cl/",
+"link_profile": "https://www.datacentermap.com/c/hosted-ltda/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.60092929471702,
+"longitude": -32.84211624349566,
+"address": "Av. Chile 474",
+"postal": "2100183",
+"city": "Los Andes",
+"market": "",
+"state": "Valparaíso",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.135984979195726, -71.55881037120824] },
+"properties": {
+"name": "SSCLCR01",
+"id": ,
+"company_name": "Scala Data Centers",
+"company_id": ,
+"link_company": "https://scaladatacenters.com/en/data-centers-en/",
+"link_profile": "https://www.datacentermap.com/c/scala-data-centers/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -71.55881037120824,
+"longitude": -33.135984979195726,
+"address": "Av. Tupungato 3371",
+"postal": "2373207",
+"city": "Placilla",
+"market": "",
+"state": " Vaparaíso",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-33.81243486061017, -70.74882960695342] },
+"properties": {
+"name": "NextStream Paine",
+"id": ,
+"company_name": "NextStream",
+"company_id": ,
+"link_company": "https://nextstream.com/",
+"link_profile": "https://www.datacentermap.com/c/actis/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -70.74882960695342,
+"longitude": -33.81243486061017,
+"address": "Presidente Prieto 226",
+"postal": "9540000",
+"city": "Paine",
+"market": "",
+"state": "O'Higgins",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-36.81560823871166, -73.04836452059571] },
+"properties": {
+"name": "Opciones Concepción",
+"id": ,
+"company_name": "Opciones S.A",
+"company_id": ,
+"link_company": "https://www.opciones.cl/",
+"link_profile": "https://www.datacentermap.com/c/opciones-sa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -73.04836452059571,
+"longitude": -36.81560823871166,
+"address": "Ongolmo 1280",
+"postal": "4081378",
+"city": "Concepción",
+"market": "",
+"state": "Biobío",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-41.48707590192612, -73.0229677048695] },
+"properties": {
+"name": "GTD Puerto Montt",
+"id": ,
+"company_name": "GTD Chile",
+"company_id": ,
+"link_company": "https://www.gtd.cl/",
+"link_profile": "https://www.datacentermap.com/c/gtd-chile/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -73.0229677048695,
+"longitude": -41.48707590192612,
+"address": "Ruta 5 Sur 1028",
+"postal": "5500000",
+"city": "Puerto Montt",
+"market": "",
+"state": "Los Ríos",
+"country": "Chile"
+}
+
+"type": "Feature",
+"geometry": { "type": "Point", "coordinates": [-41.467543585864384, -72.94030037180688] },
+"properties": {
+"name": "Opciones Puerto Montt",
+"id": ,
+"company_name": "Opciones S.A",
+"company_id": ,
+"link_company": "https://www.opciones.cl/",
+"link_profile": "https://www.datacentermap.com/c/opciones-sa/",
+"link_website": "https://www.datacentermap.com/chile/",
+"latitude": -72.94030037180688,
+"longitude": -41.467543585864384,
+"address": "Seminario 372",
+"postal": "5501990",
+"city": "Puerto Montt",
+"market": "",
+"state": "Los Ríos",
+"country": "Chile"
+}
+
