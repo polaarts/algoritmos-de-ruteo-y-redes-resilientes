@@ -14,18 +14,18 @@
 - [-] Archivo `.sql` para crear la BD desde cero
 
 ### 1. Carpeta Infraestructura
-- [ ] Archivo que automatiza extracción de nodos y aristas
-- [ ] Archivo que transforma nodos y aristas a JSON
+- [-] Archivo que automatiza extracción de nodos y aristas
+- [-] Archivo que transforma nodos y aristas a JSON
 
 ### 2. Carpeta Metadata
-- [ ] Archivo(s) que automatiza(n) extracción de API/BD de metadata
-- [ ] Archivo(s) que transforma(n) metadata a JSON
-- [ ] Todos los archivos JSON de metadata generados
+- [-] Archivo(s) que automatiza(n) extracción de API/BD de metadata
+- [-] Archivo(s) que transforma(n) metadata a JSON
+- [-] Todos los archivos JSON de metadata generados
 
 ### 3. Carpeta Amenazas
-- [ ] Archivo(s) que automatiza(n) extracción de API/BD de amenazas
-- [ ] Archivo(s) que transforma(n) amenazas a JSON
-- [ ] Todos los archivos JSON de amenazas generados
+- [-] Archivo(s) que automatiza(n) extracción de API/BD de amenazas
+- [-] Archivo(s) que transforma(n) amenazas a JSON
+- [-] Todos los archivos JSON de amenazas generados
 
 ### 4. Documentación de JSON/GeoJSON
 - [ ] Archivo de documentación para cada JSON generado
@@ -45,10 +45,10 @@
 - [ ] Visualización de amenazas
 
 ### 7. Implementación de Ruta
-- [ ] Ruta generada con `pgr_dijkstra`
-- [ ] Uso de longitud como costo
+- [-] Ruta generada con `pgr_dijkstra`
+- [-] Uso de longitud como costo
 - [ ] Muestra ejemplo de solución al problema
-- [ ] Representa peor caso (sin metadata ni amenazas)
+- [-] Representa peor caso (sin metadata ni amenazas)
 
 ### 8. Archivo Main
 - [ ] Archivo `main` en carpeta raíz
