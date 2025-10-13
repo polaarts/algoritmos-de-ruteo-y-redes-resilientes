@@ -30,7 +30,7 @@ Para asegurar que todas sus implementaciones funcionen correctamente, estas DEBE
 
 ## Repositorio GitHub
 
-### 0. Diseño de Base de Datos
+### 0. (Samuel) Diseño de Base de Datos
 - [ ] Imagen con diagrama de la BD (muestra dimensiones y estructura)
 - [ ] Archivo `.sql` para crear la BD desde cero
 
@@ -51,7 +51,7 @@ Para asegurar que todas sus implementaciones funcionen correctamente, estas DEBE
 5. Habilitar extensiones: `CREATE EXTENSION postgis; CREATE EXTENSION pgrouting;`
 6. Crear diagrama con herramientas como dbdiagram.io o draw.io
 
-### 1. Carpeta Infraestructura
+### 1. (Agustín) Carpeta Infraestructura
 - [x] Archivo GeoJSON de infraestructura (`infraestructura/mapa_completo_v2.geojson`)
 - [ ] Archivo que automatiza extracción de nodos y aristas
 - [ ] Archivo que transforma nodos y aristas a JSON
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     extract_chile_fiber_network()
 ```
 
-### 2. Carpeta Metadata
+### 2. (Agustín) Carpeta Metadata
 - [x] Scripts de prueba de APIs (`metadata/api-tests/*.py`)
 - [x] GeoJSON de datacenters (`metadata/datacenters_fixed.geojson`)
 - [ ] Script completo de automatización ETL
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     extract_all_metadata()
 ```
 
-### 3. Carpeta Amenazas
+### 3. (Agustín) Carpeta Amenazas
 - [x] Scripts de prueba de APIs (`amenazas/*.py`)
 - [x] GeoJSON de vías con recubrimiento (`amenazas/vias_con_recubrimiento_estim.geojson`, `amenazas/vias_osmnx_cubierta.geojson`)
 - [ ] Script completo de automatización ETL
@@ -282,7 +282,7 @@ OpenStreetMap vía OSMnx - Red vial de Chile
 - Incendios: [Indicar fuente]
 ```
 
-### 5. Carga a Base de Datos
+### 5. (Samuel) Carga a Base de Datos
 - [ ] Script de carga para JSON de infraestructura
 - [ ] Script(s) de carga para JSON(s) de metadata
 - [ ] Script(s) de carga para JSON(s) de amenazas
@@ -369,7 +369,7 @@ if __name__ == "__main__":
     load_threats_to_db()
 ```
 
-### 6. Carpeta Sitio Web
+### 6. (Samuel) Carpeta Sitio Web
 - [ ] Archivo que crea sitio web con Leaflet
 - [ ] Visualización de infraestructura
 - [ ] Visualización de metadata
