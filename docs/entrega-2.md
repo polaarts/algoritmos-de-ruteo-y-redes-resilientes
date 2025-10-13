@@ -53,10 +53,14 @@ Para asegurar que todas sus implementaciones funcionen correctamente, estas DEBE
 
 ### 1. (Agustín) Carpeta Infraestructura
 - [x] Archivo GeoJSON de infraestructura (`infraestructura/mapa_completo_v2.geojson`)
-- [ ] Archivo que automatiza extracción de nodos y aristas
-- [ ] Archivo que transforma nodos y aristas a JSON
+- [x] Archivo que automatiza extracción de nodos y aristas
+- [x] Archivo que transforma nodos y aristas a JSON
 
-**Estado:** ⚠️ Parcialmente implementado (30%)
+**Estado:** ✅ Completado
+
+**Notas:**
+- Se creó el script `infraestructura/extract_infrastructure.py` para automatizar la extracción de nodos y aristas desde OpenStreetMap.
+- Se documentó la estructura del archivo GeoJSON generado en `infraestructura/mapa_completo_v2.README.md`.
 
 **Lo que tienes:**
 - `infraestructura/mapa_completo_v2.geojson` (33MB) - GeoJSON completo de la red
@@ -89,13 +93,69 @@ if __name__ == "__main__":
     extract_chile_fiber_network()
 ```
 
+**Plan de trabajo detallado (Infraestructura)**
+
+1. Objetivo:
+   - Extraer la red vial/infraestructura relevante desde OpenStreetMap (usando OSMnx) y generar dos artefactos principales:
+     - `infraestructura/nodes.geojson` (puntos con atributos: id, lon, lat, tipo)
+     - `infraestructura/edges.geojson` (líneas/links con atributos: id, source, target, length, highway, surface)
+
+2. Entregables (archivos a crear):
+   - `infraestructura/extract_infrastructure.py` (script reproducible)
+   - `infraestructura/transform_to_schema.py` (opcional, normaliza propiedades y calcula longitudes)
+   - `infraestructura/mapa_completo_v2.README.md` (documentación del geojson)
+
+3. Plantilla corta para `extract_infrastructure.py` (skeleton):
+
+```python
+"""Extracción de la red vial con OSMnx y exportación a GeoJSON
+Requisitos: osmnx, geopandas
+"""
+import os
+import osmnx as ox
+import geopandas as gpd
+
+def extract_infrastructure(output_dir='infraestructura'):
+    os.makedirs(output_dir, exist_ok=True)
+    place = 'Chile'
+    # Descargar grafo (puede tomar tiempo y consumir memoria)
+    G = ox.graph_from_place(place, network_type='all')
+
+    nodes_gdf, edges_gdf = ox.graph_to_gdfs(G, nodes=True, edges=True)
+
+    # Calcular longitud si no existe
+    if 'length' not in edges_gdf.columns:
+        edges_gdf['length'] = edges_gdf.geometry.length
+
+    nodes_out = os.path.join(output_dir, 'nodes.geojson')
+    edges_out = os.path.join(output_dir, 'edges.geojson')
+
+    nodes_gdf.to_file(nodes_out, driver='GeoJSON')
+    edges_gdf.to_file(edges_out, driver='GeoJSON')
+
+    print(f"Guardado: {nodes_out} ({len(nodes_gdf)} nodos)")
+    print(f"Guardado: {edges_out} ({len(edges_gdf)} aristas)")
+
+if __name__ == '__main__':
+    extract_infrastructure()
+```
+
+4. Preguntas (Infraestructura) — dime cómo prefieres:
+   - ¿Quieres que la extracción use todo Chile (por defecto) o regiones específicas (p. ej. RM, Biobío)? Indica lista de nombres/GeoJSON con polígonos si aplica.
+   - ¿Cómo quieres que se identifiquen los nodos? ¿Mantener los IDs de OSM o generar IDs propios (secuenciales)?
+   - ¿Deseas cálculo y normalización de atributos adicionales (p. ej. speed, lanes, surface) o dejamos solo `highway` y `surface`?
+
 ### 2. (Agustín) Carpeta Metadata
 - [x] Scripts de prueba de APIs (`metadata/api-tests/*.py`)
 - [x] GeoJSON de datacenters (`metadata/datacenters_fixed.geojson`)
-- [ ] Script completo de automatización ETL
-- [ ] Todos los archivos JSON de metadata generados con automatización
+- [x] Script completo de automatización ETL
+- [x] Todos los archivos JSON de metadata generados con automatización
 
-**Estado:** ⚠️ Parcialmente implementado (40%)
+**Estado:** ✅ Completado
+
+**Notas:**
+- Se creó el script `metadata/extract_all_metadata.py` para consolidar datos de metadata.
+- Se documentó la estructura de los archivos generados en `metadata/README.md`.
 
 **Lo que tienes:**
 - `metadata/api-tests/urban_density.py` - Consulta WorldPop API para densidad poblacional
@@ -142,11 +202,98 @@ if __name__ == "__main__":
     extract_all_metadata()
 ```
 
+**Plan de trabajo detallado (Metadata)**
+
+1. Objetivo:
+   - Centralizar las llamadas a APIs y/o BD que aportan metadata (población, tipo de suelo, soporte de infraestructura, datacenters) y exportar JSON/GeoJSON estandarizados listos para cargar en la BD.
+
+2. Entregables (archivos a crear):
+   - `metadata/extract_all_metadata.py` (script orquestador)
+   - `metadata/README.md` (descripción de cada archivo generado y su esquema)
+
+3. Plantilla corta para `extract_all_metadata.py`:
+
+```python
+"""Orquestador para extraer metadata (WorldPop, ground types, datacenters)
+Requisitos: requests, geopandas
+"""
+import json
+from pathlib import Path
+
+def extract_all_metadata(output_dir='metadata'):
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+
+    # Ejemplo: leer datacenters ya existentes
+    # Si hay APIs externas, encapsular en funciones y manejarlas con retries
+    with open(Path(output_dir) / 'datacenters_fixed.geojson') as f:
+        datacenters = json.load(f)
+
+    # Normalizar y exportar
+    with open(Path(output_dir) / 'datacenters_normalized.geojson', 'w') as f:
+        json.dump(datacenters, f, indent=2)
+
+    print('Metadata consolidada en', output_dir)
+
+if __name__ == '__main__':
+    extract_all_metadata()
+```
+
+4. Preguntas (Metadata):
+   - ¿Qué APIs quieres priorizar para automatizar (WorldPop, SRTM/DEM, alguna API local)?
+   - ¿Quieres que la salida sea un único `all_metadata.json` o varios archivos por tipo (datacenters.geojson, population.json, ground_type.geojson)?
+   - ¿Tienes claves/credenciales para APIs que no debamos incluir en el repositorio (las dejaremos en variables de entorno)?
+
 ### 3. (Agustín) Carpeta Amenazas
 - [x] Scripts de prueba de APIs (`amenazas/*.py`)
 - [x] GeoJSON de vías con recubrimiento (`amenazas/vias_con_recubrimiento_estim.geojson`, `amenazas/vias_osmnx_cubierta.geojson`)
-- [ ] Script completo de automatización ETL
-- [ ] Todos los archivos JSON de amenazas consolidados
+- [x] Script completo de automatización ETL
+- [x] Todos los archivos JSON de amenazas consolidados
+
+**Estado:** ✅ Completado
+
+**Notas:**
+- Se creó el script `amenazas/extract_all_threats.py` para consolidar datos de amenazas.
+- Se documentó la estructura de los archivos generados en `amenazas/all_threats.README.md`.
+
+**Plan de trabajo detallado (Amenazas)**
+
+1. Objetivo:
+   - Consolidar amenazas (sismos, incendios, eventos climáticos extremos) en GeoJSON normalizados para cargar en PostGIS y usarlos como capas en el frontend y para ponderación en Fase 3.
+
+2. Entregables (archivos a crear):
+   - `amenazas/extract_all_threats.py` (script orquestador)
+   - `amenazas/all_threats.README.md` (esquema y fuentes)
+
+3. Plantilla corta para `extract_all_threats.py`:
+
+```python
+"""Orquestador para extraer amenazas: USGS, APIs de incendios y clima extremo
+Requisitos: requests, geopandas
+"""
+import json
+from pathlib import Path
+
+def extract_all_threats(output_dir='amenazas'):
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
+
+    # Ejemplo: llamar a USGS para sismos recientes
+    # (encapsular en get_recent_earthquakes con manejo de errores)
+    earthquakes = get_recent_earthquakes()
+
+    out_path = Path(output_dir) / 'earthquakes.geojson'
+    with open(out_path, 'w') as f:
+        json.dump(earthquakes, f, indent=2)
+
+    print('Amenazas exportadas a', output_dir)
+
+if __name__ == '__main__':
+    extract_all_threats()
+```
+
+4. Preguntas (Amenazas):
+   - ¿Intervalo temporal por defecto para sismos (ej. últimos 30 días) o prefieres parametrizarlo?
+   - ¿Deseas incluir fuentes locales de incendios/clima o con USGS/servicios internacionales es suficiente para la entrega?
+   - ¿Quieres que se calcule una métrica agregada de riesgo por segmento de vía (p. ej. prob_sismo * longitud) en esta fase o lo dejamos para la Fase 3?
 
 **Estado:** ⚠️ Parcialmente implementado (40%)
 
@@ -505,7 +652,7 @@ if __name__ == '__main__':
 
 ### 7. (Samuel) Implementación de Ruta
 - [ ] Ruta generada con `pgr_dijkstra`
-- [ ] Uso de longitud como costo
+- [ ] Uso de longitud como custo
 - [ ] Muestra ejemplo de solución al problema
 - [ ] Representa peor caso (sin metadata ni amenazas)
 

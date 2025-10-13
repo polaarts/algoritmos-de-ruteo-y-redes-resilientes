@@ -1,0 +1,1221 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "generated": 1760316359000,
+    "url": "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2025-09-01&endtime=2025-10-01&minlatitude=-56&maxlatitude=-17&minlongitude=-75&maxlongitude=-66&minmagnitude=4.5",
+    "title": "USGS Earthquakes",
+    "status": 200,
+    "api": "1.14.1",
+    "count": 30
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "28 km SW of Cami\u00f1a, Chile",
+        "time": 1759092799983,
+        "updated": 1759164720194,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000rdhh",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000rdhh&format=geojson",
+        "felt": 20,
+        "cdi": 4.1,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 320,
+        "net": "us",
+        "code": "6000rdhh",
+        "ids": ",us6000rdhh,",
+        "sources": ",us,",
+        "types": ",dyfi,moment-tensor,origin,phase-data,",
+        "nst": 48,
+        "dmin": 0.393,
+        "rms": 1.12,
+        "gap": 116,
+        "magType": "mwr",
+        "type": "earthquake",
+        "title": "M 4.5 - 28 km SW of Cami\u00f1a, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.582,
+          -19.5226,
+          34.106
+        ]
+      },
+      "id": "us6000rdhh"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.6,
+        "place": "43 km W of Ollag\u00fce, Chile",
+        "time": 1759037143120,
+        "updated": 1759040022040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000rde6",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000rde6&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 326,
+        "net": "us",
+        "code": "6000rde6",
+        "ids": ",us6000rde6,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 38,
+        "dmin": 0.776,
+        "rms": 1.11,
+        "gap": 67,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.6 - 43 km W of Ollag\u00fce, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.6675,
+          -21.1721,
+          122.735
+        ]
+      },
+      "id": "us6000rde6"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 5.3,
+        "place": "23 km SSE of Cami\u00f1a, Chile",
+        "time": 1758823903772,
+        "updated": 1758849447739,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000rcw8",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000rcw8&format=geojson",
+        "felt": 18,
+        "cdi": 4.3,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 440,
+        "net": "us",
+        "code": "6000rcw8",
+        "ids": ",us6000rcw8,usauto6000rcw8,",
+        "sources": ",us,usauto,",
+        "types": ",dyfi,internal-moment-tensor,moment-tensor,origin,phase-data,",
+        "nst": 69,
+        "dmin": 0.207,
+        "rms": 1.32,
+        "gap": 94,
+        "magType": "mww",
+        "type": "earthquake",
+        "title": "M 5.3 - 23 km SSE of Cami\u00f1a, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.3284,
+          -19.5034,
+          106.938
+        ]
+      },
+      "id": "us6000rcw8"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.7,
+        "place": "39 km N of Calama, Chile",
+        "time": 1758690381704,
+        "updated": 1758691356040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000rcgf",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000rcgf&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 340,
+        "net": "us",
+        "code": "6000rcgf",
+        "ids": ",us6000rcgf,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 44,
+        "dmin": 0.394,
+        "rms": 0.68,
+        "gap": 48,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.7 - 39 km N of Calama, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.9688,
+          -22.0992,
+          105.123
+        ]
+      },
+      "id": "us6000rcgf"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 5.2,
+        "place": "133 km E of Antofagasta, Chile",
+        "time": 1758689819150,
+        "updated": 1758691377191,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000rcgd",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000rcgd&format=geojson",
+        "felt": 1,
+        "cdi": 3.8,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 416,
+        "net": "us",
+        "code": "6000rcgd",
+        "ids": ",us6000rcgd,usauto6000rcgd,",
+        "sources": ",us,usauto,",
+        "types": ",dyfi,internal-moment-tensor,moment-tensor,origin,phase-data,",
+        "nst": 65,
+        "dmin": 1.188,
+        "rms": 1.42,
+        "gap": 84,
+        "magType": "mww",
+        "type": "earthquake",
+        "title": "M 5.2 - 133 km E of Antofagasta, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.1031,
+          -23.8183,
+          103.061
+        ]
+      },
+      "id": "us6000rcgd"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "49 km SSW of Calama, Chile",
+        "time": 1758645061826,
+        "updated": 1758647955040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000rccs",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000rccs&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "6000rccs",
+        "ids": ",us6000rccs,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 36,
+        "dmin": 0.382,
+        "rms": 0.58,
+        "gap": 90,
+        "magType": "mwr",
+        "type": "earthquake",
+        "title": "M 4.5 - 49 km SSW of Calama, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.1826,
+          -22.8374,
+          83.721
+        ]
+      },
+      "id": "us6000rccs"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 5.2,
+        "place": "134 km W of Corral, Chile",
+        "time": 1758598607911,
+        "updated": 1758642093122,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000rc7s",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000rc7s&format=geojson",
+        "felt": 1,
+        "cdi": 2.9,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 416,
+        "net": "us",
+        "code": "6000rc7s",
+        "ids": ",us6000rc7s,usauto6000rc7s,",
+        "sources": ",us,usauto,",
+        "types": ",dyfi,internal-moment-tensor,moment-tensor,origin,phase-data,",
+        "nst": 43,
+        "dmin": 1.212,
+        "rms": 1.28,
+        "gap": 154,
+        "magType": "mww",
+        "type": "earthquake",
+        "title": "M 5.2 - 134 km W of Corral, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.9702,
+          -40.1291,
+          9.65
+        ]
+      },
+      "id": "us6000rc7s"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "30 km S of Cami\u00f1a, Chile",
+        "time": 1758576554253,
+        "updated": 1758582631040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000rc69",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us6000rc69&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "6000rc69",
+        "ids": ",us6000rc69,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 28,
+        "dmin": 0.231,
+        "rms": 0.61,
+        "gap": 115,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 30 km S of Cami\u00f1a, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.4249,
+          -19.59,
+          104.369
+        ]
+      },
+      "id": "us6000rc69"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.6,
+        "place": "93 km NNW of Villa General Roca, Argentina",
+        "time": 1758445738898,
+        "updated": 1758446919040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qxnx",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qxnx&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 326,
+        "net": "us",
+        "code": "7000qxnx",
+        "ids": ",us7000qxnx,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 99,
+        "dmin": 1.542,
+        "rms": 0.68,
+        "gap": 51,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.6 - 93 km NNW of Villa General Roca, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.9156,
+          -31.9244,
+          138.171
+        ]
+      },
+      "id": "us7000qxnx"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "62 km SSW of San Pedro de Atacama, Chile",
+        "time": 1758382908425,
+        "updated": 1758384299981,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qxkg",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qxkg&format=geojson",
+        "felt": 1,
+        "cdi": 2.2,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "7000qxkg",
+        "ids": ",us7000qxkg,",
+        "sources": ",us,",
+        "types": ",dyfi,origin,phase-data,",
+        "nst": 59,
+        "dmin": 0.532,
+        "rms": 0.86,
+        "gap": 92,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 62 km SSW of San Pedro de Atacama, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.4177,
+          -23.4386,
+          101.406
+        ]
+      },
+      "id": "us7000qxkg"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.7,
+        "place": "58 km SW of Atocha, Bolivia",
+        "time": 1758347738101,
+        "updated": 1758348502040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qxil",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qxil&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 340,
+        "net": "us",
+        "code": "7000qxil",
+        "ids": ",us7000qxil,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 32,
+        "dmin": 2.185,
+        "rms": 0.99,
+        "gap": 55,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.7 - 58 km SW of Atocha, Bolivia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.6462,
+          -21.2838,
+          228.019
+        ]
+      },
+      "id": "us7000qxil"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.6,
+        "place": "99 km WNW of Vinchina, Argentina",
+        "time": 1758274741134,
+        "updated": 1758793228040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qx9c",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qx9c&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 326,
+        "net": "us",
+        "code": "7000qx9c",
+        "ids": ",us7000qx9c,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 91,
+        "dmin": 1.496,
+        "rms": 0.77,
+        "gap": 42,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.6 - 99 km WNW of Vinchina, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.1358,
+          -28.3973,
+          97.573
+        ]
+      },
+      "id": "us7000qx9c"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 5.5,
+        "place": "40 km ENE of La Tirana, Chile",
+        "time": 1758257756549,
+        "updated": 1758819894405,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qx7a",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qx7a&format=geojson",
+        "felt": 36,
+        "cdi": 4.9,
+        "mmi": 4.945,
+        "alert": "green",
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 483,
+        "net": "us",
+        "code": "7000qx7a",
+        "ids": ",us7000qx7a,usauto7000qx7a,",
+        "sources": ",us,usauto,",
+        "types": ",dyfi,internal-moment-tensor,losspager,moment-tensor,origin,phase-data,shakemap,",
+        "nst": 62,
+        "dmin": 0.15,
+        "rms": 1.37,
+        "gap": 85,
+        "magType": "mww",
+        "type": "earthquake",
+        "title": "M 5.5 - 40 km ENE of La Tirana, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.2907,
+          -20.2187,
+          93.77
+        ]
+      },
+      "id": "us7000qx7a"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.7,
+        "place": "47 km W of Mendoza, Argentina",
+        "time": 1758218601005,
+        "updated": 1758220340902,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qx1v",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qx1v&format=geojson",
+        "felt": 3,
+        "cdi": 3.1,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 341,
+        "net": "us",
+        "code": "7000qx1v",
+        "ids": ",us7000qx1v,",
+        "sources": ",us,",
+        "types": ",dyfi,origin,phase-data,",
+        "nst": 48,
+        "dmin": 0.849,
+        "rms": 0.7,
+        "gap": 40,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.7 - 47 km W of Mendoza, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.3378,
+          -32.8795,
+          124.428
+        ]
+      },
+      "id": "us7000qx1v"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "48 km SSW of Ollag\u00fce, Chile",
+        "time": 1757978504659,
+        "updated": 1759970864040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qwea",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qwea&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "7000qwea",
+        "ids": ",us7000qwea,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 33,
+        "dmin": 0.792,
+        "rms": 0.83,
+        "gap": 90,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 48 km SSW of Ollag\u00fce, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -68.4076,
+          -21.635,
+          121.731
+        ]
+      },
+      "id": "us7000qwea"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.8,
+        "place": "64 km ENE of La Tirana, Chile",
+        "time": 1757969773174,
+        "updated": 1760026845147,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qwdr",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qwdr&format=geojson",
+        "felt": 13,
+        "cdi": 4.1,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 360,
+        "net": "us",
+        "code": "7000qwdr",
+        "ids": ",us7000qwdr,",
+        "sources": ",us,",
+        "types": ",dyfi,origin,phase-data,",
+        "nst": 64,
+        "dmin": 0.078,
+        "rms": 0.89,
+        "gap": 60,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.8 - 64 km ENE of La Tirana, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.1103,
+          -20.0735,
+          108.936
+        ]
+      },
+      "id": "us7000qwdr"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "18 km NNW of Locumba, Peru",
+        "time": 1757966837536,
+        "updated": 1760027889040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qwdf",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qwdf&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "7000qwdf",
+        "ids": ",us7000qwdf,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 35,
+        "dmin": 1.018,
+        "rms": 0.76,
+        "gap": 128,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 18 km NNW of Locumba, Peru"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -70.8409,
+          -17.4649,
+          97.077
+        ]
+      },
+      "id": "us7000qwdf"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.7,
+        "place": "67 km WSW of Abra Pampa, Argentina",
+        "time": 1757818726038,
+        "updated": 1760060282040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qw2i",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qw2i&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 340,
+        "net": "us",
+        "code": "7000qw2i",
+        "ids": ",us7000qw2i,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 54,
+        "dmin": 1.706,
+        "rms": 0.96,
+        "gap": 72,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.7 - 67 km WSW of Abra Pampa, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.3295,
+          -22.893,
+          226.514
+        ]
+      },
+      "id": "us7000qw2i"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "57 km W of San Antonio de los Cobres, Argentina",
+        "time": 1757767947086,
+        "updated": 1759908173040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qvzk",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qvzk&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "7000qvzk",
+        "ids": ",us7000qvzk,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 87,
+        "dmin": 1.698,
+        "rms": 1.2,
+        "gap": 70,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 57 km W of San Antonio de los Cobres, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.8788,
+          -24.1662,
+          178.818
+        ]
+      },
+      "id": "us7000qvzk"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "71 km W of San Antonio de los Cobres, Argentina",
+        "time": 1757720977989,
+        "updated": 1757723173040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qvvh",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qvvh&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "7000qvvh",
+        "ids": ",us7000qvvh,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 37,
+        "dmin": 1.682,
+        "rms": 0.54,
+        "gap": 70,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 71 km W of San Antonio de los Cobres, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.0219,
+          -24.2635,
+          186.192
+        ]
+      },
+      "id": "us7000qvvh"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.6,
+        "place": "88 km WNW of San Antonio de los Cobres, Argentina",
+        "time": 1757651406197,
+        "updated": 1757695280517,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qvm9",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qvm9&format=geojson",
+        "felt": 1,
+        "cdi": 1,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 326,
+        "net": "us",
+        "code": "7000qvm9",
+        "ids": ",us7000qvm9,",
+        "sources": ",us,",
+        "types": ",dyfi,origin,phase-data,",
+        "nst": 32,
+        "dmin": 1.406,
+        "rms": 1.05,
+        "gap": 64,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.6 - 88 km WNW of San Antonio de los Cobres, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.1512,
+          -23.9994,
+          188.646
+        ]
+      },
+      "id": "us7000qvm9"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "101 km WSW of Abra Pampa, Argentina",
+        "time": 1757641119282,
+        "updated": 1757642112040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qvlg",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qvlg&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "7000qvlg",
+        "ids": ",us7000qvlg,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 47,
+        "dmin": 1.399,
+        "rms": 1,
+        "gap": 49,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 101 km WSW of Abra Pampa, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.6606,
+          -22.94,
+          222.2
+        ]
+      },
+      "id": "us7000qvlg"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "85 km W of San Antonio de los Cobres, Argentina",
+        "time": 1757439320995,
+        "updated": 1759683735040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qv1g",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qv1g&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "7000qv1g",
+        "ids": ",us7000qv1g,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 28,
+        "dmin": 1.627,
+        "rms": 0.98,
+        "gap": 72,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 85 km W of San Antonio de los Cobres, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.1581,
+          -24.2893,
+          174.986
+        ]
+      },
+      "id": "us7000qv1g"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.9,
+        "place": "67 km SW of Atocha, Bolivia",
+        "time": 1757423008206,
+        "updated": 1759845841040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000quzw",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000quzw&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 369,
+        "net": "us",
+        "code": "7000quzw",
+        "ids": ",us7000quzw,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 174,
+        "dmin": 2.103,
+        "rms": 0.96,
+        "gap": 20,
+        "magType": "mww",
+        "type": "earthquake",
+        "title": "M 4.9 - 67 km SW of Atocha, Bolivia"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.6325,
+          -21.4051,
+          219.565
+        ]
+      },
+      "id": "us7000quzw"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.6,
+        "place": "84 km WNW of Ollag\u00fce, Chile",
+        "time": 1757288945118,
+        "updated": 1759364902040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qumm",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qumm&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 326,
+        "net": "us",
+        "code": "7000qumm",
+        "ids": ",us7000qumm,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 47,
+        "dmin": 0.45,
+        "rms": 0.79,
+        "gap": 48,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.6 - 84 km WNW of Ollag\u00fce, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -69.0134,
+          -20.9612,
+          108.208
+        ]
+      },
+      "id": "us7000qumm"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.5,
+        "place": "80 km W of San Antonio de los Cobres, Argentina",
+        "time": 1757218350874,
+        "updated": 1759965263040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qui5",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qui5&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 312,
+        "net": "us",
+        "code": "7000qui5",
+        "ids": ",us7000qui5,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 34,
+        "dmin": 1.683,
+        "rms": 0.62,
+        "gap": 62,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.5 - 80 km W of San Antonio de los Cobres, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.1008,
+          -24.32,
+          167.076
+        ]
+      },
+      "id": "us7000qui5"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 5.9,
+        "place": "85 km W of San Antonio de los Cobres, Argentina",
+        "time": 1756959019917,
+        "updated": 1759621903376,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qtpj",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qtpj&format=geojson",
+        "felt": 17,
+        "cdi": 6.1,
+        "mmi": 3.778,
+        "alert": "green",
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 546,
+        "net": "us",
+        "code": "7000qtpj",
+        "ids": ",us7000qtpj,usauto7000qtpj,",
+        "sources": ",us,usauto,",
+        "types": ",dyfi,internal-moment-tensor,losspager,moment-tensor,origin,phase-data,shakemap,",
+        "nst": 117,
+        "dmin": 1.502,
+        "rms": 1.32,
+        "gap": 41,
+        "magType": "mww",
+        "type": "earthquake",
+        "title": "M 5.9 - 85 km W of San Antonio de los Cobres, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.1572,
+          -24.1304,
+          182
+        ]
+      },
+      "id": "us7000qtpj"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 5,
+        "place": "79 km W of San Antonio de los Cobres, Argentina",
+        "time": 1756959008732,
+        "updated": 1759620776040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qtpi",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qtpi&format=geojson",
+        "felt": 1,
+        "cdi": 2.5,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 385,
+        "net": "us",
+        "code": "7000qtpi",
+        "ids": ",us7000qtpi,usauto7000qtpi,pt25247000,",
+        "sources": ",us,usauto,pt,",
+        "types": ",dyfi,internal-moment-tensor,internal-origin,origin,phase-data,",
+        "nst": 89,
+        "dmin": 1.679,
+        "rms": 1.35,
+        "gap": 41,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 5.0 - 79 km W of San Antonio de los Cobres, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -67.0928,
+          -24.3102,
+          172.477
+        ]
+      },
+      "id": "us7000qtpi"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.6,
+        "place": "9 km SW of Ovalle, Chile",
+        "time": 1756734481348,
+        "updated": 1758819733732,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qt0p",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qt0p&format=geojson",
+        "felt": 1,
+        "cdi": 1,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 326,
+        "net": "us",
+        "code": "7000qt0p",
+        "ids": ",us7000qt0p,",
+        "sources": ",us,",
+        "types": ",dyfi,origin,phase-data,",
+        "nst": 53,
+        "dmin": 0.311,
+        "rms": 0.64,
+        "gap": 78,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.6 - 9 km SW of Ovalle, Chile"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -71.2748,
+          -30.654,
+          56.106
+        ]
+      },
+      "id": "us7000qt0p"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 4.8,
+        "place": "68 km W of San Antonio de los Cobres, Argentina",
+        "time": 1756712313874,
+        "updated": 1759160010040,
+        "tz": null,
+        "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000qsyz",
+        "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000qsyz&format=geojson",
+        "felt": null,
+        "cdi": null,
+        "mmi": null,
+        "alert": null,
+        "status": "reviewed",
+        "tsunami": 0,
+        "sig": 354,
+        "net": "us",
+        "code": "7000qsyz",
+        "ids": ",us7000qsyz,",
+        "sources": ",us,",
+        "types": ",origin,phase-data,",
+        "nst": 99,
+        "dmin": 1.649,
+        "rms": 0.73,
+        "gap": 46,
+        "magType": "mb",
+        "type": "earthquake",
+        "title": "M 4.8 - 68 km W of San Antonio de los Cobres, Argentina"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -66.9878,
+          -24.1923,
+          176.971
+        ]
+      },
+      "id": "us7000qsyz"
+    }
+  ],
+  "bbox": [
+    -74.9702,
+    -40.1291,
+    9.65,
+    -66.3295,
+    -17.4649,
+    228.019
+  ]
+}
