@@ -503,7 +503,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 ```
 
-### 7. Implementación de Ruta
+### 7. (Samuel) Implementación de Ruta
 - [ ] Ruta generada con `pgr_dijkstra`
 - [ ] Uso de longitud como costo
 - [ ] Muestra ejemplo de solución al problema
