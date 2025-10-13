@@ -3,6 +3,41 @@ const router = express.Router();
 const { query, convertToGeoJSON } = require('../config/database');
 
 /**
+ * GET /api/metadata
+ * Get available metadata endpoints
+ */
+router.get('/', (req, res) => {
+  res.json({
+    message: 'Metadata API endpoints',
+    endpoints: {
+      datacenters: {
+        path: '/api/metadata/datacenters',
+        method: 'GET',
+        description: 'Get all datacenters as GeoJSON',
+        query_params: ['region', 'limit', 'offset']
+      },
+      datacenter_by_id: {
+        path: '/api/metadata/datacenters/:id',
+        method: 'GET',
+        description: 'Get specific datacenter by ID'
+      },
+      urban_density: {
+        path: '/api/metadata/urban-density',
+        method: 'GET',
+        description: 'Get urban density data',
+        query_params: ['min_lat', 'min_lon', 'max_lat', 'max_lon']
+      },
+      ground_types: {
+        path: '/api/metadata/ground-types',
+        method: 'GET',
+        description: 'Get ground types data',
+        query_params: ['min_lat', 'min_lon', 'max_lat', 'max_lon']
+      }
+    }
+  });
+});
+
+/**
  * GET /api/metadata/datacenters
  * Get all datacenters as GeoJSON
  */

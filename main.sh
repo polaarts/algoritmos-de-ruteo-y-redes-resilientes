@@ -95,7 +95,7 @@ check_dependencies() {
     fi
 
     # Verificar Docker Compose
-    if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
+    if ! docker compose version &> /dev/null && ! command -v docker-compose &> /dev/null; then
         print_error "Docker Compose no está instalado"
         missing_deps=1
     else
@@ -183,9 +183,9 @@ start_database() {
 
     print_step "Levantando contenedor de base de datos..."
 
-    if docker-compose up -d db; then
+    if docker compose up -d db; then
         print_success "Base de datos iniciada"
-    elif docker compose up -d db; then
+    elif docker-compose up -d db 2>/dev/null; then
         print_success "Base de datos iniciada"
     else
         print_error "No se pudo iniciar la base de datos"
@@ -201,8 +201,8 @@ start_database() {
     local retry=0
 
     while [ $retry -lt $max_retries ]; do
-        if docker-compose exec -T db pg_isready -U postgres > /dev/null 2>&1 || \
-           docker compose exec -T db pg_isready -U postgres > /dev/null 2>&1; then
+        if docker compose exec -T db pg_isready -U postgres > /dev/null 2>&1 || \
+           docker-compose exec -T db pg_isready -U postgres > /dev/null 2>&1; then
             print_success "Base de datos lista"
             return 0
         fi
@@ -225,8 +225,8 @@ create_schema() {
 
     print_step "Ejecutando schema.sql..."
 
-    if docker-compose exec -T db psql -U postgres -d postgres < schema.sql > /dev/null 2>&1 || \
-       docker compose exec -T db psql -U postgres -d postgres < schema.sql > /dev/null 2>&1; then
+    if docker compose exec -T db psql -U postgres -d postgres < schema.sql > /dev/null 2>&1 || \
+       docker-compose exec -T db psql -U postgres -d postgres < schema.sql > /dev/null 2>&1; then
         print_success "Esquema creado correctamente"
     else
         print_warning "Error al crear esquema (puede que ya exista)"
@@ -235,8 +235,8 @@ create_schema() {
     # Verificar que las extensiones están instaladas
     print_step "Verificando extensiones PostGIS y pgRouting..."
 
-    docker-compose exec -T db psql -U postgres -d postgres -c "SELECT PostGIS_version(), pgr_version();" > /dev/null 2>&1 || \
-    docker compose exec -T db psql -U postgres -d postgres -c "SELECT PostGIS_version(), pgr_version();" > /dev/null 2>&1
+    docker compose exec -T db psql -U postgres -d postgres -c "SELECT PostGIS_version(), pgr_version();" > /dev/null 2>&1 || \
+    docker-compose exec -T db psql -U postgres -d postgres -c "SELECT PostGIS_version(), pgr_version();" > /dev/null 2>&1
 
     if [ $? -eq 0 ]; then
         print_success "Extensiones verificadas"
@@ -281,13 +281,13 @@ create_topology() {
 
     print_step "Ejecutando create-topology.sql..."
 
-    if docker-compose exec -T db psql -U postgres -d postgres < create-topology.sql > /dev/null 2>&1 || \
-       docker compose exec -T db psql -U postgres -d postgres < create-topology.sql > /dev/null 2>&1; then
+    if docker compose exec -T db psql -U postgres -d postgres < create-topology.sql > /dev/null 2>&1 || \
+       docker-compose exec -T db psql -U postgres -d postgres < create-topology.sql > /dev/null 2>&1; then
         print_success "Topología de red creada"
 
         # Verificar resultados
         print_step "Verificando topología..."
-        docker-compose exec -T db psql -U postgres -d postgres -c "
+        docker compose exec -T db psql -U postgres -d postgres -c "
             SELECT
                 COUNT(*) as total_edges,
                 COUNT(CASE WHEN source IS NOT NULL AND target IS NOT NULL THEN 1 END) as edges_with_topology
@@ -309,7 +309,7 @@ start_services() {
     # Levantar backend
     print_step "Levantando backend (Node.js/Express)..."
 
-    if docker-compose up -d backend || docker compose up -d backend; then
+    if docker compose up -d backend 2>/dev/null || docker-compose up -d backend 2>/dev/null; then
         print_success "Backend iniciado"
     else
         print_error "No se pudo iniciar el backend"
@@ -322,7 +322,7 @@ start_services() {
     # Levantar frontend
     print_step "Levantando frontend (Vite/React)..."
 
-    if docker-compose up -d frontend || docker compose up -d frontend; then
+    if docker compose up -d frontend 2>/dev/null || docker-compose up -d frontend 2>/dev/null; then
         print_success "Frontend iniciado"
     else
         print_error "No se pudo iniciar el frontend"
@@ -341,7 +341,7 @@ verify_services() {
 
     # Verificar base de datos
     print_step "Verificando base de datos..."
-    if docker-compose ps db | grep -q "Up" || docker compose ps db | grep -q "Up"; then
+    if docker compose ps db 2>/dev/null | grep -q "Up" || docker-compose ps db 2>/dev/null | grep -q "Up"; then
         print_success "Base de datos: ✓ Running"
     else
         print_error "Base de datos: ✗ Not running"
@@ -349,7 +349,7 @@ verify_services() {
 
     # Verificar backend
     print_step "Verificando backend..."
-    if docker-compose ps backend | grep -q "Up" || docker compose ps backend | grep -q "Up"; then
+    if docker compose ps backend 2>/dev/null | grep -q "Up" || docker-compose ps backend 2>/dev/null | grep -q "Up"; then
         print_success "Backend: ✓ Running"
 
         # Intentar hacer request a health endpoint
@@ -364,7 +364,7 @@ verify_services() {
 
     # Verificar frontend
     print_step "Verificando frontend..."
-    if docker-compose ps frontend | grep -q "Up" || docker compose ps frontend | grep -q "Up"; then
+    if docker compose ps frontend 2>/dev/null | grep -q "Up" || docker-compose ps frontend 2>/dev/null | grep -q "Up"; then
         print_success "Frontend: ✓ Running"
         print_success "Frontend disponible en http://localhost:8080"
     else
@@ -458,11 +458,11 @@ EOF
             ;;
         4)
             print_header "Logs de Servicios"
-            docker-compose logs --tail=50 -f || docker compose logs --tail=50 -f
+            docker compose logs --tail=50 -f || docker-compose logs --tail=50 -f
             ;;
         5)
             print_header "Deteniendo Servicios"
-            docker-compose down || docker compose down
+            docker compose down || docker-compose down
             print_success "Servicios detenidos"
             ;;
         6)

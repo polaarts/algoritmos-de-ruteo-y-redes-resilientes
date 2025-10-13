@@ -3,6 +3,45 @@ const router = express.Router();
 const { query, convertToGeoJSON } = require('../config/database');
 
 /**
+ * GET /api/infrastructure
+ * Get available infrastructure endpoints
+ */
+router.get('/', (req, res) => {
+  res.json({
+    message: 'Infrastructure API endpoints',
+    endpoints: {
+      edges: {
+        path: '/api/infrastructure/edges',
+        method: 'GET',
+        description: 'Get all fiber optic links as GeoJSON',
+        query_params: ['region', 'limit', 'offset']
+      },
+      edge_by_id: {
+        path: '/api/infrastructure/edges/:id',
+        method: 'GET',
+        description: 'Get specific edge by ID'
+      },
+      nodes: {
+        path: '/api/infrastructure/nodes',
+        method: 'GET',
+        description: 'Get all nodes as GeoJSON',
+        query_params: ['region', 'node_type', 'limit', 'offset']
+      },
+      node_by_id: {
+        path: '/api/infrastructure/nodes/:id',
+        method: 'GET',
+        description: 'Get specific node by ID'
+      },
+      stats: {
+        path: '/api/infrastructure/stats',
+        method: 'GET',
+        description: 'Get infrastructure statistics'
+      }
+    }
+  });
+});
+
+/**
  * GET /api/infrastructure/edges
  * Get all edges (fiber optic links) as GeoJSON
  */

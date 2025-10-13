@@ -3,6 +3,57 @@ const router = express.Router();
 const { query, convertToGeoJSON } = require('../config/database');
 
 /**
+ * GET /api/routing
+ * Get available routing endpoints
+ */
+router.get('/', (req, res) => {
+  res.json({
+    message: 'Routing API endpoints',
+    endpoints: {
+      calculate: {
+        path: '/api/routing/calculate',
+        methods: ['GET', 'POST'],
+        description: 'Calculate shortest path using pgr_dijkstra',
+        parameters: {
+          start_lat: 'Starting latitude',
+          start_lon: 'Starting longitude',
+          end_lat: 'Ending latitude',
+          end_lon: 'Ending longitude'
+        }
+      },
+      calculate_resilient: {
+        path: '/api/routing/calculate-resilient',
+        methods: ['GET', 'POST'],
+        description: 'Calculate resilient path considering threats',
+        parameters: {
+          start_lat: 'Starting latitude',
+          start_lon: 'Starting longitude',
+          end_lat: 'Ending latitude',
+          end_lon: 'Ending longitude',
+          avoid_threats: 'Comma-separated threat types to avoid'
+        }
+      },
+      alternative_paths: {
+        path: '/api/routing/alternative-paths',
+        methods: ['GET', 'POST'],
+        description: 'Find alternative paths between two points',
+        parameters: {
+          start_lat: 'Starting latitude',
+          start_lon: 'Starting longitude',
+          end_lat: 'Ending latitude',
+          end_lon: 'Ending longitude',
+          k: 'Number of alternative paths (default: 3)'
+        }
+      }
+    },
+    example: {
+      url: '/api/routing/calculate?start_lat=-33.4489&start_lon=-70.6693&end_lat=-33.0369&end_lon=-71.6277',
+      description: 'Santiago to Valparaíso route'
+    }
+  });
+});
+
+/**
  * GET /api/routing/calculate
  * Calculate shortest path using pgr_dijkstra
  * Query params: start_lat, start_lon, end_lat, end_lon

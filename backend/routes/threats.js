@@ -3,6 +3,47 @@ const router = express.Router();
 const { query, convertToGeoJSON } = require('../config/database');
 
 /**
+ * GET /api/threats
+ * Get available threats endpoints
+ */
+router.get('/', (req, res) => {
+  res.json({
+    message: 'Threats API endpoints',
+    endpoints: {
+      earthquakes: {
+        path: '/api/threats/earthquakes',
+        method: 'GET',
+        description: 'Get earthquake data as GeoJSON',
+        query_params: ['min_magnitude', 'max_magnitude', 'start_date', 'end_date', 'limit', 'offset']
+      },
+      wildfires: {
+        path: '/api/threats/wildfires',
+        method: 'GET',
+        description: 'Get wildfire risk zones as GeoJSON',
+        query_params: ['min_risk', 'region', 'limit', 'offset']
+      },
+      extreme_weather: {
+        path: '/api/threats/extreme-weather',
+        method: 'GET',
+        description: 'Get extreme weather events as GeoJSON',
+        query_params: ['event_type', 'start_date', 'end_date', 'limit', 'offset']
+      },
+      all_threats: {
+        path: '/api/threats/all',
+        method: 'GET',
+        description: 'Get all threats in a bounding box',
+        query_params: ['min_lat', 'min_lon', 'max_lat', 'max_lon']
+      },
+      threat_impact: {
+        path: '/api/threats/impact/:edge_id',
+        method: 'GET',
+        description: 'Get threat impact analysis for specific edge'
+      }
+    }
+  });
+});
+
+/**
  * GET /api/threats/earthquakes
  * Get all earthquakes as GeoJSON
  */

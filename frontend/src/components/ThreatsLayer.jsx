@@ -26,6 +26,7 @@ function ThreatsLayer({
           min_magnitude: 4.0,
           limit: 500,
         });
+        console.log('Earthquakes loaded:', response.data);
         setEarthquakes(response.data);
       } catch (err) {
         console.error('Error loading earthquakes:', err);
@@ -47,6 +48,7 @@ function ThreatsLayer({
     const loadFireZones = async () => {
       try {
         const response = await threatsAPI.getFireZones({ limit: 100 });
+        console.log('Fire zones loaded:', response.data);
         setFireZones(response.data);
       } catch (err) {
         console.error('Error loading fire zones:', err);
@@ -66,6 +68,7 @@ function ThreatsLayer({
     const loadWeatherEvents = async () => {
       try {
         const response = await threatsAPI.getWeatherEvents({ limit: 100 });
+        console.log('Weather events loaded:', response.data);
         setWeatherEvents(response.data);
       } catch (err) {
         console.error('Error loading weather events:', err);
@@ -164,35 +167,38 @@ function ThreatsLayer({
       {earthquakes && earthquakes.features && earthquakes.features.map((feature, idx) => {
         const coords = feature.geometry.coordinates;
         const props = feature.properties;
+        // GeoJSON: [longitud, latitud], Leaflet: [latitud, longitud]
+        const position = [coords[1], coords[0]];
 
         return (
           <CircleMarker
-            key={`eq-${idx}`}
-            center={[coords[1], coords[0]]}
+            key={`eq-${props.usgs_id || idx}`}
+            center={position}
             radius={getEarthquakeRadius(props.magnitude)}
             pathOptions={{
               color: getEarthquakeColor(props.magnitude),
               fillColor: getEarthquakeColor(props.magnitude),
               fillOpacity: 0.5,
-              weight: 1,
+              weight: 2,
             }}
           >
             <Popup>
-              <div>
-                <h3>Sismo</h3>
-                <p><strong>Magnitud:</strong> {props.magnitude}</p>
-                <p><strong>Profundidad:</strong> {props.depth} km</p>
-                <p><strong>Fecha:</strong> {new Date(props.time).toLocaleString()}</p>
-                <p><strong>Lugar:</strong> {props.place}</p>
-                <p><strong>Nivel de amenaza:</strong> {props.threat_level}</p>
+              <div style="max-width: 250px;">
+                <h3 style="margin: 0 0 10px 0; color: #c0392b;">🔴 Sismo</h3>
+                <p style="margin: 5px 0;"><strong>Magnitud:</strong> {props.magnitude}</p>
+                <p style="margin: 5px 0;"><strong>Profundidad:</strong> {props.depth} km</p>
+                <p style="margin: 5px 0;"><strong>Fecha:</strong> {new Date(props.time).toLocaleString()}</p>
+                <p style="margin: 5px 0;"><strong>Lugar:</strong> {props.place}</p>
+                <p style="margin: 5px 0;"><strong>Nivel de amenaza:</strong> <span style="text-transform: uppercase; color: {getEarthquakeColor(props.magnitude)}; font-weight: bold;">{props.threat_level}</span></p>
                 {props.usgs_id && (
-                  <p>
+                  <p style="margin: 10px 0 0 0;">
                     <a
                       href={`https://earthquake.usgs.gov/earthquakes/eventpage/${props.usgs_id}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      style="color: #3498db;"
                     >
-                      Ver en USGS
+                      Ver en USGS →
                     </a>
                   </p>
                 )}
@@ -203,20 +209,30 @@ function ThreatsLayer({
       })}
 
       {/* Render fire zones as polygons */}
-      {fireZones && (
+      {fireZones && fireZones.features && fireZones.features.length > 0 && (
         <GeoJSON
+          key={`fire-${fireZones.features.length}`}
           data={fireZones}
           style={fireZoneStyle}
           onEachFeature={onEachFireZone}
+          coordsToLatLng={(coords) => {
+            // GeoJSON: [longitud, latitud], Leaflet: [latitud, longitud]
+            return [coords[1], coords[0]];
+          }}
         />
       )}
 
       {/* Render weather events as polygons */}
-      {weatherEvents && (
+      {weatherEvents && weatherEvents.features && weatherEvents.features.length > 0 && (
         <GeoJSON
+          key={`weather-${weatherEvents.features.length}`}
           data={weatherEvents}
           style={weatherEventStyle}
           onEachFeature={onEachWeatherEvent}
+          coordsToLatLng={(coords) => {
+            // GeoJSON: [longitud, latitud], Leaflet: [latitud, longitud]
+            return [coords[1], coords[0]];
+          }}
         />
       )}
     </>
