@@ -379,3 +379,37 @@
     max-width: none;
   }
 }
+
+/* Route Mode Selector */
+.route-mode-selector {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.radio-label {
+  display: block;
+  padding: 6px 8px;
+  margin: 4px 0;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+  transition: background 0.2s;
+  border-radius: 3px;
+}
+
+.radio-label:hover {
+  background: #f0f0f0;
+}
+
+.radio-label input[type="radio"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.radio-label input[type="radio"]:checked + span {
+  font-weight: 600;
+  color: #0088ff;
+}

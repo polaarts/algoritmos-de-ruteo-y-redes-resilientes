@@ -3,6 +3,8 @@ import Map from './components/Map';
 import InfrastructureLayer from './components/InfrastructureLayer';
 import ThreatsLayer from './components/ThreatsLayer';
 import RouteCalculator from './components/RouteCalculator';
+import RouteComparison from './components/RouteComparison';
+import SimulationControls from './components/SimulationControls';
 import './styles/App.css';
 
 function App() {
@@ -15,9 +17,12 @@ function App() {
     showFireZones: false,
     showWeatherEvents: false,
     showRoute: true,
+    showSimulation: false,
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [routeInfo, setRouteInfo] = useState(null);
+  const [routeMode, setRouteMode] = useState('comparison'); // 'simple' or 'comparison'
+  const [simulationData, setSimulationData] = useState(null);
 
   const toggleLayer = (layerName) => {
     setLayers((prev) => ({
@@ -28,6 +33,10 @@ function App() {
 
   const handleRouteCalculated = (routeData) => {
     setRouteInfo(routeData.route_info);
+  };
+
+  const handleSimulationComplete = (simData) => {
+    setSimulationData(simData);
   };
 
   return (
@@ -120,6 +129,40 @@ function App() {
                       onChange={() => toggleLayer('showRoute')}
                     />
                     Mostrar Ruta
+                  </label>
+                  <div className="route-mode-selector">
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="routeMode"
+                        value="simple"
+                        checked={routeMode === 'simple'}
+                        onChange={() => setRouteMode('simple')}
+                      />
+                      Modo Simple
+                    </label>
+                    <label className="radio-label">
+                      <input
+                        type="radio"
+                        name="routeMode"
+                        value="comparison"
+                        checked={routeMode === 'comparison'}
+                        onChange={() => setRouteMode('comparison')}
+                      />
+                      Comparación 4 Algoritmos
+                    </label>
+                  </div>
+                </div>
+
+                <div className="control-group">
+                  <h3>Simulación</h3>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={layers.showSimulation}
+                      onChange={() => toggleLayer('showSimulation')}
+                    />
+                    Mostrar Simulación Monte Carlo
                   </label>
                 </div>
               </section>
@@ -215,9 +258,17 @@ function App() {
               showFireZones={layers.showFireZones}
               showWeatherEvents={layers.showWeatherEvents}
             />
-            <RouteCalculator
-              showRoute={layers.showRoute}
-              onRouteCalculated={handleRouteCalculated}
+            {routeMode === 'simple' ? (
+              <RouteCalculator
+                showRoute={layers.showRoute}
+                onRouteCalculated={handleRouteCalculated}
+              />
+            ) : (
+              <RouteComparison show={layers.showRoute} />
+            )}
+            <SimulationControls
+              show={layers.showSimulation}
+              onSimulationComplete={handleSimulationComplete}
             />
           </Map>
         </main>

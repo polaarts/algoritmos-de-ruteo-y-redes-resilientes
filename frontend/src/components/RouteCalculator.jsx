@@ -97,6 +97,54 @@ function RouteCalculator({ showRoute = false, onRouteCalculated }) {
     map.on('click', onMapClick);
   };
 
+  // Use current location from GPS
+  const useCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      alert('Tu navegador no soporta geolocalización. Por favor selecciona manualmente.');
+      return;
+    }
+
+    setError(null);
+    setLoading(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setStartPoint({ lat: latitude, lon: longitude, name: 'Mi Ubicación' });
+        setLoading(false);
+
+        // Center map on user location
+        map.setView([latitude, longitude], 13);
+      },
+      (error) => {
+        setLoading(false);
+        let errorMessage = 'No se pudo obtener tu ubicación. ';
+
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage += 'Debes permitir el acceso a tu ubicación.';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage += 'La ubicación no está disponible.';
+            break;
+          case error.TIMEOUT:
+            errorMessage += 'Tiempo de espera agotado.';
+            break;
+          default:
+            errorMessage += 'Error desconocido.';
+        }
+
+        errorMessage += ' Por favor selecciona manualmente en el mapa.';
+        setError(errorMessage);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
+      }
+    );
+  };
+
   // Style for route
   const routeStyle = {
     color: '#00ff00',
@@ -160,8 +208,13 @@ function RouteCalculator({ showRoute = false, onRouteCalculated }) {
           {routeInfo.route_name && <p><strong>Ruta:</strong> {routeInfo.route_name}</p>}
           {routeInfo.description && <p className="route-description">{routeInfo.description}</p>}
           <div className="route-actions">
-            <button onClick={loadExampleRoute}>Cargar Ejemplo</button>
-            <button onClick={enablePointSelection}>
+            <button onClick={loadExampleRoute} className="btn-secondary">
+              Cargar Ejemplo
+            </button>
+            <button onClick={useCurrentLocation} className="btn-gps" disabled={loading}>
+              📍 Usar Mi Ubicación
+            </button>
+            <button onClick={enablePointSelection} className="btn-primary">
               {isSelectingPoints ? 'Seleccionando...' : 'Nueva Ruta'}
             </button>
           </div>

@@ -111,14 +111,57 @@ function ThreatsLayer({
   // Popup for fire zones
   const onEachFireZone = (feature, layer) => {
     const props = feature.properties;
+
+    const getRiskColor = (level) => {
+      if (level === 'extreme') return '#8b0000';
+      if (level === 'high') return '#ff0000';
+      if (level === 'medium') return '#ff6600';
+      return '#ffcc00';
+    };
+
+    const getRiskIcon = (level) => {
+      if (level === 'extreme') return '🔥🔥🔥';
+      if (level === 'high') return '🔥🔥';
+      if (level === 'medium') return '🔥';
+      return '⚠️';
+    };
+
     const popupContent = `
-      <div>
-        <h3>Zona de Riesgo de Incendio</h3>
-        <p><strong>Nombre:</strong> ${props.zone_name || 'N/A'}</p>
-        <p><strong>Nivel de riesgo:</strong> ${props.risk_level}</p>
-        <p><strong>Área:</strong> ${props.area_km2} km²</p>
-        <p><strong>Tipo de vegetación:</strong> ${props.vegetation_type || 'N/A'}</p>
-        ${props.last_fire_date ? `<p><strong>Último incendio:</strong> ${new Date(props.last_fire_date).toLocaleDateString()}</p>` : ''}
+      <div style="max-width: 280px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+        <h3 style="margin: 0 0 12px 0; color: #c0392b; border-bottom: 2px solid #ffcccc; padding-bottom: 8px;">
+          ${getRiskIcon(props.risk_level)} Zona de Riesgo de Incendio
+        </h3>
+        <p style="margin: 6px 0; font-size: 13px;">
+          <strong style="color: #333;">Nombre:</strong> ${props.zone_name || 'Sin nombre'}
+        </p>
+        <p style="margin: 6px 0; font-size: 13px;">
+          <strong style="color: #333;">Nivel de riesgo:</strong>
+          <span style="text-transform: uppercase; color: ${getRiskColor(props.risk_level)}; font-weight: bold; background: rgba(255,0,0,0.1); padding: 2px 8px; border-radius: 3px;">
+            ${props.risk_level}
+          </span>
+        </p>
+        <p style="margin: 6px 0; font-size: 13px;">
+          <strong style="color: #333;">Área:</strong> ${props.area_km2?.toFixed(2) || 'N/A'} km²
+        </p>
+        ${props.vegetation_type ? `
+          <p style="margin: 6px 0; font-size: 13px;">
+            <strong style="color: #333;">Vegetación:</strong> ${props.vegetation_type}
+          </p>
+        ` : ''}
+        ${props.last_fire_date ? `
+          <p style="margin: 6px 0; font-size: 13px;">
+            <strong style="color: #333;">Último incendio:</strong>
+            ${new Date(props.last_fire_date).toLocaleDateString('es-CL')}
+          </p>
+        ` : ''}
+        ${props.fire_frequency ? `
+          <p style="margin: 6px 0; font-size: 13px;">
+            <strong style="color: #333;">Frecuencia de incendios:</strong> ${props.fire_frequency}/año
+          </p>
+        ` : ''}
+        <p style="margin: 12px 0 0 0; padding: 8px; background: #fff9e6; border-left: 3px solid #ffcc00; font-size: 12px; color: #666;">
+          <strong>⚠️ Atención:</strong> Esta zona presenta alto riesgo de incendios forestales que pueden afectar la infraestructura de fibra óptica.
+        </p>
       </div>
     `;
     layer.bindPopup(popupContent);
@@ -144,16 +187,70 @@ function ThreatsLayer({
   // Popup for weather events
   const onEachWeatherEvent = (feature, layer) => {
     const props = feature.properties;
+
+    const getSeverityColor = (severity) => {
+      if (severity === 'extreme') return '#8b0000';
+      if (severity === 'high') return '#ff0000';
+      if (severity === 'medium') return '#ff6600';
+      return '#00bfff';
+    };
+
+    const getEventIcon = (eventType) => {
+      const type = (eventType || '').toLowerCase();
+      if (type.includes('storm') || type.includes('tormenta')) return '⛈️';
+      if (type.includes('flood') || type.includes('inundación')) return '🌊';
+      if (type.includes('snow') || type.includes('nieve')) return '❄️';
+      if (type.includes('wind') || type.includes('viento')) return '💨';
+      if (type.includes('rain') || type.includes('lluvia')) return '🌧️';
+      return '🌪️';
+    };
+
     const popupContent = `
-      <div>
-        <h3>Evento Climático</h3>
-        <p><strong>Tipo:</strong> ${props.event_type}</p>
-        <p><strong>Severidad:</strong> ${props.severity}</p>
-        <p><strong>Fecha:</strong> ${new Date(props.event_date).toLocaleDateString()}</p>
-        ${props.duration_hours ? `<p><strong>Duración:</strong> ${props.duration_hours} horas</p>` : ''}
-        ${props.max_wind_speed ? `<p><strong>Viento máximo:</strong> ${props.max_wind_speed} km/h</p>` : ''}
-        ${props.precipitation_mm ? `<p><strong>Precipitación:</strong> ${props.precipitation_mm} mm</p>` : ''}
-        ${props.description ? `<p>${props.description}</p>` : ''}
+      <div style="max-width: 280px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+        <h3 style="margin: 0 0 12px 0; color: #2c3e50; border-bottom: 2px solid #b3d9ff; padding-bottom: 8px;">
+          ${getEventIcon(props.event_type)} Evento Climático Extremo
+        </h3>
+        <p style="margin: 6px 0; font-size: 13px;">
+          <strong style="color: #333;">Tipo:</strong> ${props.event_type}
+        </p>
+        <p style="margin: 6px 0; font-size: 13px;">
+          <strong style="color: #333;">Severidad:</strong>
+          <span style="text-transform: uppercase; color: ${getSeverityColor(props.severity)}; font-weight: bold; background: rgba(0,0,255,0.1); padding: 2px 8px; border-radius: 3px;">
+            ${props.severity}
+          </span>
+        </p>
+        <p style="margin: 6px 0; font-size: 13px;">
+          <strong style="color: #333;">Fecha:</strong> ${new Date(props.event_date).toLocaleDateString('es-CL')}
+        </p>
+        ${props.duration_hours ? `
+          <p style="margin: 6px 0; font-size: 13px;">
+            <strong style="color: #333;">Duración:</strong> ${props.duration_hours} horas
+          </p>
+        ` : ''}
+        ${props.max_wind_speed ? `
+          <p style="margin: 6px 0; font-size: 13px;">
+            <strong style="color: #333;">Viento máximo:</strong> ${props.max_wind_speed} km/h
+          </p>
+        ` : ''}
+        ${props.precipitation_mm ? `
+          <p style="margin: 6px 0; font-size: 13px;">
+            <strong style="color: #333;">Precipitación:</strong> ${props.precipitation_mm} mm
+          </p>
+        ` : ''}
+        ${props.temperature_min || props.temperature_max ? `
+          <p style="margin: 6px 0; font-size: 13px;">
+            <strong style="color: #333;">Temperatura:</strong>
+            ${props.temperature_min ? `${props.temperature_min}°C` : ''} ${props.temperature_min && props.temperature_max ? 'a' : ''} ${props.temperature_max ? `${props.temperature_max}°C` : ''}
+          </p>
+        ` : ''}
+        ${props.description ? `
+          <p style="margin: 10px 0 0 0; font-size: 12px; color: #555; font-style: italic;">
+            ${props.description}
+          </p>
+        ` : ''}
+        <p style="margin: 12px 0 0 0; padding: 8px; background: #e6f7ff; border-left: 3px solid #00bfff; font-size: 12px; color: #666;">
+          <strong>💡 Impacto:</strong> Los eventos climáticos extremos pueden dañar cables aéreos y causar interrupciones en el servicio.
+        </p>
       </div>
     `;
     layer.bindPopup(popupContent);
