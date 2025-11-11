@@ -59,6 +59,8 @@ router.get('/', (req, res) => {
  * Query params: start_lat, start_lon, end_lat, end_lon
  */
 router.get('/calculate', async (req, res, next) => {
+  const startTime = performance.now();
+  
   try {
     const { start_lat, start_lon, end_lat, end_lon } = req.query;
 
@@ -91,6 +93,7 @@ router.get('/calculate', async (req, res, next) => {
     // Calculate total statistics
     const totalCost = result.rows[result.rows.length - 1].agg_cost;
     const totalEdges = result.rows.filter(r => r.edge !== null).length;
+    const computeTime = performance.now() - startTime;
 
     // Convert to GeoJSON
     const features = result.rows
@@ -112,13 +115,16 @@ router.get('/calculate', async (req, res, next) => {
       type: 'FeatureCollection',
       features,
       route_info: {
+        algorithm: 'pgr_dijkstra',
+        algorithm_name: 'Dijkstra (Distancia)',
         start: { lat: parseFloat(start_lat), lon: parseFloat(start_lon) },
         end: { lat: parseFloat(end_lat), lon: parseFloat(end_lon) },
         total_cost_meters: totalCost,
         total_cost_km: (totalCost / 1000).toFixed(2),
         total_edges: totalEdges,
-        algorithm: 'pgr_dijkstra',
-        considers_threats: false
+        considers_threats: false,
+        compute_time_ms: computeTime.toFixed(2),
+        compute_time_seconds: (computeTime / 1000).toFixed(4)
       }
     });
   } catch (error) {
@@ -357,6 +363,196 @@ router.get('/topology-status', async (req, res, next) => {
       message: isReady
         ? 'Network topology is ready for routing'
         : 'Network topology needs to be created. Run create-topology.sql script.'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/routing/calculate-resilient
+ * Calculate resilient path using pgr_dijkstra with failure probabilities
+ * Query params: start_lat, start_lon, end_lat, end_lon, max_failure_prob, risk_weight, simulation_id
+ */
+router.get('/calculate-resilient', async (req, res, next) => {
+  const startTime = performance.now();
+  
+  try {
+    const { 
+      start_lat, start_lon, end_lat, end_lon,
+      max_failure_prob = 0.3,
+      risk_weight = 2.0,
+      simulation_id = null
+    } = req.query;
+
+    // Validate required parameters
+    if (!start_lat || !start_lon || !end_lat || !end_lon) {
+      return res.status(400).json({
+        error: 'Missing required parameters',
+        required: ['start_lat', 'start_lon', 'end_lat', 'end_lon']
+      });
+    }
+
+    // Use the calculate_resilient_path function
+    const result = await query(
+      `SELECT * FROM calculate_resilient_path($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        parseFloat(start_lat),
+        parseFloat(start_lon),
+        parseFloat(end_lat),
+        parseFloat(end_lon),
+        parseFloat(max_failure_prob),
+        parseFloat(risk_weight),
+        simulation_id
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: 'No resilient route found',
+        message: 'Try increasing max_failure_prob or decreasing risk_weight'
+      });
+    }
+
+    const computeTime = performance.now() - startTime;
+    
+    const totalCost = result.rows[result.rows.length - 1].agg_cost;
+    const totalEdges = result.rows.filter(r => r.edge !== null).length;
+    const avgFailureProb = result.rows
+      .filter(r => r.failure_prob !== null)
+      .reduce((sum, r) => sum + r.failure_prob, 0) / totalEdges;
+    const maxFailureProb = Math.max(...result.rows.map(r => r.failure_prob || 0));
+
+    // Convert to GeoJSON
+    const features = result.rows
+      .filter(row => row.geom !== null)
+      .map(row => ({
+        type: 'Feature',
+        geometry: row.geom,
+        properties: {
+          seq: row.seq,
+          path_seq: row.path_seq,
+          node: row.node,
+          edge: row.edge,
+          cost: row.cost,
+          agg_cost: row.agg_cost,
+          failure_prob: row.failure_prob
+        }
+      }));
+
+    res.json({
+      type: 'FeatureCollection',
+      features,
+      route_info: {
+        algorithm: 'pgr_dijkstra_resilient',
+        algorithm_name: 'Dijkstra (Resiliente)',
+        start: { lat: parseFloat(start_lat), lon: parseFloat(start_lon) },
+        end: { lat: parseFloat(end_lat), lon: parseFloat(end_lon) },
+        total_cost_meters: totalCost,
+        total_cost_km: (totalCost / 1000).toFixed(2),
+        total_edges: totalEdges,
+        considers_threats: true,
+        risk_weight: parseFloat(risk_weight),
+        max_failure_prob_allowed: parseFloat(max_failure_prob),
+        avg_failure_prob: avgFailureProb.toFixed(4),
+        max_failure_prob: maxFailureProb.toFixed(4),
+        total_failure_risk: (1 - Math.exp(result.rows
+          .filter(r => r.failure_prob)
+          .reduce((sum, r) => sum + Math.log(1 - r.failure_prob), 0)
+        )).toFixed(4),
+        simulation_id: simulation_id,
+        compute_time_ms: computeTime.toFixed(2),
+        compute_time_seconds: (computeTime / 1000).toFixed(4)
+      }
+    });
+  } catch (error) {
+    console.error('Resilient routing error:', error);
+    next(error);
+  }
+});
+
+/**
+ * POST /api/routing/calculate-resilient
+ * Same as GET but with POST body
+ */
+router.post('/calculate-resilient', async (req, res, next) => {
+  const startTime = performance.now();
+  
+  try {
+    const { 
+      start_lat, start_lon, end_lat, end_lon,
+      max_failure_prob = 0.3,
+      risk_weight = 2.0,
+      simulation_id = null
+    } = req.body;
+
+    if (!start_lat || !start_lon || !end_lat || !end_lon) {
+      return res.status(400).json({
+        error: 'Missing required parameters',
+        required: ['start_lat', 'start_lon', 'end_lat', 'end_lon']
+      });
+    }
+
+    const result = await query(
+      `SELECT * FROM calculate_resilient_path($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        parseFloat(start_lat),
+        parseFloat(start_lon),
+        parseFloat(end_lat),
+        parseFloat(end_lon),
+        parseFloat(max_failure_prob),
+        parseFloat(risk_weight),
+        simulation_id
+      ]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: 'No resilient route found',
+        message: 'Try adjusting parameters'
+      });
+    }
+
+    const computeTime = performance.now() - startTime;
+    
+    const totalCost = result.rows[result.rows.length - 1].agg_cost;
+    const totalEdges = result.rows.filter(r => r.edge !== null).length;
+    const avgFailureProb = result.rows
+      .filter(r => r.failure_prob !== null)
+      .reduce((sum, r) => sum + r.failure_prob, 0) / totalEdges;
+
+    const features = result.rows
+      .filter(row => row.geom !== null)
+      .map(row => ({
+        type: 'Feature',
+        geometry: row.geom,
+        properties: {
+          seq: row.seq,
+          path_seq: row.path_seq,
+          node: row.node,
+          edge: row.edge,
+          cost: row.cost,
+          agg_cost: row.agg_cost,
+          failure_prob: row.failure_prob
+        }
+      }));
+
+    res.json({
+      type: 'FeatureCollection',
+      features,
+      route_info: {
+        algorithm: 'pgr_dijkstra_resilient',
+        algorithm_name: 'Dijkstra (Resiliente)',
+        start: { lat: parseFloat(start_lat), lon: parseFloat(start_lon) },
+        end: { lat: parseFloat(end_lat), lon: parseFloat(end_lon) },
+        total_cost_meters: totalCost,
+        total_cost_km: (totalCost / 1000).toFixed(2),
+        total_edges: totalEdges,
+        considers_threats: true,
+        avg_failure_prob: avgFailureProb.toFixed(4),
+        compute_time_ms: computeTime.toFixed(2),
+        compute_time_seconds: (computeTime / 1000).toFixed(4)
+      }
     });
   } catch (error) {
     next(error);

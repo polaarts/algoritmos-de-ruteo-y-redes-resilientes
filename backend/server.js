@@ -9,6 +9,9 @@ const infrastructureRoutes = require('./routes/infrastructure');
 const metadataRoutes = require('./routes/metadata');
 const threatsRoutes = require('./routes/threats');
 const routingRoutes = require('./routes/routing');
+const probabilitiesRoutes = require('./routes/probabilities');
+const simulationRoutes = require('./routes/simulation');
+const optimizationRoutes = require('./routes/optimization');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -34,6 +37,9 @@ app.use('/api/infrastructure', infrastructureRoutes);
 app.use('/api/metadata', metadataRoutes);
 app.use('/api/threats', threatsRoutes);
 app.use('/api/routing', routingRoutes);
+app.use('/api/probabilities', probabilitiesRoutes);
+app.use('/api/simulation', simulationRoutes);
+app.use('/api/optimization', optimizationRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -44,7 +50,10 @@ app.get('/', (req, res) => {
       infrastructure: '/api/infrastructure',
       metadata: '/api/metadata',
       threats: '/api/threats',
-      routing: '/api/routing'
+      routing: '/api/routing',
+      probabilities: '/api/probabilities',
+      simulation: '/api/simulation',
+      optimization: '/api/optimization'
     },
     documentation: 'https://github.com/polaarts/algoritmos-de-ruteo-y-redes-resilientes'
   });
