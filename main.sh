@@ -306,28 +306,88 @@ create_topology() {
 start_services() {
     print_header "PASO 6: Levantando Servicios Web"
 
-    # Levantar backend
-    print_step "Levantando backend (Node.js/Express)..."
+    # Verificar e instalar dependencias del backend
+    print_step "Verificando dependencias del backend..."
+    if [ -d "backend" ]; then
+        cd backend
 
-    if docker compose up -d backend 2>/dev/null || docker-compose up -d backend 2>/dev/null; then
-        print_success "Backend iniciado"
-    else
-        print_error "No se pudo iniciar el backend"
-        print_warning "Puedes ejecutarlo manualmente: cd backend && npm install && npm start"
+        # Limpiar node_modules si hay problemas de permisos
+        if [ -d "node_modules" ] && [ ! -w "node_modules" ]; then
+            print_warning "Limpiando node_modules con permisos incorrectos..."
+            rm -rf node_modules package-lock.json
+        fi
+
+        # Instalar dependencias si no existen
+        if [ ! -d "node_modules" ]; then
+            print_step "Instalando dependencias del backend..."
+            npm install > /dev/null 2>&1
+            print_success "Dependencias del backend instaladas"
+        fi
+
+        cd ..
     fi
 
-    # Esperar un poco
-    sleep 5
+    # Verificar e instalar dependencias del frontend
+    print_step "Verificando dependencias del frontend..."
+    if [ -d "frontend" ]; then
+        cd frontend
 
-    # Levantar frontend
-    print_step "Levantando frontend (Vite/React)..."
+        # Limpiar node_modules si hay problemas de permisos
+        if [ -d "node_modules" ] && [ ! -w "node_modules" ]; then
+            print_warning "Limpiando node_modules con permisos incorrectos..."
+            rm -rf node_modules package-lock.json
+        fi
 
-    if docker compose up -d frontend 2>/dev/null || docker-compose up -d frontend 2>/dev/null; then
-        print_success "Frontend iniciado"
-    else
-        print_error "No se pudo iniciar el frontend"
-        print_warning "Puedes ejecutarlo manualmente: cd frontend && npm install && npm run dev"
+        # Instalar dependencias si no existen
+        if [ ! -d "node_modules" ]; then
+            print_step "Instalando dependencias del frontend..."
+            npm install > /dev/null 2>&1
+            print_success "Dependencias del frontend instaladas"
+        fi
+
+        cd ..
     fi
+
+    # Matar procesos previos en los puertos 5000 y 8080
+    print_step "Liberando puertos 5000 y 8080..."
+    lsof -ti:5000 | xargs kill -9 2>/dev/null || true
+    lsof -ti:8080 | xargs kill -9 2>/dev/null || true
+    sleep 2
+    print_success "Puertos liberados"
+
+    # Levantar backend en segundo plano
+    print_step "Levantando backend (Node.js/Express) en puerto 5000..."
+    cd backend
+    nohup npm start > ../backend.log 2>&1 &
+    BACKEND_PID=$!
+    echo $BACKEND_PID > ../backend.pid
+    cd ..
+    sleep 3
+
+    if ps -p $BACKEND_PID > /dev/null; then
+        print_success "Backend iniciado (PID: $BACKEND_PID)"
+    else
+        print_error "El backend falló al iniciar. Revisa backend.log"
+        return 1
+    fi
+
+    # Levantar frontend en segundo plano
+    print_step "Levantando frontend (Vite/React) en puerto 8080..."
+    cd frontend
+    nohup npm run dev > ../frontend.log 2>&1 &
+    FRONTEND_PID=$!
+    echo $FRONTEND_PID > ../frontend.pid
+    cd ..
+    sleep 3
+
+    if ps -p $FRONTEND_PID > /dev/null; then
+        print_success "Frontend iniciado (PID: $FRONTEND_PID)"
+    else
+        print_error "El frontend falló al iniciar. Revisa frontend.log"
+        return 1
+    fi
+
+    print_success "Servicios iniciados correctamente"
 }
 
 ###############################################################################
@@ -337,39 +397,92 @@ start_services() {
 verify_services() {
     print_header "Verificación de Servicios"
 
-    sleep 5
-
-    # Verificar base de datos
-    print_step "Verificando base de datos..."
-    if docker compose ps db 2>/dev/null | grep -q "Up" || docker-compose ps db 2>/dev/null | grep -q "Up"; then
-        print_success "Base de datos: ✓ Running"
-    else
-        print_error "Base de datos: ✗ Not running"
-    fi
+    sleep 2
 
     # Verificar backend
     print_step "Verificando backend..."
-    if docker compose ps backend 2>/dev/null | grep -q "Up" || docker-compose ps backend 2>/dev/null | grep -q "Up"; then
-        print_success "Backend: ✓ Running"
+    if [ -f "backend.pid" ]; then
+        BACKEND_PID=$(cat backend.pid)
+        if ps -p $BACKEND_PID > /dev/null 2>&1; then
+            print_success "Backend: ✓ Running (PID: $BACKEND_PID)"
 
-        # Intentar hacer request a health endpoint
-        if command -v curl &> /dev/null; then
-            if curl -s http://localhost:5000/health > /dev/null 2>&1; then
-                print_success "Backend responde en http://localhost:5000"
+            # Intentar hacer request
+            if command -v curl &> /dev/null; then
+                sleep 2
+                if curl -s http://localhost:5000/ > /dev/null 2>&1; then
+                    print_success "Backend responde en http://localhost:5000"
+                else
+                    print_warning "Backend está corriendo pero no responde aún (esperando inicialización)"
+                fi
             fi
+        else
+            print_error "Backend: ✗ Not running (revisar backend.log)"
         fi
     else
-        print_warning "Backend: No está en Docker (puede estar ejecutándose localmente)"
+        print_warning "Backend: No hay archivo backend.pid"
     fi
 
     # Verificar frontend
     print_step "Verificando frontend..."
-    if docker compose ps frontend 2>/dev/null | grep -q "Up" || docker-compose ps frontend 2>/dev/null | grep -q "Up"; then
-        print_success "Frontend: ✓ Running"
-        print_success "Frontend disponible en http://localhost:8080"
+    if [ -f "frontend.pid" ]; then
+        FRONTEND_PID=$(cat frontend.pid)
+        if ps -p $FRONTEND_PID > /dev/null 2>&1; then
+            print_success "Frontend: ✓ Running (PID: $FRONTEND_PID)"
+            print_success "Frontend disponible en http://localhost:8080"
+        else
+            print_error "Frontend: ✗ Not running (revisar frontend.log)"
+        fi
     else
-        print_warning "Frontend: No está en Docker (puede estar ejecutándose localmente)"
+        print_warning "Frontend: No hay archivo frontend.pid"
     fi
+
+    # Verificar puertos abiertos
+    print_step "Verificando puertos..."
+    if lsof -i:5000 > /dev/null 2>&1; then
+        print_success "Puerto 5000 (backend): ✓ En uso"
+    else
+        print_warning "Puerto 5000 (backend): ✗ Libre"
+    fi
+
+    if lsof -i:8080 > /dev/null 2>&1; then
+        print_success "Puerto 8080 (frontend): ✓ En uso"
+    else
+        print_warning "Puerto 8080 (frontend): ✗ Libre"
+    fi
+}
+
+###############################################################################
+# DETENER SERVICIOS
+###############################################################################
+
+stop_services() {
+    print_header "Deteniendo Servicios"
+
+    # Detener backend
+    if [ -f "backend.pid" ]; then
+        BACKEND_PID=$(cat backend.pid)
+        print_step "Deteniendo backend (PID: $BACKEND_PID)..."
+        kill $BACKEND_PID 2>/dev/null || true
+        rm backend.pid
+        print_success "Backend detenido"
+    fi
+
+    # Detener frontend
+    if [ -f "frontend.pid" ]; then
+        FRONTEND_PID=$(cat frontend.pid)
+        print_step "Deteniendo frontend (PID: $FRONTEND_PID)..."
+        kill $FRONTEND_PID 2>/dev/null || true
+        rm frontend.pid
+        print_success "Frontend detenido"
+    fi
+
+    # Matar cualquier proceso remanente en los puertos
+    print_step "Liberando puertos..."
+    lsof -ti:5000 | xargs kill -9 2>/dev/null || true
+    lsof -ti:8080 | xargs kill -9 2>/dev/null || true
+    print_success "Puertos liberados"
+
+    print_success "Todos los servicios detenidos"
 }
 
 ###############################################################################
@@ -381,9 +494,9 @@ show_menu() {
     echo -e "${PURPLE}║${NC}  ${CYAN}Pipeline ETL - Red de Fibra Óptica en Chile${NC}               ${PURPLE}║${NC}"
     echo -e "${PURPLE}╚═══════════════════════════════════════════════════════════════╝${NC}\n"
     echo -e "${BLUE}Opciones:${NC}"
-    echo -e "  ${GREEN}1)${NC} Ejecutar pipeline completo (Recomendado)"
-    echo -e "  ${GREEN}2)${NC} Solo extraer datos (ETL - Extract)"
-    echo -e "  ${GREEN}3)${NC} Solo levantar servicios (Docker)"
+    echo -e "  ${GREEN}1)${NC} Solo levantar servicios (Backend + Frontend) ${YELLOW}★ RÁPIDO${NC}"
+    echo -e "  ${GREEN}2)${NC} Ejecutar pipeline completo (ETL + Servicios)"
+    echo -e "  ${GREEN}3)${NC} Solo extraer datos (ETL - Extract)"
     echo -e "  ${GREEN}4)${NC} Ver logs de servicios"
     echo -e "  ${GREEN}5)${NC} Detener todos los servicios"
     echo -e "  ${GREEN}6)${NC} Verificar estado de servicios"
@@ -429,6 +542,23 @@ EOF
 
     case $choice in
         1)
+            print_header "Levantando Servicios"
+            start_services
+            verify_services
+
+            print_header "Servicios Iniciados Exitosamente"
+            echo -e "${GREEN}✓ Backend y Frontend están corriendo${NC}\n"
+            echo -e "${CYAN}Servicios disponibles:${NC}"
+            echo -e "  ${BLUE}►${NC} Frontend:  ${GREEN}http://localhost:8080${NC}"
+            echo -e "  ${BLUE}►${NC} Backend:   ${GREEN}http://localhost:5000${NC}"
+            echo -e ""
+            echo -e "${YELLOW}Para ver logs:${NC}"
+            echo -e "  ${CYAN}Backend:${NC}  tail -f backend.log"
+            echo -e "  ${CYAN}Frontend:${NC} tail -f frontend.log"
+            echo -e ""
+            echo -e "${YELLOW}Para detener:${NC} ./main.sh (opción 5)"
+            ;;
+        2)
             print_header "Ejecutando Pipeline Completo"
             extract_data
             start_database
@@ -445,25 +575,28 @@ EOF
             echo -e "  ${BLUE}►${NC} Backend:   ${GREEN}http://localhost:5000${NC}"
             echo -e "  ${BLUE}►${NC} Database:  ${GREEN}localhost:5432${NC}"
             echo -e ""
-            echo -e "${YELLOW}Para ver logs:${NC} docker-compose logs -f"
-            echo -e "${YELLOW}Para detener:${NC} docker-compose down"
-            ;;
-        2)
-            extract_data
+            echo -e "${YELLOW}Para ver logs:${NC}"
+            echo -e "  ${CYAN}Backend:${NC}  tail -f backend.log"
+            echo -e "  ${CYAN}Frontend:${NC} tail -f frontend.log"
+            echo -e ""
+            echo -e "${YELLOW}Para detener:${NC} ./main.sh (opción 5)"
             ;;
         3)
-            start_database
-            start_services
-            verify_services
+            extract_data
             ;;
         4)
             print_header "Logs de Servicios"
-            docker compose logs --tail=50 -f || docker-compose logs --tail=50 -f
+            echo -e "${CYAN}Mostrando últimas 50 líneas de cada log...${NC}\n"
+            echo -e "${YELLOW}═══ BACKEND LOG ═══${NC}"
+            tail -n 50 backend.log 2>/dev/null || echo "No hay log de backend"
+            echo -e "\n${YELLOW}═══ FRONTEND LOG ═══${NC}"
+            tail -n 50 frontend.log 2>/dev/null || echo "No hay log de frontend"
+            echo -e "\n${CYAN}Para ver logs en tiempo real:${NC}"
+            echo -e "  tail -f backend.log"
+            echo -e "  tail -f frontend.log"
             ;;
         5)
-            print_header "Deteniendo Servicios"
-            docker compose down || docker-compose down
-            print_success "Servicios detenidos"
+            stop_services
             ;;
         6)
             verify_services
