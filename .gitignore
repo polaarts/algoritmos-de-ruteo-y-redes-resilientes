@@ -1,12 +1,7 @@
-# Archivos de configuración obsoletos
-CLAUDE.md
-schema.README.md
-SUPABASE_README.md
-supabase_setup.sql
-
 # Environment Variables
 .env
 .env.local
+*.env.local
 
 # Python
 __pycache__/
@@ -18,12 +13,21 @@ __pycache__/
 venv/
 ENV/
 env/
+*.pyc
 
 # Node.js
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json.bak
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+*.min.js
+*.min.css
 
 # Cache y temporales
 cache/
@@ -31,9 +35,12 @@ cache/
 *.cache
 *.tmp
 *.log
+*.pid
+.temp/
 
 # Docker
 postgres_data/
+.docker/
 
 # IDE
 .vscode/
@@ -41,11 +48,30 @@ postgres_data/
 *.swp
 *.swo
 *~
+*.sublime-*
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Data (opcional - comentar si quieres versionar)
-# *.geojson
-# *.json
+# Data generados (NO versionar)
+amenazas/data/*.json
+amenazas/data/*.geojson
+metadata/data/*.json
+metadata/data/*.geojson
+infraestructura/data/*.json
+infraestructura/data/*.geojson
+
+# Backups
+*.bak
+*.backup
+*.dump
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Documentation builds (si usas generators)
+docs/_build/
+docs/.doctrees/

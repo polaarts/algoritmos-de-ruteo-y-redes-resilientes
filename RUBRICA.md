@@ -2,30 +2,6 @@
 
 ## Criterios de Evaluación
 
-1.- Cargue el sitio web desde consola, el cual permita generar rutas realistas, es decir, no debe generar líneas rectas entre dos puntos que no posea caminos entre ellos.
-
-2.- La interfaz web deberá poder recibir los parámetros de consulta del usuario (junto a las restricciones del usuario) y detectar su geolocalización de forma automática (de forma alternativa, el usuario en caso de no dar permisos para compartir la geolocalización, podrá indicar la dirección a utilizar como inicio).
-
-3.- La interfaz deberá ser capaz de cargar todos los metadatos y amenazas detectados (utilizar popups o algún otro mecanismo para desplegar la información que no se pueda visualizar como un polígono). Para habilitar o deshabilitar la información cargada, debe utilizar un panel de control que posea checkboxes.
-
-4.- A partir de los datos obtenidos como amenaza, cada uno debe ser modelado como una probabilidad de falla en su sistema. Para esto, deberá crear un archivo que genere la probabilidad de fallo de cada enlace y nodo a partir de cada amenaza considerada en su trabajo.
-
-5.- Deberá mostrar como solución la mejor ruta que satisfaga su problemática, utilizando y detallando el funcionamiento de las siguientes técnicas:
-
-Pgr_dijkstra usando como peso solo la distancia en metros.
-Utilizando CPLEX/GUROBI, a partir del modelamiento formal de su problema de optimización, considere las variables de los metadatos y amenazas, y las condiciones del usuario como restricciones.
-Pgr_dijkstra utilizando los parámetros y condiciones propuestas en el punto anterior.
-Una metaheurística u otro algoritmo que considere viable para solucionar su problemática.
-Las 4 rutas generadas deben ser posibles de habilitar o deshabilitar desde su página web, con el fin de poder compararlas.
-
-Deberá indicar el tiempo de cómputo en calcular cada ruta.
-
-6.- A partir de las probabilidades asignadas, deberá habilitar una opción que permita, a partir de números aleatorios entre 0 y 100, determinar si ocurrirá o no la falla (a partir de si supera o no el umbral de falla).
-
-7.- Deberá habilitar un checkbox que permita mostrar solo las amenazas que podrían ocurrir, en base al punto 6.
-
-8.- Realizar un ejemplo de caso en donde se pueda evidenciar que su solución provee una ruta alternativa frente a una amenaza (mitigando lo más posible las amenazas), y que evidencie que se logra cumplir sus objetivos iniciales.
-
 ### 1. Infraestructura para Generación de Rutas Realistas
 **Descripción:** Las rutas generadas son realistas, utilizando caminos existentes y evitando líneas rectas entre puntos.
 
