@@ -1,20 +1,31 @@
 #!/usr/bin/env python3
 """
-Script simplificado para cargar datos GeoJSON locales a PostgreSQL
+Script simplificado para cargar datos GeoJSON locales a PostgreSQL/Supabase
 """
 import json
 import psycopg2
 from psycopg2.extras import execute_batch
 import os
+from dotenv import load_dotenv
 
-# Configuración de la base de datos
+# Cargar variables de entorno desde backend/.env
+env_path = os.path.join(os.path.dirname(__file__), '..', 'backend', '.env')
+load_dotenv(env_path)
+
+# Configuración de la base de datos (desde .env o valores por defecto)
 DB_CONFIG = {
-    'host': 'localhost',
-    'port': '5432',
-    'database': 'postgres',
-    'user': 'postgres',
-    'password': 'postgres'
+    'host': os.getenv('DB_HOST', 'localhost'),
+    'port': os.getenv('DB_PORT', '5432'),
+    'database': os.getenv('DB_NAME', 'postgres'),
+    'user': os.getenv('DB_USER', 'postgres'),
+    'password': os.getenv('DB_PASSWORD', 'postgres')
 }
+
+print(f"🔧 Configuración de base de datos:")
+print(f"   Host: {DB_CONFIG['host']}")
+print(f"   Puerto: {DB_CONFIG['port']}")
+print(f"   Base de datos: {DB_CONFIG['database']}")
+print(f"   Usuario: {DB_CONFIG['user']}")
 
 def connect_db():
     """Conecta a la base de datos"""
@@ -23,7 +34,7 @@ def connect_db():
     return conn
 
 def load_infrastructure(conn, filepath):
-    """Carga infraestructura de red desde GeoJSON"""
+    """Carga infraestructura de red desde GeoJSON a fiber_links"""
     print(f"\n📂 Cargando infraestructura desde {filepath}...")
     
     if not os.path.exists(filepath):
@@ -38,30 +49,95 @@ def load_infrastructure(conn, filepath):
     
     cur = conn.cursor()
     
-    # Insertar features
+    # Primero, crear nodos desde las geometrías
+    print("📍 Extrayendo nodos de las geometrías...")
+    node_coords = set()
+    for feature in features:
+        geom = feature['geometry']
+        if geom['type'] == 'LineString':
+            coords = geom['coordinates']
+            # Primer y último punto
+            node_coords.add((coords[0][0], coords[0][1]))
+            node_coords.add((coords[-1][0], coords[-1][1]))
+    
+    print(f"📍 Encontrados {len(node_coords)} nodos únicos")
+    
+    # Insertar nodos
+    node_map = {}  # (lon, lat) -> node_id
+    for idx, (lon, lat) in enumerate(node_coords):
+        try:
+            cur.execute("""
+                INSERT INTO fiber_nodes (
+                    osm_id, node_type, latitude, longitude, geometry
+                ) VALUES (
+                    %s, %s, %s, %s, ST_SetSRID(ST_MakePoint(%s, %s), 4326)
+                )
+                RETURNING id
+            """, (
+                1000000 + idx,  # osm_id como número (BIGINT)
+                'intersection',
+                lat,
+                lon,
+                lon,
+                lat
+            ))
+            node_id = cur.fetchone()[0]
+            node_map[(lon, lat)] = node_id
+            
+            if (idx + 1) % 500 == 0:
+                conn.commit()
+                print(f"  ✓ Insertados {idx + 1} / {len(node_coords)} nodos...")
+        except Exception as e:
+            print(f"⚠️  Error insertando nodo {idx}: {e}")
+            conn.rollback()
+            continue
+    
+    conn.commit()
+    print(f"✅ Nodos insertados: {len(node_map)}")
+    
+    # Insertar enlaces (fiber_links)
     inserted = 0
     for idx, feature in enumerate(features):
         try:
             props = feature.get('properties', {})
             geom = feature['geometry']
             
+            if geom['type'] != 'LineString':
+                continue
+            
+            coords = geom['coordinates']
+            start_coord = (coords[0][0], coords[0][1])
+            end_coord = (coords[-1][0], coords[-1][1])
+            
+            source_id = node_map.get(start_coord)
+            target_id = node_map.get(end_coord)
+            
+            if not source_id or not target_id:
+                continue
+            
             # Convertir geometry a GeoJSON string
             geom_json = json.dumps(geom)
             
-            # Insertar
+            # Insertar enlace
             cur.execute("""
-                INSERT INTO edges (
-                    osm_id, geometry, highway, surface, length
+                INSERT INTO fiber_links (
+                    source, target, osm_id, geometry, highway, surface, 
+                    length, name, region
                 ) VALUES (
-                    %s, ST_GeomFromGeoJSON(%s), %s, %s, ST_Length(ST_GeomFromGeoJSON(%s)::geography)
+                    %s, %s, %s, ST_GeomFromGeoJSON(%s), %s, %s, 
+                    ST_Length(ST_GeomFromGeoJSON(%s)::geography), %s, %s
                 )
                 ON CONFLICT DO NOTHING
             """, (
+                source_id,
+                target_id,
                 props.get('@id', f'synthetic_{idx}'),
                 geom_json,
                 props.get('highway', 'unclassified'),
                 props.get('surface', 'unknown'),
-                geom_json
+                geom_json,
+                props.get('name', 'Unnamed'),
+                props.get('region', 'Chile')
             ))
             
             if cur.rowcount > 0:
@@ -69,10 +145,10 @@ def load_infrastructure(conn, filepath):
                 
             if (idx + 1) % 100 == 0:
                 conn.commit()
-                print(f"  ✓ Procesados {idx + 1} / {len(features)} ...")
+                print(f"  ✓ Procesados {idx + 1} / {len(features)} enlaces...")
                 
         except Exception as e:
-            print(f"⚠️  Error en feature {idx}: {e}")
+            print(f"⚠️  Error en enlace {idx}: {e}")
             conn.rollback()
             continue
     

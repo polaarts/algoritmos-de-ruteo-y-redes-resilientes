@@ -6,9 +6,9 @@ Backend API REST desarrollado con Node.js y Express para el análisis de resilie
 
 - **Node.js 18+**
 - **Express.js** - Framework web
-- **PostgreSQL + PostGIS + pgRouting** - Base de datos geoespacial
-- **node-postgres (pg)** - Cliente PostgreSQL
-- **Supabase** - PostgreSQL en la nube
+- **Supabase** - PostgreSQL gestionado en la nube con PostGIS y pgRouting
+- **@supabase/supabase-js** - Cliente oficial de Supabase
+- **node-postgres (pg)** - Cliente PostgreSQL para consultas avanzadas
 
 ## Estructura del Proyecto
 
@@ -47,17 +47,23 @@ cp .env.example .env
 Edita `.env` con tus credenciales de Supabase:
 
 ```env
-PORT=5000
+PORT=5001
 NODE_ENV=development
 
-# Supabase credentials
-DB_HOST=your-project.supabase.co
+# Supabase Configuration
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# Database credentials
+DB_HOST=db.your-project.supabase.co
 DB_PORT=5432
 DB_NAME=postgres
-DB_USER=postgres
+DB_USER=postgres.your-project
 DB_PASSWORD=your-password
-DB_SSL=true
 ```
+
+**📚 Para instrucciones detalladas de configuración de Supabase, ver [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)**
 
 ### 3. Ejecutar el servidor
 

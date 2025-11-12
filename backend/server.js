@@ -10,7 +10,8 @@ const metadataRoutes = require('./routes/metadata');
 const threatsRoutes = require('./routes/threats');
 const routingRoutes = require('./routes/routing');
 const probabilitiesRoutes = require('./routes/probabilities');
-const simulationRoutes = require('./routes/simulation');
+// const simulationRoutes = require('./routes/simulation'); // Deprecated - usar simulation-v2
+const simulationV2Routes = require('./routes/simulation-v2');
 const optimizationRoutes = require('./routes/optimization');
 
 const app = express();
@@ -38,7 +39,9 @@ app.use('/api/metadata', metadataRoutes);
 app.use('/api/threats', threatsRoutes);
 app.use('/api/routing', routingRoutes);
 app.use('/api/probabilities', probabilitiesRoutes);
-app.use('/api/simulation', simulationRoutes);
+// app.use('/api/simulation', simulationRoutes); // Deprecated
+app.use('/api/simulation', simulationV2Routes); // Nueva implementación
+app.use('/api/simulation-v2', simulationV2Routes); // Alias para compatibilidad
 app.use('/api/optimization', optimizationRoutes);
 
 // Root endpoint

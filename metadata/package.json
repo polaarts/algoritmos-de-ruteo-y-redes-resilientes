@@ -1,0 +1,19 @@
+{
+  "name": "metadata-extractor",
+  "version": "1.0.0",
+  "description": "Extractor de metadata de infraestructura (uso de suelo, vías, recubrimiento)",
+  "main": "extract_all_metadata.js",
+  "scripts": {
+    "extract": "node extract_all_metadata.js",
+    "ground": "node ground_type.js",
+    "infrastructure": "node infraestructure_support.js",
+    "recubrimiento": "node recubrimiento_estimado.js",
+    "adaptar": "node adaptar_para_supabase.js",
+    "all": "npm run extract && npm run adaptar"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "author": "",
+  "license": "ISC"
+}

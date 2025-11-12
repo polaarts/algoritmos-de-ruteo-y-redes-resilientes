@@ -559,4 +559,191 @@ router.post('/calculate-resilient', async (req, res, next) => {
   }
 });
 
+/**
+ * POST /api/routing/genetic
+ * Calculate route using Genetic Algorithm
+ */
+router.post('/genetic', async (req, res, next) => {
+  try {
+    const { 
+      start_lat, 
+      start_lon, 
+      end_lat, 
+      end_lon,
+      populationSize = 50,
+      generations = 100,
+      mutationRate = 0.15
+    } = req.body;
+
+    // Validar parámetros requeridos
+    if (!start_lat || !start_lon || !end_lat || !end_lon) {
+      return res.status(400).json({
+        error: 'Missing required parameters',
+        required: ['start_lat', 'start_lon', 'end_lat', 'end_lon']
+      });
+    }
+
+    // Encontrar nodos más cercanos
+    const startNodeResult = await query(
+      `SELECT id FROM fiber_nodes 
+       ORDER BY geom <-> ST_SetSRID(ST_MakePoint($1, $2), 4326) 
+       LIMIT 1`,
+      [parseFloat(start_lon), parseFloat(start_lat)]
+    );
+
+    const endNodeResult = await query(
+      `SELECT id FROM fiber_nodes 
+       ORDER BY geom <-> ST_SetSRID(ST_MakePoint($1, $2), 4326) 
+       LIMIT 1`,
+      [parseFloat(end_lon), parseFloat(end_lat)]
+    );
+
+    if (startNodeResult.rows.length === 0 || endNodeResult.rows.length === 0) {
+      return res.status(404).json({
+        error: 'No nodes found near specified coordinates'
+      });
+    }
+
+    const sourceId = startNodeResult.rows[0].id;
+    const targetId = endNodeResult.rows[0].id;
+
+    // Inicializar y ejecutar algoritmo genético
+    const GeneticRoutingAlgorithm = require('../algorithms/genetic_routing');
+    const ga = new GeneticRoutingAlgorithm({
+      populationSize: parseInt(populationSize),
+      generations: parseInt(generations),
+      mutationRate: parseFloat(mutationRate),
+      weightDistance: 0.4,
+      weightRisk: 0.4,
+      weightHops: 0.2
+    });
+
+    await ga.initialize();
+
+    const route = await ga.findRoute(sourceId, targetId);
+
+    res.json({
+      success: true,
+      route: route,
+      algorithm: 'genetic_algorithm',
+      parameters: {
+        population_size: populationSize,
+        generations: generations,
+        mutation_rate: mutationRate
+      }
+    });
+
+  } catch (error) {
+    console.error('Error en ruta genética:', error);
+    next(error);
+  }
+});
+
+/**
+ * POST /api/routing/mip
+ * Calculate route using Mixed Integer Programming (MIP) optimization
+ */
+router.post('/mip', async (req, res, next) => {
+  try {
+    const { 
+      start_lat, 
+      start_lon, 
+      end_lat, 
+      end_lon,
+      riskWeight = 0.5,
+      distanceWeight = 0.5,
+      maxDistance = null,
+      avoidHighRisk = false,
+      highRiskThreshold = 50,
+      avoidNodes = [],
+      avoidEdges = []
+    } = req.body;
+
+    // Validar parámetros requeridos
+    if (!start_lat || !start_lon || !end_lat || !end_lon) {
+      return res.status(400).json({
+        error: 'Missing required parameters',
+        required: ['start_lat', 'start_lon', 'end_lat', 'end_lon']
+      });
+    }
+
+    // Encontrar nodos más cercanos
+    const startNodeResult = await query(
+      `SELECT id FROM fiber_nodes 
+       ORDER BY geom <-> ST_SetSRID(ST_MakePoint($1, $2), 4326) 
+       LIMIT 1`,
+      [parseFloat(start_lon), parseFloat(start_lat)]
+    );
+
+    const endNodeResult = await query(
+      `SELECT id FROM fiber_nodes 
+       ORDER BY geom <-> ST_SetSRID(ST_MakePoint($1, $2), 4326) 
+       LIMIT 1`,
+      [parseFloat(end_lon), parseFloat(end_lat)]
+    );
+
+    if (startNodeResult.rows.length === 0 || endNodeResult.rows.length === 0) {
+      return res.status(404).json({
+        error: 'No nodes found near specified coordinates'
+      });
+    }
+
+    const sourceId = startNodeResult.rows[0].id;
+    const targetId = endNodeResult.rows[0].id;
+
+    // Inicializar y ejecutar optimizador MIP
+    const MIPRoutingOptimizer = require('../algorithms/mip_routing');
+    const mip = new MIPRoutingOptimizer({
+      riskWeight: parseFloat(riskWeight),
+      distanceWeight: parseFloat(distanceWeight),
+      maxDistance: maxDistance ? parseFloat(maxDistance) : Infinity,
+      avoidHighRisk: Boolean(avoidHighRisk),
+      highRiskThreshold: parseFloat(highRiskThreshold)
+    });
+
+    await mip.initialize();
+
+    const route = await mip.solve(sourceId, targetId, {
+      avoidNodes: avoidNodes,
+      avoidEdges: avoidEdges
+    });
+
+    // Obtener explicación del modelo
+    const modelExplanation = mip.getModelExplanation();
+
+    res.json({
+      success: true,
+      route: route,
+      algorithm: 'mip_optimization',
+      model: modelExplanation,
+      parameters: {
+        risk_weight: riskWeight,
+        distance_weight: distanceWeight,
+        max_distance: maxDistance || 'unlimited',
+        avoid_high_risk: avoidHighRisk,
+        high_risk_threshold: highRiskThreshold
+      }
+    });
+
+  } catch (error) {
+    console.error('Error en optimización MIP:', error);
+    next(error);
+  }
+});
+
+/**
+ * GET /api/routing/mip/model-info
+ * Get information about the MIP optimization model
+ */
+router.get('/mip/model-info', (req, res) => {
+  const MIPRoutingOptimizer = require('../algorithms/mip_routing');
+  const mip = new MIPRoutingOptimizer();
+  const explanation = mip.getModelExplanation();
+  
+  res.json({
+    success: true,
+    model: explanation
+  });
+});
+
 module.exports = router;

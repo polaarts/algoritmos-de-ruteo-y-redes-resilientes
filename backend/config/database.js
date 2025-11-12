@@ -1,26 +1,40 @@
+const { createClient } = require('@supabase/supabase-js');
 const { Pool } = require('pg');
 
-// Database connection pool configuration
+// Supabase configuration
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+
+// Initialize Supabase client
+let supabase = null;
+if (supabaseUrl && supabaseServiceKey) {
+  supabase = createClient(supabaseUrl, supabaseServiceKey, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false
+    }
+  });
+  console.log('✅ Supabase client initialized');
+}
+
+// PostgreSQL Pool configuration (using Supabase's connection pooler or direct connection)
 const pool = new Pool({
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'fiber_network',
+  database: process.env.DB_NAME || 'postgres',
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
-  max: 20, // Maximum number of clients in the pool
+  max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
-  // For Supabase SSL connection
-  ...(process.env.DB_SSL === 'true' && {
-    ssl: {
-      rejectUnauthorized: false
-    }
-  })
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 // Test database connection on startup
 pool.on('connect', () => {
-  console.log('✅ Database connected successfully');
+  console.log('✅ PostgreSQL pool connected successfully');
 });
 
 pool.on('error', (err) => {
@@ -60,6 +74,7 @@ const convertToGeoJSON = (rows, geomColumn = 'geometry') => {
 // Test database connection function
 const testConnection = async () => {
   try {
+    // Test PostgreSQL connection
     const result = await pool.query('SELECT NOW() as current_time, version() as pg_version');
     console.log('🗄️  PostgreSQL version:', result.rows[0].pg_version);
 
@@ -71,6 +86,16 @@ const testConnection = async () => {
     const pgroutingVersion = await pool.query("SELECT pgr_version() as pgrouting_version");
     console.log('🛣️  pgRouting version:', pgroutingVersion.rows[0].pgrouting_version);
 
+    // Test Supabase connection if configured
+    if (supabase) {
+      const { data, error } = await supabase.from('datacenters').select('count', { count: 'exact', head: true });
+      if (error) {
+        console.warn('⚠️  Supabase test query failed:', error.message);
+      } else {
+        console.log('✅ Supabase connection verified');
+      }
+    }
+
     return true;
   } catch (error) {
     console.error('❌ Database connection test failed:', error.message);
@@ -79,6 +104,7 @@ const testConnection = async () => {
 };
 
 module.exports = {
+  supabase,
   pool,
   query,
   convertToGeoJSON,
