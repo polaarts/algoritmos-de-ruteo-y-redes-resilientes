@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for API - can be configured via environment variable
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -40,9 +40,13 @@ export const infrastructureAPI = {
   // Get all available endpoints
   getInfo: () => api.get('/infrastructure'),
   
-  // Edges
-  getEdges: (params = {}) => api.get('/infrastructure/edges', { params }),
-  getEdgeById: (id) => api.get(`/infrastructure/edges/${id}`),
+  // Links (fiber optic cables) - CORRECTED: uses /links not /edges
+  getLinks: (params = {}) => api.get('/infrastructure/links', { params }),
+  getLinkById: (id) => api.get(`/infrastructure/links/${id}`),
+  
+  // Legacy alias for backwards compatibility
+  getEdges: (params = {}) => api.get('/infrastructure/links', { params }),
+  getEdgeById: (id) => api.get(`/infrastructure/links/${id}`),
   
   // Nodes
   getNodes: (params = {}) => api.get('/infrastructure/nodes', { params }),
@@ -101,8 +105,8 @@ export const threatsAPI = {
 export const routingAPI = {
   // Get all available endpoints
   getInfo: () => api.get('/routing'),
-  
-  // Calculate routes
+
+  // Calculate routes - Dijkstra with distance only
   calculateRoute: (startLat, startLon, endLat, endLon) =>
     api.get('/routing/calculate', {
       params: {
@@ -119,11 +123,141 @@ export const routingAPI = {
       end_lat: endLat,
       end_lon: endLon,
     }),
+
+  // Calculate resilient route - Dijkstra with variables (risk-aware)
+  calculateResilientRoute: (startLat, startLon, endLat, endLon, options = {}) =>
+    api.get('/routing/calculate-resilient', {
+      params: {
+        start_lat: startLat,
+        start_lon: startLon,
+        end_lat: endLat,
+        end_lon: endLon,
+        max_failure_prob: options.maxFailureProb || 0.3,
+        risk_weight: options.riskWeight || 2.0,
+        simulation_id: options.simulationId || null,
+      },
+    }),
+  calculateResilientRoutePost: (startLat, startLon, endLat, endLon, options = {}) =>
+    api.post('/routing/calculate-resilient', {
+      start_lat: startLat,
+      start_lon: startLon,
+      end_lat: endLat,
+      end_lon: endLon,
+      max_failure_prob: options.maxFailureProb || 0.3,
+      risk_weight: options.riskWeight || 2.0,
+      simulation_id: options.simulationId || null,
+    }),
+
+  // Helper endpoints - Santiago to Valparaíso (shorter route, more likely to be connected)
+  getExampleRoute: () => api.get('/routing/calculate', {
+    params: {
+      start_lat: -33.4489,  // Santiago
+      start_lon: -70.6693,
+      end_lat: -33.0472,    // Valparaíso (ajustado)
+      end_lon: -71.6127
+    }
+  }),
+  getNearestNode: (lat, lon) => api.get('/routing/node-search', {
+    params: { lat, lon }
+  }),
+  getTopologyStatus: () => api.get('/routing'),
+};
+
+// Optimization API (MIP and Genetic Algorithm)
+export const optimizationAPI = {
+  // Get all available endpoints
+  getInfo: () => api.get('/routing'),
+
+  // MIP (Mixed Integer Programming) optimization
+  calculateMIPRoute: (startLat, startLon, endLat, endLon, options = {}) =>
+    api.post('/routing/mip', {
+      start_lat: startLat,
+      start_lon: startLon,
+      end_lat: endLat,
+      end_lon: endLon,
+      max_probability: options.maxProbability || 0.7,
+      risk_weight: options.riskWeight || 1.0,
+      time_limit: options.timeLimit || 60,
+    }),
+
+  // MIP model information
+  getMIPModelInfo: () => api.get('/routing/mip/model-info'),
+
+  // Genetic Algorithm optimization
+  calculateGeneticRoute: (startLat, startLon, endLat, endLon, options = {}) =>
+    api.post('/routing/genetic', {
+      start_lat: startLat,
+      start_lon: startLon,
+      end_lat: endLat,
+      end_lon: endLon,
+      max_probability: options.maxProbability || 0.7,
+      population_size: options.populationSize || 100,
+      generations: options.generations || 50,
+    }),
+
+  // Compare all algorithms
+  compareAlgorithms: (startLat, startLon, endLat, endLon, options = {}) =>
+    api.get('/routing/compare', {
+      params: {
+        start_lat: startLat,
+        start_lon: startLon,
+        end_lat: endLat,
+        end_lon: endLon,
+        ...options,
+      },
+    }),
+};
+
+// Probabilities API
+export const probabilitiesAPI = {
+  // Get all available endpoints
+  getInfo: () => api.get('/probabilities'),
+
+  // Get edge probabilities
+  getEdgeProbabilities: (params = {}) => api.get('/probabilities/edges', { params }),
+  getEdgeProbabilityById: (id) => api.get(`/probabilities/edges/${id}`),
+
+  // Statistics
+  getStatistics: () => api.get('/probabilities/statistics'),
+
+  // Calculate probabilities
+  calculateProbabilities: (options = {}) =>
+    api.post('/probabilities/calculate', {
+      threat_radius_km: options.threatRadiusKm || 200,
+      limit: options.limit || null,
+    }),
+};
+
+// Simulation API
+export const simulationAPI = {
+  // Trigger Monte Carlo simulation
+  triggerSimulation: (options = {}) =>
+    api.post('/simulation/trigger-failures', {
+      probabilityThreshold: options.probabilityThreshold || 0.5,
+      includeGeometry: options.includeGeometry !== false,
+    }),
+
+  // Get current failures
+  getCurrentFailures: () => api.get('/simulation/current-failures'),
+
+  // Clear all failures
+  clearSimulation: () => api.post('/simulation/clear-failures'),
+
+  // Get network operational status
+  getNetworkStatus: () => api.get('/simulation/network-status'),
   
-  // Helper endpoints
-  getExampleRoute: () => api.get('/routing/example'),
-  getNearestNode: (lat, lon) => api.get(`/routing/nearest-node/${lat}/${lon}`),
-  getTopologyStatus: () => api.get('/routing/topology-status'),
+  // Legacy endpoints (backward compatibility)
+  getSimulations: () => api.get('/simulation'),
+  getSimulationById: (id) => api.get(`/simulation/${id}`),
+  runSimulation: (options = {}) =>
+    api.post('/simulation/run', {
+      name: options.name || `Simulación ${new Date().toISOString()}`,
+      probabilityThreshold: options.probabilityThreshold || 0.3,
+    }),
+  getSimulationFailures: (id, elementType = 'edge') =>
+    api.get(`/simulation/${id}/failures`, { params: { element_type: elementType } }),
+  getSimulationStatistics: (id) => api.get(`/simulation/${id}/statistics`),
+  deleteSimulation: (id) => api.delete(`/simulation/${id}`),
 };
 
 // Health check

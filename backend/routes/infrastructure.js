@@ -10,22 +10,22 @@ router.get('/', (req, res) => {
   res.json({
     message: 'Infrastructure API endpoints',
     endpoints: {
-      edges: {
-        path: '/api/infrastructure/edges',
+      links: {
+        path: '/api/infrastructure/links',
         method: 'GET',
         description: 'Get all fiber optic links as GeoJSON',
-        query_params: ['region', 'limit', 'offset']
+        query_params: ['region', 'limit', 'offset', 'bbox']
       },
-      edge_by_id: {
-        path: '/api/infrastructure/edges/:id',
+      link_by_id: {
+        path: '/api/infrastructure/links/:id',
         method: 'GET',
-        description: 'Get specific edge by ID'
+        description: 'Get specific link by ID'
       },
       nodes: {
         path: '/api/infrastructure/nodes',
         method: 'GET',
         description: 'Get all nodes as GeoJSON',
-        query_params: ['region', 'node_type', 'limit', 'offset']
+        query_params: ['region', 'limit', 'offset', 'bbox']
       },
       node_by_id: {
         path: '/api/infrastructure/nodes/:id',
@@ -35,19 +35,25 @@ router.get('/', (req, res) => {
       stats: {
         path: '/api/infrastructure/stats',
         method: 'GET',
-        description: 'Get infrastructure statistics'
+        description: 'Get infrastructure statistics by region'
+      },
+      regions: {
+        path: '/api/infrastructure/regions',
+        method: 'GET',
+        description: 'Get list of available regions'
       }
     }
   });
 });
 
 /**
- * GET /api/infrastructure/edges
- * Get all edges (fiber optic links) as GeoJSON
+ * GET /api/infrastructure/links
+ * Get all fiber links as GeoJSON
+ * Query params: region, limit, offset, bbox (minLon,minLat,maxLon,maxLat)
  */
-router.get('/edges', async (req, res, next) => {
+router.get('/links', async (req, res, next) => {
   try {
-    const { region, limit = 1000, offset = 0 } = req.query;
+    const { region, limit = 1000, offset = 0, bbox } = req.query;
 
     let sql = `
       SELECT
@@ -66,12 +72,11 @@ router.get('/edges', async (req, res, next) => {
         tunnel,
         region,
         link_type,
-        recubrimiento_estim,
         cost,
         reverse_cost,
         ST_AsGeoJSON(geometry)::json as geometry
-      FROM edges
-      WHERE 1=1
+      FROM fiber_links
+      WHERE cost > 0
     `;
 
     const params = [];
@@ -83,13 +88,21 @@ router.get('/edges', async (req, res, next) => {
       paramIndex++;
     }
 
+    // Bounding box filter for map viewport
+    if (bbox) {
+      const [minLon, minLat, maxLon, maxLat] = bbox.split(',').map(parseFloat);
+      sql += ` AND geometry && ST_MakeEnvelope($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, 4326)`;
+      params.push(minLon, minLat, maxLon, maxLat);
+      paramIndex += 4;
+    }
+
     sql += ` ORDER BY id LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
     params.push(parseInt(limit), parseInt(offset));
 
     const result = await query(sql, params);
 
     // Get total count
-    let countSql = 'SELECT COUNT(*) as total FROM edges WHERE 1=1';
+    let countSql = 'SELECT COUNT(*) as total FROM fiber_links WHERE cost > 0';
     const countParams = [];
     if (region) {
       countSql += ' AND region = $1';
@@ -114,10 +127,10 @@ router.get('/edges', async (req, res, next) => {
 });
 
 /**
- * GET /api/infrastructure/edges/:id
- * Get specific edge by ID
+ * GET /api/infrastructure/links/:id
+ * Get specific link by ID
  */
-router.get('/edges/:id', async (req, res, next) => {
+router.get('/links/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -139,18 +152,17 @@ router.get('/edges/:id', async (req, res, next) => {
         tunnel,
         region,
         link_type,
-        recubrimiento_estim,
         cost,
         reverse_cost,
         ST_AsGeoJSON(geometry)::json as geometry
-      FROM edges
+      FROM fiber_links
       WHERE id = $1
       `,
       [id]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Edge not found' });
+      return res.status(404).json({ error: 'Link not found' });
     }
 
     const geojson = convertToGeoJSON(result.rows);
@@ -163,23 +175,22 @@ router.get('/edges/:id', async (req, res, next) => {
 /**
  * GET /api/infrastructure/nodes
  * Get all nodes as GeoJSON
+ * Query params: region, limit, offset, bbox
  */
 router.get('/nodes', async (req, res, next) => {
   try {
-    const { region, node_type, limit = 1000, offset = 0 } = req.query;
+    const { region, limit = 100, offset = 0, bbox } = req.query;
 
     let sql = `
       SELECT
         id,
         osm_id,
-        node_type,
         latitude,
         longitude,
         region,
         city,
-        elevation,
         ST_AsGeoJSON(geometry)::json as geometry
-      FROM nodes
+      FROM fiber_nodes
       WHERE 1=1
     `;
 
@@ -192,10 +203,12 @@ router.get('/nodes', async (req, res, next) => {
       paramIndex++;
     }
 
-    if (node_type) {
-      sql += ` AND node_type = $${paramIndex}`;
-      params.push(node_type);
-      paramIndex++;
+    // Bounding box filter
+    if (bbox) {
+      const [minLon, minLat, maxLon, maxLat] = bbox.split(',').map(parseFloat);
+      sql += ` AND geometry && ST_MakeEnvelope($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, 4326)`;
+      params.push(minLon, minLat, maxLon, maxLat);
+      paramIndex += 4;
     }
 
     sql += ` ORDER BY id LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
@@ -204,7 +217,7 @@ router.get('/nodes', async (req, res, next) => {
     const result = await query(sql, params);
 
     // Get total count
-    let countSql = 'SELECT COUNT(*) as total FROM nodes WHERE 1=1';
+    let countSql = 'SELECT COUNT(*) as total FROM fiber_nodes WHERE 1=1';
     const countParams = [];
     if (region) {
       countSql += ' AND region = $1';
@@ -229,13 +242,58 @@ router.get('/nodes', async (req, res, next) => {
 });
 
 /**
+ * GET /api/infrastructure/nodes/:id
+ * Get specific node by ID
+ */
+router.get('/nodes/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await query(
+      `
+      SELECT
+        id,
+        osm_id,
+        latitude,
+        longitude,
+        region,
+        city,
+        ST_AsGeoJSON(geometry)::json as geometry
+      FROM fiber_nodes
+      WHERE id = $1
+      `,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Node not found' });
+    }
+
+    const geojson = convertToGeoJSON(result.rows);
+    res.json(geojson.features[0]);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * GET /api/infrastructure/stats
  * Get network statistics by region
  */
 router.get('/stats', async (req, res, next) => {
   try {
     const result = await query(`
-      SELECT * FROM network_stats_by_region
+      SELECT
+        region,
+        COUNT(DISTINCT id) as total_links,
+        COUNT(DISTINCT source) + COUNT(DISTINCT target) as total_nodes,
+        ROUND(SUM(length)/1000, 2) as total_km,
+        COUNT(CASE WHEN highway LIKE '%motorway%' THEN 1 END) as motorways,
+        COUNT(CASE WHEN bridge = 'yes' THEN 1 END) as bridges,
+        COUNT(CASE WHEN tunnel = 'yes' THEN 1 END) as tunnels
+      FROM fiber_links
+      WHERE region IS NOT NULL
+      GROUP BY region
       ORDER BY total_km DESC
     `);
 
@@ -254,11 +312,11 @@ router.get('/stats', async (req, res, next) => {
 router.get('/regions', async (req, res, next) => {
   try {
     const result = await query(`
-      SELECT DISTINCT region, COUNT(*) as edge_count
-      FROM edges
+      SELECT DISTINCT region, COUNT(*) as link_count
+      FROM fiber_links
       WHERE region IS NOT NULL
       GROUP BY region
-      ORDER BY edge_count DESC
+      ORDER BY link_count DESC
     `);
 
     res.json({

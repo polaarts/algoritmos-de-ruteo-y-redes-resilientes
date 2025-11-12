@@ -1,0 +1,601 @@
+/* Route Comparison Panel */
+.route-comparison-panel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 1000;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+}
+
+.route-comparison-panel h3 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 2px solid #0088ff;
+  padding-bottom: 8px;
+}
+
+.route-comparison-panel h4 {
+  margin: 15px 0 10px 0;
+  font-size: 14px;
+  color: #555;
+  font-weight: 600;
+}
+
+/* Point Selection */
+.point-selection {
+  margin-bottom: 15px;
+}
+
+.point-group {
+  margin-bottom: 12px;
+}
+
+.point-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.point-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.point-display {
+  flex: 1;
+  padding: 8px 12px;
+  background: #f0f8ff;
+  border: 1px solid #0088ff;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #0066cc;
+  font-weight: 500;
+}
+
+.point-empty {
+  flex: 1;
+  padding: 8px 12px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+}
+
+.point-controls button {
+  padding: 8px 16px;
+  background: #0088ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.point-controls button:hover {
+  background: #0066cc;
+}
+
+.point-controls button.active {
+  background: #ff6600;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-gps {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #00cc66;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #00aa55;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 204, 102, 0.3);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+  border-color: #ccc;
+}
+
+.btn-gps {
+  background: #ff6600;
+  color: white;
+  border: none;
+}
+
+.btn-gps:hover:not(:disabled) {
+  background: #ff5500;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(255, 102, 0, 0.3);
+}
+
+.btn-gps:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Options Toggle */
+.options-toggle {
+  margin-bottom: 15px;
+}
+
+.options-toggle button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.options-toggle button:hover {
+  background: #f0f0f0;
+  border-color: #ccc;
+}
+
+/* Options Panel */
+.options-panel {
+  margin-bottom: 15px;
+  padding: 15px;
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.options-panel h4 {
+  margin: 0 0 15px 0;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 2px solid #0088ff;
+  padding-bottom: 6px;
+}
+
+.option-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.option-section:last-of-type {
+  border-bottom: none;
+}
+
+.option-section h5 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: #555;
+  font-weight: 600;
+}
+
+.option-item {
+  margin-bottom: 15px;
+}
+
+.option-item label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+}
+
+.option-value {
+  background: #0088ff;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: center;
+}
+
+.option-item input[type="range"] {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+.option-item input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #0088ff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.option-item input[type="range"]::-webkit-slider-thumb:hover {
+  background: #0066cc;
+  transform: scale(1.2);
+}
+
+.option-item input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #0088ff;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.option-item input[type="range"]::-moz-range-thumb:hover {
+  background: #0066cc;
+  transform: scale(1.2);
+}
+
+.option-item small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #777;
+  line-height: 1.4;
+}
+
+.options-actions {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.options-actions button {
+  width: 100%;
+}
+
+/* Route Toggles */
+.route-toggles {
+  margin-bottom: 15px;
+  padding: 12px;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.route-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  cursor: pointer;
+  font-size: 13px;
+  color: #333;
+}
+
+.route-toggle input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.route-toggle input[type="checkbox"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.route-color-indicator {
+  display: inline-block;
+  width: 24px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.loading-indicator {
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.error-indicator {
+  margin-left: auto;
+  color: #ff3333;
+  font-size: 14px;
+}
+
+/* Comparison Table */
+.table-toggle {
+  margin-bottom: 10px;
+}
+
+.comparison-table {
+  margin-top: 15px;
+  overflow-x: auto;
+}
+
+.comparison-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.comparison-table th {
+  background: #f5f5f5;
+  padding: 8px 6px;
+  text-align: left;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 2px solid #ddd;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.comparison-table td {
+  padding: 10px 6px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.comparison-table tr.visible {
+  background: #f9fff9;
+}
+
+.route-color-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.status-loading {
+  color: #ff9900;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-error {
+  color: #ff3333;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-success {
+  color: #00cc66;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-pending {
+  color: #999;
+  font-size: 11px;
+  font-style: italic;
+}
+
+/* Errors Display */
+.errors-display {
+  margin-top: 15px;
+  padding: 12px;
+  background: #fff5f5;
+  border: 1px solid #ffcccc;
+  border-radius: 4px;
+}
+
+.errors-display h4 {
+  margin: 0 0 8px 0;
+  color: #cc0000;
+  font-size: 13px;
+}
+
+.error-item {
+  padding: 6px 0;
+  font-size: 12px;
+  color: #cc0000;
+}
+
+.error-item strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.loading-spinner {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 20px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0088ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.loading-details {
+  text-align: left;
+  font-size: 13px;
+  color: #666;
+}
+
+.loading-details p {
+  margin: 5px 0;
+  padding: 4px 8px;
+  background: #f9f9f9;
+  border-radius: 3px;
+}
+
+/* Selection Hint */
+.selection-hint {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ff6600;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.4);
+  z-index: 9999;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
+}
+
+/* Route Popup */
+.route-popup h3 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 5px;
+}
+
+.route-popup p {
+  margin: 4px 0;
+  font-size: 12px;
+  color: #555;
+}
+
+.route-popup strong {
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .route-comparison-panel {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+    max-height: 70vh;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+
+  .comparison-table {
+    font-size: 10px;
+  }
+
+  .comparison-table th,
+  .comparison-table td {
+    padding: 6px 4px;
+  }
+}
+
+/* Scrollbar styling */
+.route-comparison-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.route-comparison-panel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.route-comparison-panel::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.route-comparison-panel::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

@@ -1,0 +1,230 @@
+import React, { useState } from 'react';
+import '../styles/SimulationControls.css';
+
+/**
+ * SimulationControlsV2 Component
+ * Permite ejecutar simulaciones Monte Carlo para determinar fallas en la red
+ * basadas en números aleatorios vs probabilidades calculadas
+ */
+function SimulationControlsV2({ onSimulationChange }) {
+  const [simulationActive, setSimulationActive] = useState(false);
+  const [simulationData, setSimulationData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showFailedOnly, setShowFailedOnly] = useState(false);
+
+  // Ejecutar simulación de fallas
+  const triggerSimulation = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('http://localhost:5001/api/simulation/trigger-failures', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          simulationName: `Simulación ${new Date().toLocaleString('es-CL')}`,
+          seed: Math.random()
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al ejecutar simulación');
+      }
+
+      const data = await response.json();
+      console.log('Simulación ejecutada:', data);
+
+      setSimulationData(data);
+      setSimulationActive(true);
+
+      // Notificar al componente padre
+      if (onSimulationChange) {
+        onSimulationChange(data);
+      }
+
+    } catch (err) {
+      console.error('Error en simulación:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Limpiar simulación
+  const clearSimulation = async () => {
+    try {
+      await fetch('http://localhost:5001/api/simulation/clear-failures', {
+        method: 'POST'
+      });
+
+      setSimulationActive(false);
+      setSimulationData(null);
+      setError(null);
+
+      // Notificar al componente padre
+      if (onSimulationChange) {
+        onSimulationChange(null);
+      }
+
+    } catch (err) {
+      console.error('Error limpiando simulación:', err);
+    }
+  };
+
+  // Obtener estado de la red
+  const checkNetworkStatus = async () => {
+    try {
+      const response = await fetch('http://localhost:5001/api/simulation/network-status');
+      const data = await response.json();
+      console.log('Estado de la red:', data);
+    } catch (err) {
+      console.error('Error obteniendo estado:', err);
+    }
+  };
+
+  return (
+    <div className="simulation-controls-panel">
+      <div className="simulation-header">
+        <h3>🎲 Simulación de Fallas (Monte Carlo)</h3>
+        <span className={`status-badge ${simulationActive ? 'active' : 'inactive'}`}>
+          {simulationActive ? 'Activa' : 'Inactiva'}
+        </span>
+      </div>
+
+      <div className="simulation-description">
+        <p>
+          Simula fallas en la red usando números aleatorios (0-100) comparados
+          con las probabilidades calculadas de cada nodo y enlace.
+        </p>
+      </div>
+
+      {/* Controles */}
+      <div className="simulation-actions">
+        <button
+          className="btn-primary"
+          onClick={triggerSimulation}
+          disabled={loading || simulationActive}
+        >
+          {loading ? 'Ejecutando...' : '▶️ Ejecutar Simulación'}
+        </button>
+
+        {simulationActive && (
+          <>
+            <button
+              className="btn-secondary"
+              onClick={clearSimulation}
+            >
+              🗑️ Limpiar Simulación
+            </button>
+            
+            <button
+              className="btn-info"
+              onClick={checkNetworkStatus}
+            >
+              📊 Ver Estado de Red
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Checkbox para mostrar solo fallas */}
+      {simulationActive && (
+        <div className="simulation-options">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={showFailedOnly}
+              onChange={(e) => setShowFailedOnly(e.target.checked)}
+            />
+            <span>Mostrar solo elementos fallidos</span>
+          </label>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="simulation-error">
+          <strong>❌ Error:</strong> {error}
+        </div>
+      )}
+
+      {/* Estadísticas */}
+      {simulationData && (
+        <div className="simulation-stats">
+          <h4>📈 Estadísticas de Simulación</h4>
+          
+          <div className="stat-card">
+            <div className="stat-header">Resumen General</div>
+            <div className="stat-row">
+              <span>Tiempo de ejecución:</span>
+              <strong>{simulationData.simulation.execution_time_ms}ms</strong>
+            </div>
+            <div className="stat-row">
+              <span>Elementos totales:</span>
+              <strong>{simulationData.statistics.total_elements}</strong>
+            </div>
+            <div className="stat-row">
+              <span>Fallas totales:</span>
+              <strong className="text-danger">
+                {simulationData.statistics.total_failures}
+              </strong>
+            </div>
+            <div className="stat-row">
+              <span>Tasa de falla:</span>
+              <strong>{simulationData.statistics.failure_rate}</strong>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-header">📍 Nodos</div>
+            <div className="stat-row">
+              <span>Total:</span>
+              <strong>{simulationData.statistics.nodes.total}</strong>
+            </div>
+            <div className="stat-row">
+              <span>Fallidos:</span>
+              <strong className="text-danger">
+                {simulationData.statistics.nodes.failed}
+              </strong>
+            </div>
+            <div className="stat-subheader">Por amenaza:</div>
+            {Object.entries(simulationData.statistics.nodes.byThreat).map(([threat, count]) => (
+              count > 0 && (
+                <div key={threat} className="stat-row stat-threat">
+                  <span>{threat}:</span>
+                  <strong>{count}</strong>
+                </div>
+              )
+            ))}
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-header">🔗 Enlaces</div>
+            <div className="stat-row">
+              <span>Total:</span>
+              <strong>{simulationData.statistics.edges.total}</strong>
+            </div>
+            <div className="stat-row">
+              <span>Fallidos:</span>
+              <strong className="text-danger">
+                {simulationData.statistics.edges.failed}
+              </strong>
+            </div>
+            <div className="stat-subheader">Por amenaza:</div>
+            {Object.entries(simulationData.statistics.edges.byThreat).map(([threat, count]) => (
+              count > 0 && (
+                <div key={threat} className="stat-row stat-threat">
+                  <span>{threat}:</span>
+                  <strong>{count}</strong>
+                </div>
+              )
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default SimulationControlsV2;

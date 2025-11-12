@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { query, convertToGeoJSON } = require('../config/database');
-const { spawn } = require('child_process');
-const path = require('path');
 
 /**
  * GET /api/probabilities
@@ -23,19 +21,21 @@ router.get('/', (req, res) => {
         method: 'GET',
         description: 'Get detailed probabilities for specific edge'
       },
+      nodes: {
+        path: '/api/probabilities/nodes',
+        method: 'GET',
+        description: 'Get all node failure probabilities',
+        query_params: ['limit', 'offset']
+      },
+      node_detail: {
+        path: '/api/probabilities/nodes/:id',
+        method: 'GET',
+        description: 'Get detailed probabilities for specific node'
+      },
       statistics: {
         path: '/api/probabilities/statistics',
         method: 'GET',
         description: 'Get probability statistics'
-      },
-      calculate: {
-        path: '/api/probabilities/calculate',
-        method: 'POST',
-        description: 'Recalculate failure probabilities',
-        body: {
-          threat_radius_km: 'number (default: 200)',
-          limit: 'number (optional)'
-        }
       }
     }
   });
@@ -51,49 +51,62 @@ router.get('/edges', async (req, res, next) => {
 
     let sql = `
       SELECT
-        e.id,
-        e.name,
-        e.region,
-        e.highway,
-        e.bridge,
-        e.tunnel,
-        ecp.combined_probability,
-        ecp.threat_count,
-        ecp.max_individual_probability,
-        ecp.dominant_threat_type,
-        ecp.last_updated,
-        ST_AsGeoJSON(e.geometry)::json as geometry
-      FROM edges e
-      JOIN edge_combined_probabilities ecp ON e.id = ecp.edge_id
-      WHERE 1=1
+        fl.id,
+        fl.name,
+        fl.region,
+        fl.highway,
+        fl.bridge,
+        fl.tunnel,
+        fl.length,
+        ep.earthquake_probability,
+        ep.fire_probability,
+        ep.flood_probability,
+        ep.weather_probability,
+        ep.landslide_probability,
+        ep.total_failure_probability,
+        ep.bridge_factor,
+        ep.tunnel_factor,
+        ep.surface_quality_factor,
+        ST_AsGeoJSON(fl.geometry)::json as geometry
+      FROM fiber_links fl
+      LEFT JOIN edge_probabilities ep ON fl.id = ep.edge_id
+      WHERE fl.cost > 0
     `;
 
     const params = [];
     let paramIndex = 1;
 
     if (min_probability) {
-      sql += ` AND ecp.combined_probability >= $${paramIndex}`;
+      sql += ` AND ep.total_failure_probability >= $${paramIndex}`;
       params.push(parseFloat(min_probability));
       paramIndex++;
     }
 
     if (max_probability) {
-      sql += ` AND ecp.combined_probability <= $${paramIndex}`;
+      sql += ` AND ep.total_failure_probability <= $${paramIndex}`;
       params.push(parseFloat(max_probability));
       paramIndex++;
     }
 
-    sql += ` ORDER BY ecp.combined_probability DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+    sql += ` ORDER BY ep.total_failure_probability DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
     params.push(parseInt(limit), parseInt(offset));
 
     const result = await query(sql, params);
+
+    // Get total count
+    const countResult = await query(
+      'SELECT COUNT(*) as total FROM edge_probabilities'
+    );
 
     const geojson = convertToGeoJSON(result.rows);
 
     res.json({
       ...geojson,
       metadata: {
+        total: parseInt(countResult.rows[0].total),
         returned: result.rows.length,
+        limit: parseInt(limit),
+        offset: parseInt(offset),
         filters: {
           min_probability: min_probability || 0,
           max_probability: max_probability || 1
@@ -107,87 +120,187 @@ router.get('/edges', async (req, res, next) => {
 
 /**
  * GET /api/probabilities/edges/:id
- * Get detailed failure probabilities for a specific edge
+ * Get detailed probability breakdown for a specific edge
  */
 router.get('/edges/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    // Get combined probability
-    const combinedResult = await query(
+    const result = await query(
       `
       SELECT
-        e.id,
-        e.name,
-        e.region,
-        e.highway,
-        e.bridge,
-        e.tunnel,
-        e.recubrimiento_estim,
-        ecp.combined_probability,
-        ecp.threat_count,
-        ecp.max_individual_probability,
-        ecp.dominant_threat_type,
-        ecp.last_updated,
-        ST_AsGeoJSON(e.geometry)::json as geometry
-      FROM edges e
-      LEFT JOIN edge_combined_probabilities ecp ON e.id = ecp.edge_id
-      WHERE e.id = $1
+        fl.id,
+        fl.name,
+        fl.region,
+        fl.highway,
+        fl.bridge,
+        fl.tunnel,
+        fl.length,
+        fl.surface,
+        ep.earthquake_probability,
+        ep.fire_probability,
+        ep.flood_probability,
+        ep.weather_probability,
+        ep.landslide_probability,
+        ep.total_failure_probability,
+        ep.bridge_factor,
+        ep.tunnel_factor,
+        ep.surface_quality_factor,
+        ST_AsGeoJSON(fl.geometry)::json as geometry
+      FROM fiber_links fl
+      LEFT JOIN edge_probabilities ep ON fl.id = ep.edge_id
+      WHERE fl.id = $1
       `,
       [id]
     );
 
-    if (combinedResult.rows.length === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Edge not found' });
     }
 
-    // Get individual threat probabilities
-    const threatsResult = await query(
+    const edge = result.rows[0];
+
+    // Get nearby threats
+    const nearbyThreats = await query(
       `
       SELECT
-        efp.threat_type,
-        efp.threat_id,
-        efp.distance_km,
-        efp.severity_level,
-        efp.base_probability,
-        efp.infrastructure_factor,
-        efp.adjusted_probability,
-        efp.calculation_date,
-        CASE efp.threat_type
-          WHEN 'earthquake' THEN (
-            SELECT json_build_object(
-              'magnitude', e.magnitude,
-              'place', e.place,
-              'time', e.time
-            ) FROM earthquakes e WHERE e.id = efp.threat_id
-          )
-          WHEN 'fire_zone' THEN (
-            SELECT json_build_object(
-              'zone_name', f.zone_name,
-              'risk_level', f.risk_level
-            ) FROM fire_risk_zones f WHERE f.id = efp.threat_id
-          )
-          WHEN 'weather' THEN (
-            SELECT json_build_object(
-              'event_type', w.event_type,
-              'severity', w.severity
-            ) FROM weather_events w WHERE w.id = efp.threat_id
-          )
-        END as threat_details
-      FROM edge_failure_probabilities efp
-      WHERE efp.edge_id = $1
-      ORDER BY efp.adjusted_probability DESC
+        'earthquake' as threat_type,
+        COUNT(*) as count,
+        AVG(magnitude) as avg_magnitude
+      FROM earthquakes
+      WHERE ST_DWithin(
+        geometry::geography,
+        (SELECT geometry::geography FROM fiber_links WHERE id = $1),
+        200000  -- 200km radius
+      )
+      UNION ALL
+      SELECT
+        'fire_zone' as threat_type,
+        COUNT(*) as count,
+        NULL as avg_magnitude
+      FROM fire_risk_zones
+      WHERE ST_Intersects(
+        geometry,
+        ST_Buffer((SELECT geometry FROM fiber_links WHERE id = $1)::geography, 50000)::geometry
+      )
+      UNION ALL
+      SELECT
+        'weather_event' as threat_type,
+        COUNT(*) as count,
+        NULL as avg_magnitude
+      FROM weather_events
+      WHERE ST_DWithin(
+        geometry::geography,
+        (SELECT geometry::geography FROM fiber_links WHERE id = $1),
+        100000  -- 100km radius
+      )
       `,
       [id]
     );
 
-    const edgeData = combinedResult.rows[0];
-    const geojson = convertToGeoJSON([edgeData]);
+    res.json({
+      edge: {
+        ...edge,
+        geometry: edge.geometry
+      },
+      probability_breakdown: {
+        earthquake: edge.earthquake_probability,
+        fire: edge.fire_probability,
+        flood: edge.flood_probability,
+        weather: edge.weather_probability,
+        landslide: edge.landslide_probability,
+        total: edge.total_failure_probability
+      },
+      adjustment_factors: {
+        bridge: edge.bridge_factor,
+        tunnel: edge.tunnel_factor,
+        surface_quality: edge.surface_quality_factor
+      },
+      nearby_threats: nearbyThreats.rows
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/probabilities/nodes
+ * Get all nodes with their failure probabilities
+ */
+router.get('/nodes', async (req, res, next) => {
+  try {
+    const { limit = 100, offset = 0 } = req.query;
+
+    const result = await query(
+      `
+      SELECT
+        fn.id,
+        fn.region,
+        fn.city,
+        np.earthquake_probability,
+        np.fire_probability,
+        np.flood_probability,
+        np.total_failure_probability,
+        ST_AsGeoJSON(fn.geometry)::json as geometry
+      FROM fiber_nodes fn
+      LEFT JOIN node_probabilities np ON fn.id = np.node_id
+      ORDER BY np.total_failure_probability DESC
+      LIMIT $1 OFFSET $2
+      `,
+      [parseInt(limit), parseInt(offset)]
+    );
+
+    const countResult = await query('SELECT COUNT(*) as total FROM node_probabilities');
+
+    const geojson = convertToGeoJSON(result.rows);
 
     res.json({
-      ...geojson.features[0],
-      individual_threats: threatsResult.rows
+      ...geojson,
+      metadata: {
+        total: parseInt(countResult.rows[0].total),
+        returned: result.rows.length,
+        limit: parseInt(limit),
+        offset: parseInt(offset)
+      }
     });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /api/probabilities/nodes/:id
+ * Get detailed probability for a specific node
+ */
+router.get('/nodes/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await query(
+      `
+      SELECT
+        fn.id,
+        fn.region,
+        fn.city,
+        fn.latitude,
+        fn.longitude,
+        np.earthquake_probability,
+        np.fire_probability,
+        np.flood_probability,
+        np.total_failure_probability,
+        ST_AsGeoJSON(fn.geometry)::json as geometry
+      FROM fiber_nodes fn
+      LEFT JOIN node_probabilities np ON fn.id = np.node_id
+      WHERE fn.id = $1
+      `,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Node not found' });
+    }
+
+    res.json(result.rows[0]);
   } catch (error) {
     next(error);
   }
@@ -195,54 +308,56 @@ router.get('/edges/:id', async (req, res, next) => {
 
 /**
  * GET /api/probabilities/statistics
- * Get probability statistics
+ * Get overall probability statistics
  */
 router.get('/statistics', async (req, res, next) => {
   try {
-    const statsResult = await query(`
-      SELECT 
+    const edgeStats = await query(`
+      SELECT
         COUNT(*) as total_edges,
-        COUNT(*) FILTER (WHERE combined_probability > 0) as edges_with_risk,
-        AVG(combined_probability) as avg_probability,
-        MAX(combined_probability) as max_probability,
-        MIN(combined_probability) FILTER (WHERE combined_probability > 0) as min_nonzero_probability,
-        COUNT(*) FILTER (WHERE combined_probability > 0.5) as high_risk_count,
-        COUNT(*) FILTER (WHERE combined_probability BETWEEN 0.3 AND 0.5) as medium_risk_count,
-        COUNT(*) FILTER (WHERE combined_probability BETWEEN 0.1 AND 0.3) as low_risk_count,
-        COUNT(*) FILTER (WHERE combined_probability < 0.1 AND combined_probability > 0) as very_low_risk_count,
-        AVG(threat_count) as avg_threats_per_edge,
-        MAX(threat_count) as max_threats_per_edge
-      FROM edge_combined_probabilities
+        AVG(total_failure_probability) as avg_total_probability,
+        MAX(total_failure_probability) as max_total_probability,
+        MIN(total_failure_probability) as min_total_probability,
+        AVG(earthquake_probability) as avg_earthquake_prob,
+        AVG(fire_probability) as avg_fire_prob,
+        AVG(flood_probability) as avg_flood_prob,
+        AVG(weather_probability) as avg_weather_prob,
+        AVG(landslide_probability) as avg_landslide_prob,
+        COUNT(CASE WHEN total_failure_probability > 0.5 THEN 1 END) as high_risk_count,
+        COUNT(CASE WHEN total_failure_probability BETWEEN 0.3 AND 0.5 THEN 1 END) as medium_risk_count,
+        COUNT(CASE WHEN total_failure_probability < 0.3 THEN 1 END) as low_risk_count
+      FROM edge_probabilities
     `);
 
-    const byThreatType = await query(`
+    const nodeStats = await query(`
       SELECT
-        threat_type,
-        COUNT(*) as count,
-        AVG(adjusted_probability) as avg_probability,
-        MAX(adjusted_probability) as max_probability
-      FROM edge_failure_probabilities
-      GROUP BY threat_type
-      ORDER BY count DESC
+        COUNT(*) as total_nodes,
+        AVG(total_failure_probability) as avg_total_probability,
+        MAX(total_failure_probability) as max_total_probability,
+        MIN(total_failure_probability) as min_total_probability,
+        COUNT(CASE WHEN total_failure_probability > 0.5 THEN 1 END) as high_risk_count,
+        COUNT(CASE WHEN total_failure_probability BETWEEN 0.3 AND 0.5 THEN 1 END) as medium_risk_count,
+        COUNT(CASE WHEN total_failure_probability < 0.3 THEN 1 END) as low_risk_count
+      FROM node_probabilities
     `);
 
-    const byRegion = await query(`
+    const regionalStats = await query(`
       SELECT
-        e.region,
-        COUNT(*) as edge_count,
-        AVG(ecp.combined_probability) as avg_probability,
-        COUNT(*) FILTER (WHERE ecp.combined_probability > 0.3) as high_risk_count
-      FROM edges e
-      JOIN edge_combined_probabilities ecp ON e.id = ecp.edge_id
-      WHERE e.region IS NOT NULL
-      GROUP BY e.region
-      ORDER BY avg_probability DESC
+        fl.region,
+        COUNT(DISTINCT ep.edge_id) as edge_count,
+        AVG(ep.total_failure_probability) as avg_failure_probability,
+        MAX(ep.total_failure_probability) as max_failure_probability
+      FROM fiber_links fl
+      JOIN edge_probabilities ep ON fl.id = ep.edge_id
+      WHERE fl.region IS NOT NULL
+      GROUP BY fl.region
+      ORDER BY avg_failure_probability DESC
     `);
 
     res.json({
-      overall: statsResult.rows[0],
-      by_threat_type: byThreatType.rows,
-      by_region: byRegion.rows
+      edges: edgeStats.rows[0],
+      nodes: nodeStats.rows[0],
+      by_region: regionalStats.rows
     });
   } catch (error) {
     next(error);
@@ -250,66 +365,45 @@ router.get('/statistics', async (req, res, next) => {
 });
 
 /**
- * POST /api/probabilities/calculate
- * Trigger recalculation of failure probabilities
+ * GET /api/probabilities/heatmap
+ * Get probability data for heatmap visualization
  */
-router.post('/calculate', async (req, res, next) => {
+router.get('/heatmap', async (req, res, next) => {
   try {
-    const { threat_radius_km = 200, limit = null } = req.body;
+    const { bbox, min_probability = 0.3 } = req.query;
 
-    console.log('Starting probability calculation...');
-    console.log(`Radius: ${threat_radius_km} km, Limit: ${limit || 'all'}`);
+    let sql = `
+      SELECT
+        fl.id,
+        ST_Y(ST_Centroid(fl.geometry)) as lat,
+        ST_X(ST_Centroid(fl.geometry)) as lon,
+        ep.total_failure_probability as intensity
+      FROM fiber_links fl
+      JOIN edge_probabilities ep ON fl.id = ep.edge_id
+      WHERE ep.total_failure_probability >= $1
+    `;
 
-    // Execute Python script
-    const scriptPath = path.join(__dirname, '../../scripts/calculate_failure_probabilities.py');
-    
-    const args = ['--radius', threat_radius_km.toString()];
-    if (limit) {
-      args.push('--limit', limit.toString());
+    const params = [parseFloat(min_probability)];
+    let paramIndex = 2;
+
+    if (bbox) {
+      const [minLon, minLat, maxLon, maxLat] = bbox.split(',').map(parseFloat);
+      sql += ` AND fl.geometry && ST_MakeEnvelope($${paramIndex}, $${paramIndex + 1}, $${paramIndex + 2}, $${paramIndex + 3}, 4326)`;
+      params.push(minLon, minLat, maxLon, maxLat);
     }
 
-    const pythonProcess = spawn('python3', [scriptPath, ...args]);
+    sql += ` LIMIT 1000`;
 
-    let output = '';
-    let errorOutput = '';
+    const result = await query(sql, params);
 
-    pythonProcess.stdout.on('data', (data) => {
-      output += data.toString();
-      console.log(data.toString());
+    res.json({
+      type: 'heatmap',
+      points: result.rows.map(row => ({
+        lat: row.lat,
+        lon: row.lon,
+        intensity: row.intensity
+      }))
     });
-
-    pythonProcess.stderr.on('data', (data) => {
-      errorOutput += data.toString();
-      console.error(data.toString());
-    });
-
-    pythonProcess.on('close', async (code) => {
-      if (code !== 0) {
-        console.error(`Python script exited with code ${code}`);
-        return res.status(500).json({
-          error: 'Calculation failed',
-          details: errorOutput,
-          output: output
-        });
-      }
-
-      // Get updated statistics
-      const statsResult = await query(`
-        SELECT 
-          COUNT(*) as total_edges,
-          COUNT(*) FILTER (WHERE combined_probability > 0) as edges_with_risk,
-          AVG(combined_probability) as avg_probability
-        FROM edge_combined_probabilities
-      `);
-
-      res.json({
-        success: true,
-        message: 'Probabilities calculated successfully',
-        stats: statsResult.rows[0],
-        output: output
-      });
-    });
-
   } catch (error) {
     next(error);
   }

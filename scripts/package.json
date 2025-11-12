@@ -1,0 +1,22 @@
+{
+  "name": "scripts-loader",
+  "version": "1.0.0",
+  "description": "Scripts para cargar datos a Supabase",
+  "main": "cargar_datos_supabase.js",
+  "scripts": {
+    "cargar": "node cargar_datos_supabase.js",
+    "verificar": "node verificar_datos.js",
+    "load-datacenters": "node load_datacenters.js",
+    "load-metadata": "node load_metadata_to_supabase.js",
+    "generate-network": "node generate_network_with_probabilities.js",
+    "calculate-probabilities": "node calculate_and_load_probabilities.js",
+    "setup-all": "node load_datacenters.js && node load_metadata_to_supabase.js && node generate_network_with_probabilities.js && node calculate_and_load_probabilities.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.6.1",
+    "pg": "^8.11.3"
+  },
+  "author": "",
+  "license": "ISC"
+}

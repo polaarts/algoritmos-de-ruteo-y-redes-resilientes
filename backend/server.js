@@ -14,7 +14,7 @@ const simulationRoutes = require('./routes/simulation');
 const optimizationRoutes = require('./routes/optimization');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = 5001;
 
 // Middleware
 app.use(helmet()); // Security headers
@@ -77,7 +77,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🗄️  Database: ${process.env.DB_HOST || 'Not configured'}`);
@@ -87,6 +87,7 @@ app.listen(PORT, () => {
   console.log(`   - Metadata: http://localhost:${PORT}/api/metadata`);
   console.log(`   - Threats: http://localhost:${PORT}/api/threats`);
   console.log(`   - Routing: http://localhost:${PORT}/api/routing`);
+  console.log(`   - Simulation: http://localhost:${PORT}/api/simulation`);
 });
 
 // Graceful shutdown
