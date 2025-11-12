@@ -10,8 +10,7 @@ const metadataRoutes = require('./routes/metadata');
 const threatsRoutes = require('./routes/threats');
 const routingRoutes = require('./routes/routing');
 const probabilitiesRoutes = require('./routes/probabilities');
-// const simulationRoutes = require('./routes/simulation'); // Deprecated - usar simulation-v2
-const simulationV2Routes = require('./routes/simulation-v2');
+const simulationRoutes = require('./routes/simulation');
 const optimizationRoutes = require('./routes/optimization');
 
 const app = express();
@@ -39,9 +38,7 @@ app.use('/api/metadata', metadataRoutes);
 app.use('/api/threats', threatsRoutes);
 app.use('/api/routing', routingRoutes);
 app.use('/api/probabilities', probabilitiesRoutes);
-// app.use('/api/simulation', simulationRoutes); // Deprecated
-app.use('/api/simulation', simulationV2Routes); // Nueva implementación
-app.use('/api/simulation-v2', simulationV2Routes); // Alias para compatibilidad
+app.use('/api/simulation', simulationRoutes);
 app.use('/api/optimization', optimizationRoutes);
 
 // Root endpoint
@@ -80,7 +77,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🗄️  Database: ${process.env.DB_HOST || 'Not configured'}`);
@@ -90,6 +87,7 @@ app.listen(PORT, () => {
   console.log(`   - Metadata: http://localhost:${PORT}/api/metadata`);
   console.log(`   - Threats: http://localhost:${PORT}/api/threats`);
   console.log(`   - Routing: http://localhost:${PORT}/api/routing`);
+  console.log(`   - Simulation: http://localhost:${PORT}/api/simulation`);
 });
 
 // Graceful shutdown

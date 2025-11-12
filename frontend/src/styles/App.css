@@ -183,6 +183,12 @@
   color: #888;
 }
 
+/* Simulation section */
+.simulation-section {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1rem;
+}
+
 /* Map container */
 .map-container {
   flex: 1;
@@ -412,4 +418,80 @@
 .radio-label input[type="radio"]:checked + span {
   font-weight: 600;
   color: #0088ff;
+}
+
+/* Restrictions Panel */
+.restrictions-panel {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.restrictions-panel h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1rem;
+  border-bottom: 2px solid #667eea;
+  padding-bottom: 8px;
+}
+
+.restriction-item {
+  margin-bottom: 20px;
+}
+
+.restriction-item label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.restriction-item input[type="number"] {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.restriction-item input[type="range"] {
+  width: 100%;
+  margin: 8px 0;
+  cursor: pointer;
+}
+
+.restriction-item input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.restriction-item small {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+}
+
+.value-display {
+  float: right;
+  background: #667eea;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.restrictions-panel button {
+  margin-top: 10px;
+  width: 100%;
 }

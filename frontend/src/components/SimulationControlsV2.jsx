@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { GeoJSON } from 'react-leaflet';
 import '../styles/SimulationControls.css';
 
 /**
@@ -85,9 +84,9 @@ function SimulationControlsV2({ onSimulationChange }) {
   };
 
   return (
-    <div className="simulation-controls">
+    <div className="simulation-controls-panel">
       <div className="simulation-header">
-        <h3>🎲 Simulación de Fallas</h3>
+        <h3>🎲 Simulación de Fallas (Monte Carlo)</h3>
         <span className={`status-badge ${simulationActive ? 'active' : 'inactive'}`}>
           {simulationActive ? 'Activa' : 'Inactiva'}
         </span>
@@ -223,58 +222,6 @@ function SimulationControlsV2({ onSimulationChange }) {
             ))}
           </div>
         </div>
-      )}
-
-      {/* Renderizar fallas en el mapa */}
-      {simulationActive && simulationData?.failures && (
-        <GeoJSON
-          key={`failures-${Date.now()}`}
-          data={simulationData.failures}
-          style={(feature) => {
-            const isNode = feature.properties.element_type === 'node';
-            return {
-              color: '#d32f2f',
-              fillColor: '#f44336',
-              fillOpacity: 0.6,
-              weight: isNode ? 3 : 4,
-              dashArray: '5, 5'
-            };
-          }}
-          pointToLayer={(feature, latlng) => {
-            return L.circleMarker(latlng, {
-              radius: 10,
-              color: '#d32f2f',
-              fillColor: '#f44336',
-              fillOpacity: 0.7,
-              weight: 3
-            });
-          }}
-          onEachFeature={(feature, layer) => {
-            const props = feature.properties;
-            layer.bindPopup(`
-              <div style="min-width: 200px;">
-                <h3 style="margin: 0 0 10px 0; color: #c62828;">
-                  ❌ ${props.element_type === 'node' ? 'Nodo' : 'Enlace'} Fallido
-                </h3>
-                <div style="fontSize: 14px;">
-                  <strong>ID:</strong> ${props.element_id}<br/>
-                  <strong>Probabilidad:</strong> ${props.probability.toFixed(2)}%<br/>
-                  <strong>Valor Aleatorio:</strong> ${props.random_value.toFixed(2)}<br/>
-                  <strong>Amenaza Dominante:</strong> ${props.dominant_threat}<br/>
-                  <div style="
-                    margin-top: 8px; 
-                    padding: 6px; 
-                    background-color: #ffcdd2; 
-                    border-radius: 4px;
-                    font-weight: bold;
-                  ">
-                    ⚠️ FUERA DE SERVICIO
-                  </div>
-                </div>
-              </div>
-            `);
-          }}
-        />
       )}
     </div>
   );

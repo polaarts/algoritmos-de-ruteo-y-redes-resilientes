@@ -4,7 +4,7 @@ import InfrastructureLayer from './components/InfrastructureLayer';
 import ThreatsLayer from './components/ThreatsLayer';
 import RouteCalculator from './components/RouteCalculator';
 import RouteComparison from './components/RouteComparison';
-import SimulationControls from './components/SimulationControls';
+import SimulationControlsV2 from './components/SimulationControlsV2';
 import './styles/App.css';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
     showFireZones: false,
     showWeatherEvents: false,
     showRoute: true,
-    showSimulation: false,
+    showSimulation: true, // Panel de Monte Carlo visible por defecto
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [routeInfo, setRouteInfo] = useState(null);
@@ -51,13 +51,6 @@ function App() {
       <div className="app-content">
         {/* Sidebar */}
         <aside className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
-          <button
-            className="sidebar-toggle"
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            aria-label="Toggle sidebar"
-          >
-            {sidebarOpen ? '◀' : '▶'}
-          </button>
 
           {sidebarOpen && (
             <div className="sidebar-content">
@@ -167,6 +160,15 @@ function App() {
                 </div>
               </section>
 
+              {/* Simulation Monte Carlo */}
+              {layers.showSimulation && (
+                <section className="simulation-section">
+                  <SimulationControlsV2
+                    onSimulationComplete={handleSimulationComplete}
+                  />
+                </section>
+              )}
+
               {/* Route info */}
               {routeInfo && (
                 <section className="route-info">
@@ -201,14 +203,42 @@ function App() {
               {/* Legend */}
               <section className="legend">
                 <h2>Leyenda</h2>
+                
+                <h3 style={{ fontSize: '14px', marginTop: '10px', marginBottom: '5px', color: '#555' }}>
+                  Nivel de Riesgo de Enlaces
+                </h3>
                 <div className="legend-item">
-                  <span className="legend-color" style={{ backgroundColor: '#3388ff' }}></span>
-                  <span>Enlaces de fibra</span>
+                  <span className="legend-color" style={{ backgroundColor: '#27ae60' }}></span>
+                  <span>Riesgo Bajo (&lt;20%)</span>
                 </div>
+                <div className="legend-item">
+                  <span className="legend-color" style={{ backgroundColor: '#f39c12' }}></span>
+                  <span>Riesgo Medio (20-50%)</span>
+                </div>
+                <div className="legend-item">
+                  <span className="legend-color" style={{ backgroundColor: '#e67e22' }}></span>
+                  <span>Riesgo Alto (50-80%)</span>
+                </div>
+                <div className="legend-item">
+                  <span className="legend-color" style={{ backgroundColor: '#e74c3c' }}></span>
+                  <span>Riesgo Crítico (&gt;80%)</span>
+                </div>
+                <div className="legend-item">
+                  <span className="legend-color" style={{ backgroundColor: '#95a5a6' }}></span>
+                  <span>Sin datos de riesgo</span>
+                </div>
+                
+                <h3 style={{ fontSize: '14px', marginTop: '15px', marginBottom: '5px', color: '#555' }}>
+                  Infraestructura
+                </h3>
                 <div className="legend-item">
                   <span className="legend-color" style={{ backgroundColor: '#007bff' }}></span>
                   <span>Datacenters</span>
                 </div>
+                
+                <h3 style={{ fontSize: '14px', marginTop: '15px', marginBottom: '5px', color: '#555' }}>
+                  Amenazas
+                </h3>
                 <div className="legend-item">
                   <span className="legend-color" style={{ backgroundColor: '#ff0000' }}></span>
                   <span>Sismos (magnitud alta)</span>
@@ -217,6 +247,10 @@ function App() {
                   <span className="legend-color" style={{ backgroundColor: '#ffcc00' }}></span>
                   <span>Sismos (magnitud baja)</span>
                 </div>
+                
+                <h3 style={{ fontSize: '14px', marginTop: '15px', marginBottom: '5px', color: '#555' }}>
+                  Rutas
+                </h3>
                 <div className="legend-item">
                   <span className="legend-color" style={{ backgroundColor: '#00ff00' }}></span>
                   <span>Ruta calculada</span>
@@ -229,16 +263,6 @@ function App() {
                 <p>
                   Esta aplicación visualiza la red de fibra óptica de Chile y
                   analiza su resiliencia frente a amenazas naturales.
-                </p>
-                <p>
-                  <strong>Fase 2:</strong> Visualización y ruteo básico con
-                  pgr_dijkstra (sin considerar amenazas - peor caso).
-                </p>
-                <p>
-                  <small>
-                    Proyecto: Resiliencia de Redes de Fibra Óptica<br />
-                    Autores: Samuel & Agustín
-                  </small>
                 </p>
               </section>
             </div>
@@ -266,10 +290,6 @@ function App() {
             ) : (
               <RouteComparison show={layers.showRoute} />
             )}
-            <SimulationControls
-              show={layers.showSimulation}
-              onSimulationComplete={handleSimulationComplete}
-            />
           </Map>
         </main>
       </div>

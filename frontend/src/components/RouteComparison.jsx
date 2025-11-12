@@ -133,12 +133,14 @@ function RouteComparison({ show = false }) {
 
   // Calculate Dijkstra (distance only)
   const calculateDijkstraRoute = async (startLat, startLon, endLat, endLon) => {
+    console.log('🔵 [FRONTEND] Calculating Dijkstra route:', { startLat, startLon, endLat, endLon });
     setLoading((prev) => ({ ...prev, dijkstra: true }));
     try {
       const response = await routingAPI.calculateRoute(startLat, startLon, endLat, endLon);
+      console.log('✅ [FRONTEND] Dijkstra route received:', response.data);
       setRoutes((prev) => ({ ...prev, dijkstra: response.data }));
     } catch (error) {
-      console.error('Error calculating Dijkstra route:', error);
+      console.error('❌ [FRONTEND] Error calculating Dijkstra route:', error);
       setErrors((prev) => ({ ...prev, dijkstra: error.message }));
     } finally {
       setLoading((prev) => ({ ...prev, dijkstra: false }));
@@ -147,6 +149,7 @@ function RouteComparison({ show = false }) {
 
   // Calculate Dijkstra Resilient (with risk weights)
   const calculateDijkstraResilientRoute = async (startLat, startLon, endLat, endLon) => {
+    console.log('🟢 [FRONTEND] Calculating Resilient route:', { startLat, startLon, endLat, endLon, options });
     setLoading((prev) => ({ ...prev, dijkstraResilient: true }));
     try {
       const response = await routingAPI.calculateResilientRoute(
@@ -156,9 +159,10 @@ function RouteComparison({ show = false }) {
           riskWeight: options.riskWeight,
         }
       );
+      console.log('✅ [FRONTEND] Resilient route received:', response.data);
       setRoutes((prev) => ({ ...prev, dijkstraResilient: response.data }));
     } catch (error) {
-      console.error('Error calculating Dijkstra Resilient route:', error);
+      console.error('❌ [FRONTEND] Error calculating Resilient route:', error);
       setErrors((prev) => ({ ...prev, dijkstraResilient: error.message }));
     } finally {
       setLoading((prev) => ({ ...prev, dijkstraResilient: false }));
@@ -167,6 +171,7 @@ function RouteComparison({ show = false }) {
 
   // Calculate MIP route
   const calculateMIPRoute = async (startLat, startLon, endLat, endLon) => {
+    console.log('🔷 [FRONTEND] Calculating MIP route:', { startLat, startLon, endLat, endLon, options });
     setLoading((prev) => ({ ...prev, mip: true }));
     try {
       const response = await optimizationAPI.calculateMIPRoute(
@@ -177,9 +182,10 @@ function RouteComparison({ show = false }) {
           timeLimit: options.timeLimit,
         }
       );
+      console.log('✅ [FRONTEND] MIP route received:', response.data);
       setRoutes((prev) => ({ ...prev, mip: response.data }));
     } catch (error) {
-      console.error('Error calculating MIP route:', error);
+      console.error('❌ [FRONTEND] Error calculating MIP route:', error);
       setErrors((prev) => ({ ...prev, mip: error.message }));
     } finally {
       setLoading((prev) => ({ ...prev, mip: false }));
@@ -188,6 +194,7 @@ function RouteComparison({ show = false }) {
 
   // Calculate Genetic Algorithm route
   const calculateGeneticRoute = async (startLat, startLon, endLat, endLon) => {
+    console.log('🟣 [FRONTEND] Calculating Genetic route:', { startLat, startLon, endLat, endLon, options });
     setLoading((prev) => ({ ...prev, genetic: true }));
     try {
       const response = await optimizationAPI.calculateGeneticRoute(
@@ -198,9 +205,10 @@ function RouteComparison({ show = false }) {
           generations: options.generations,
         }
       );
+      console.log('✅ [FRONTEND] Genetic route received:', response.data);
       setRoutes((prev) => ({ ...prev, genetic: response.data }));
     } catch (error) {
-      console.error('Error calculating Genetic route:', error);
+      console.error('❌ [FRONTEND] Error calculating Genetic route:', error);
       setErrors((prev) => ({ ...prev, genetic: error.message }));
     } finally {
       setLoading((prev) => ({ ...prev, genetic: false }));
@@ -225,10 +233,10 @@ function RouteComparison({ show = false }) {
     }
   };
 
-  // Load example (Santiago - Concepción)
+  // Load example (Santiago - Valparaíso) - Ruta más corta y probable conexión
   const loadExample = () => {
     setStartPoint({ lat: -33.4489, lon: -70.6693, name: 'Santiago' });
-    setEndPoint({ lat: -36.8270, lon: -73.0498, name: 'Concepción' });
+    setEndPoint({ lat: -33.0472, lon: -71.6127, name: 'Valparaíso' });
   };
 
   // Use current location from GPS
@@ -576,7 +584,6 @@ function RouteComparison({ show = false }) {
               ></span>
               {routeNames[routeType]}
               {loading[routeType] && <span className="loading-indicator">⏳</span>}
-              {errors[routeType] && <span className="error-indicator">❌</span>}
             </label>
           ))}
         </div>
@@ -645,10 +652,9 @@ function RouteComparison({ show = false }) {
         {/* Errors display */}
         {Object.keys(errors).length > 0 && (
           <div className="errors-display">
-            <h4>Errores:</h4>
             {Object.entries(errors).map(([routeType, error]) => (
               <div key={routeType} className="error-item">
-                <strong>{routeNames[routeType]}:</strong> {error}
+                No se encontró ruta entre estos dos puntos para {routeNames[routeType]}
               </div>
             ))}
           </div>

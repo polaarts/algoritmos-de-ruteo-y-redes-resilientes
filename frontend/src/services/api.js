@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for API - can be configured via environment variable
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -40,9 +40,13 @@ export const infrastructureAPI = {
   // Get all available endpoints
   getInfo: () => api.get('/infrastructure'),
   
-  // Edges
-  getEdges: (params = {}) => api.get('/infrastructure/edges', { params }),
-  getEdgeById: (id) => api.get(`/infrastructure/edges/${id}`),
+  // Links (fiber optic cables) - CORRECTED: uses /links not /edges
+  getLinks: (params = {}) => api.get('/infrastructure/links', { params }),
+  getLinkById: (id) => api.get(`/infrastructure/links/${id}`),
+  
+  // Legacy alias for backwards compatibility
+  getEdges: (params = {}) => api.get('/infrastructure/links', { params }),
+  getEdgeById: (id) => api.get(`/infrastructure/links/${id}`),
   
   // Nodes
   getNodes: (params = {}) => api.get('/infrastructure/nodes', { params }),
@@ -144,20 +148,29 @@ export const routingAPI = {
       simulation_id: options.simulationId || null,
     }),
 
-  // Helper endpoints
-  getExampleRoute: () => api.get('/routing/example'),
-  getNearestNode: (lat, lon) => api.get(`/routing/nearest-node/${lat}/${lon}`),
-  getTopologyStatus: () => api.get('/routing/topology-status'),
+  // Helper endpoints - Santiago to Valparaíso (shorter route, more likely to be connected)
+  getExampleRoute: () => api.get('/routing/calculate', {
+    params: {
+      start_lat: -33.4489,  // Santiago
+      start_lon: -70.6693,
+      end_lat: -33.0472,    // Valparaíso (ajustado)
+      end_lon: -71.6127
+    }
+  }),
+  getNearestNode: (lat, lon) => api.get('/routing/node-search', {
+    params: { lat, lon }
+  }),
+  getTopologyStatus: () => api.get('/routing'),
 };
 
 // Optimization API (MIP and Genetic Algorithm)
 export const optimizationAPI = {
   // Get all available endpoints
-  getInfo: () => api.get('/optimization'),
+  getInfo: () => api.get('/routing'),
 
   // MIP (Mixed Integer Programming) optimization
   calculateMIPRoute: (startLat, startLon, endLat, endLon, options = {}) =>
-    api.post('/optimization/mip', {
+    api.post('/routing/mip', {
       start_lat: startLat,
       start_lon: startLon,
       end_lat: endLat,
@@ -167,9 +180,12 @@ export const optimizationAPI = {
       time_limit: options.timeLimit || 60,
     }),
 
+  // MIP model information
+  getMIPModelInfo: () => api.get('/routing/mip/model-info'),
+
   // Genetic Algorithm optimization
   calculateGeneticRoute: (startLat, startLon, endLat, endLon, options = {}) =>
-    api.post('/optimization/genetic', {
+    api.post('/routing/genetic', {
       start_lat: startLat,
       start_lon: startLon,
       end_lat: endLat,
@@ -181,7 +197,7 @@ export const optimizationAPI = {
 
   // Compare all algorithms
   compareAlgorithms: (startLat, startLon, endLat, endLon, options = {}) =>
-    api.get('/optimization/compare', {
+    api.get('/routing/compare', {
       params: {
         start_lat: startLat,
         start_lon: startLon,
@@ -214,27 +230,33 @@ export const probabilitiesAPI = {
 
 // Simulation API
 export const simulationAPI = {
-  // Get all simulations
+  // Trigger Monte Carlo simulation
+  triggerSimulation: (options = {}) =>
+    api.post('/simulation/trigger-failures', {
+      probabilityThreshold: options.probabilityThreshold || 0.5,
+      includeGeometry: options.includeGeometry !== false,
+    }),
+
+  // Get current failures
+  getCurrentFailures: () => api.get('/simulation/current-failures'),
+
+  // Clear all failures
+  clearSimulation: () => api.post('/simulation/clear-failures'),
+
+  // Get network operational status
+  getNetworkStatus: () => api.get('/simulation/network-status'),
+  
+  // Legacy endpoints (backward compatibility)
   getSimulations: () => api.get('/simulation'),
-
-  // Get simulation by ID
   getSimulationById: (id) => api.get(`/simulation/${id}`),
-
-  // Run new simulation
   runSimulation: (options = {}) =>
     api.post('/simulation/run', {
       name: options.name || `Simulación ${new Date().toISOString()}`,
       probabilityThreshold: options.probabilityThreshold || 0.3,
     }),
-
-  // Get failures from simulation
   getSimulationFailures: (id, elementType = 'edge') =>
     api.get(`/simulation/${id}/failures`, { params: { element_type: elementType } }),
-
-  // Get simulation statistics
   getSimulationStatistics: (id) => api.get(`/simulation/${id}/statistics`),
-
-  // Delete simulation
   deleteSimulation: (id) => api.delete(`/simulation/${id}`),
 };
 
