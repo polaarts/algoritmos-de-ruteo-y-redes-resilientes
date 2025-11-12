@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const API_KEY = "6564d5596f2d8d146ed67131d6853247"; // obtener en openweathermap.org
+const API_KEY = "API_KEY"; // obtener en openweathermap.org
 const lat = -36.82;
 const lon = -73.05; // Ejemplo: Concepción, Biobío
 

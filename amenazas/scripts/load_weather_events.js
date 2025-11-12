@@ -9,7 +9,7 @@ const client = new Client({
   port: 5432,
   database: 'postgres',
   user: 'postgres',
-  password: 'wSNlW4C1tVKCw7Ez'
+  password: 'PASS'
 });
 
 async function loadWeatherEvents() {
