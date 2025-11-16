@@ -12,6 +12,7 @@ const routingRoutes = require('./routes/routing');
 const probabilitiesRoutes = require('./routes/probabilities');
 const simulationRoutes = require('./routes/simulation');
 const optimizationRoutes = require('./routes/optimization');
+const osrmRoutes = require('./routes/osrm');
 
 const app = express();
 const PORT = 5001;
@@ -40,6 +41,7 @@ app.use('/api/routing', routingRoutes);
 app.use('/api/probabilities', probabilitiesRoutes);
 app.use('/api/simulation', simulationRoutes);
 app.use('/api/optimization', optimizationRoutes);
+app.use('/api/osrm', osrmRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {

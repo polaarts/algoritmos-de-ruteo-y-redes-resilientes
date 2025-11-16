@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # PostgreSQL with PostGIS and pgRouting (Local Development Database)
+  db:
+    image: postgis/postgis:15-3.4
+    container_name: fiber_network_db
+    environment:
+      POSTGRES_DB: fiber_network
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_INITDB_ARGS: "-E UTF8 --locale=en_US.utf8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database:/docker-entrypoint-initdb.d/sql:ro
+      - ./scripts/init-db.sh:/docker-entrypoint-initdb.d/00-init.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fiber_network"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    networks:
+      - fiber_network
+    restart: unless-stopped
+    command: 
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=postgis-3"
+      - "-c"
+      - "max_connections=200"
+      - "-c"
+      - "shared_buffers=256MB"
+
+  # Backend API (Node.js + Express)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fiber_network_backend
+    ports:
+      - "5001:5001"
+    environment:
+      PORT: ${BACKEND_PORT:-5001}
+      NODE_ENV: ${NODE_ENV:-development}
+      # Local Database Configuration
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: fiber_network
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_SSL: "false"
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - fiber_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5001/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend (Vite + React + Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:5001/api}
+    container_name: fiber_network_frontend
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - fiber_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  postgres_data:
+    driver: local
+    name: fiber_network_db_data
+    
+networks:
+  fiber_network:
+    driver: bridge
+    name: fiber_network_net

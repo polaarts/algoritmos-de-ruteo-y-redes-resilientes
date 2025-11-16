@@ -1,61 +1,36 @@
 const fs = require('fs').promises;
 const path = require('path');
 const { Pool } = require('pg');
-require('dotenv').config({ path: path.join(__dirname, '..', '..', 'backend', '.env') });
 
 // Configuración de la base de datos (PostgreSQL local)
 const pool = new Pool({
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
-    database: process.env.DB_NAME || 'fiber_network',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'postgres'
+    host: 'localhost',
+    port: 5432,
+    database: 'fiber_network',
+    user: 'postgres',
+    password: 'postgres'
 });
 
 console.log('🔧 Configuración de base de datos:');
-console.log(`   Host: ${process.env.DB_HOST}`);
-console.log(`   Base de datos: ${process.env.DB_NAME}`);
+console.log(`   Host: localhost`);
+console.log(`   Base de datos: fiber_network`);
 
 /**
- * Carga datos de metadata a Supabase
+ * Carga datos de metadata
  */
 async function loadMetadata() {
     console.log('\n' + '='.repeat(60));
-    console.log('  CARGA DE METADATA GEOGRÁFICA A SUPABASE');
+    console.log('  CARGA DE METADATA GEOGRÁFICA');
     console.log('='.repeat(60));
 
     const client = await pool.connect();
 
     try {
-        // Verificar si existe metadata_para_supabase.json
-        const metadataPath = path.join(__dirname, '..', 'metadata', 'metadata_para_supabase.json');
-        let metadata;
+        console.log('\n⚠️  metadata_para_supabase.json no encontrado');
+        console.log('📊 Generando datos sintéticos de metadata...\n');
+        const metadata = generateSyntheticMetadata();
 
-        try {
-            const content = await fs.readFile(metadataPath, 'utf-8');
-            metadata = JSON.parse(content);
-            console.log('\n✅ Archivo metadata_para_supabase.json encontrado');
-        } catch (error) {
-            console.log('\n⚠️  metadata_para_supabase.json no encontrado');
-            console.log('📊 Generando datos sintéticos de metadata...\n');
-            metadata = generateSyntheticMetadata();
-        }
-
-        // Verificar si hay datos con geometría válida
-        const validGroundType = metadata.ground_type?.filter(item => 
-            item.geometry && item.geometry.coordinates
-        ) || [];
-
-        console.log(`   Ground type con geometría válida: ${validGroundType.length} / ${metadata.ground_type?.length || 0}`);
-
-        if (validGroundType.length === 0) {
-            console.log('\n⚠️  No hay ground_type con geometría válida');
-            console.log('📊 Generando datos sintéticos...');
-            const synthetic = generateSyntheticMetadata();
-            await loadGroundType(client, synthetic.ground_type);
-        } else {
-            await loadGroundType(client, validGroundType);
-        }
+        await loadGroundType(client, metadata.ground_type);
 
         console.log('\n✅ Metadata cargada exitosamente');
 
@@ -129,22 +104,12 @@ async function loadGroundType(client, groundTypeData) {
 }
 
 /**
- * Carga datos de infrastructure metadata (no implementado - tabla no existe)
- */
-async function loadInfrastructureMetadata(client, infraData) {
-    console.log('\n⚠️  Tabla infrastructure_metadata no existe en el schema');
-    console.log('   Omitiendo carga de infrastructure metadata');
-    return 0;
-}
-
-/**
  * Genera metadata sintética para testing
  */
 function generateSyntheticMetadata() {
     console.log('🔨 Generando datos sintéticos...');
 
     const groundTypes = [];
-    const infraMetadata = [];
 
     // Generar ground_type para diferentes regiones de Chile
     const regions = [
@@ -156,6 +121,8 @@ function generateSyntheticMetadata() {
         { name: 'Puerto Montt', lat: -41.47, lon: -72.94, soil: 'mixed', stability: 'unstable' },
         { name: 'Antofagasta', lat: -23.65, lon: -70.40, soil: 'sandy', stability: 'stable' },
         { name: 'Iquique', lat: -20.21, lon: -70.15, soil: 'rocky', stability: 'stable' },
+        { name: 'Punta Arenas', lat: -53.16, lon: -70.91, soil: 'mixed', stability: 'moderate' },
+        { name: 'Arica', lat: -18.48, lon: -70.31, soil: 'sandy', stability: 'stable' }
     ];
 
     for (const region of regions) {
@@ -171,27 +138,10 @@ function generateSyntheticMetadata() {
                 coordinates: [region.lon, region.lat]
             }
         });
-
-        // Infrastructure metadata
-        infraMetadata.push({
-            name: `Infraestructura ${region.name}`,
-            metadata_type: 'urban',
-            category: 'infrastructure',
-            description: `Zona urbana de ${region.name}`,
-            accessibility: getAccessibility(region.name),
-            urban_density: getUrbanDensity(region.name),
-            population_density: getPopulationDensity(region.name),
-            terrain_type: getTerrainType(region.name),
-            geometry: {
-                type: 'Point',
-                coordinates: [region.lon, region.lat]
-            }
-        });
     }
 
     return {
-        ground_type: groundTypes,
-        infrastructure_metadata: infraMetadata
+        ground_type: groundTypes
     };
 }
 
@@ -209,41 +159,6 @@ function getPermeability(soilType) {
 function getBearingCapacity(stability) {
     const map = { 'stable': 'high', 'moderate': 'medium', 'unstable': 'low' };
     return map[stability] || 'medium';
-}
-
-function getAccessibility(cityName) {
-    const urban = ['Santiago Centro', 'Valparaíso', 'Concepción'];
-    return urban.includes(cityName) ? 'high' : 'medium';
-}
-
-function getUrbanDensity(cityName) {
-    const high = ['Santiago Centro', 'Valparaíso'];
-    const medium = ['Concepción', 'La Serena', 'Antofagasta'];
-    if (high.includes(cityName)) return 'high';
-    if (medium.includes(cityName)) return 'medium';
-    return 'low';
-}
-
-function getPopulationDensity(cityName) {
-    const densities = {
-        'Santiago Centro': 150000,
-        'Valparaíso': 100000,
-        'Concepción': 80000,
-        'La Serena': 60000,
-        'Temuco': 50000,
-        'Puerto Montt': 40000,
-        'Antofagasta': 70000,
-        'Iquique': 50000
-    };
-    return densities[cityName] || 50000;
-}
-
-function getTerrainType(cityName) {
-    const coastal = ['Valparaíso', 'Antofagasta', 'Iquique'];
-    const mountain = ['Santiago Centro'];
-    if (coastal.includes(cityName)) return 'coastal';
-    if (mountain.includes(cityName)) return 'mixed';
-    return 'flat';
 }
 
 /**

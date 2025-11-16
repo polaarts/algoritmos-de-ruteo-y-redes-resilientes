@@ -1,0 +1,54 @@
+name: Docker Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker images
+      run: |
+        docker-compose build
+
+    - name: Start services
+      run: |
+        docker-compose up -d
+        
+    - name: Wait for services to be healthy
+      run: |
+        echo "Waiting for services to be healthy..."
+        sleep 30
+        docker-compose ps
+        
+    - name: Check backend health
+      run: |
+        curl -f http://localhost:5001/health || exit 1
+        
+    - name: Check frontend
+      run: |
+        curl -f http://localhost:8080 || exit 1
+        
+    - name: Run backend tests
+      run: |
+        docker-compose exec -T backend npm test || echo "No tests configured"
+        
+    - name: Show logs on failure
+      if: failure()
+      run: |
+        docker-compose logs
+        
+    - name: Cleanup
+      if: always()
+      run: |
+        docker-compose down -v

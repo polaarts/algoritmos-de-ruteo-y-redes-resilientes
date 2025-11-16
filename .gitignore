@@ -15,6 +15,10 @@ ENV/
 env/
 *.pyc
 
+
+# es muy pesado para versionar
+osrm-data/
+
 # Node.js
 node_modules/
 npm-debug.log*

@@ -1,18 +1,16 @@
 const { Pool } = require('pg');
-require('dotenv').config({ path: require('path').join(__dirname, '..', 'backend', '.env') });
 
 const pool = new Pool({
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
-    database: process.env.DB_NAME || 'postgres',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'postgres',
-    ssl: { rejectUnauthorized: false }
+    host: 'localhost',
+    port: 5432,
+    database: 'fiber_network',
+    user: 'postgres',
+    password: 'postgres'
 });
 
 console.log('🔧 Configuración:');
-console.log(`   Host: ${process.env.DB_HOST}`);
-console.log(`   Base de datos: ${process.env.DB_NAME}`);
+console.log(`   Host: localhost`);
+console.log(`   Base de datos: fiber_network`);
 
 /**
  * Calcula y carga probabilidades de nodos y enlaces

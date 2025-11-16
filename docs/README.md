@@ -1,53 +1,73 @@
-# Resiliencia de Redes de Fibra Óptica en Chile
+# 📖 Índice de Documentación
 
-Sistema de análisis y visualización de resiliencia para redes de fibra óptica en Chile, considerando amenazas naturales y algoritmos de ruteo optimizado.
+Bienvenido a la documentación del proyecto **Red de Fibra Óptica - Resiliencia en Chile**.
 
-## Estado del Proyecto
+## 🚀 Empezar
 
-**Versión:** 1.0.0
-**Estado:** ✅ Producción (90.5% completado según rúbrica)
-**Última actualización:** Noviembre 2025
+- [**Inicio Rápido**](QUICKSTART.md) - Ejecuta el proyecto en 5 minutos
+- [Configuración con Docker](setup/DOCKER_SETUP.md)
+- [Configuración de Supabase](setup/SUPABASE_SETUP.md)
 
-### Puntuación de Rúbrica
-- **Puntos obtenidos:** 76/84 (90.5%)
-- **Nota estimada:** 6.5-7.0
+## 💻 Desarrollo
 
-## Características Principales
+- [Guía de Desarrollo Local](development/LOCAL_DEVELOPMENT.md)
+- [Arquitectura del Sistema](ARCHITECTURE.md)
+- [Esquema de Base de Datos](DATABASE.md)
+- [API Documentation](api/API.md)
+- [Mejores Prácticas](development/BEST_PRACTICES.md)
 
-### 🗺️ Visualización Interactiva
-- Mapa de Chile con red de fibra óptica real (extraída de OSM)
-- Capas toggleables: infraestructura, datacenters, amenazas naturales
-- Popups informativos con metadata detallada
+## 🗺️ Algoritmos y OSRM
 
-### 🔍 4 Algoritmos de Ruteo
-1. **Dijkstra (Distancia)** - Ruta más corta sin considerar riesgos
-2. **Dijkstra (Resiliente)** - Ruta optimizada con ponderación de riesgos
-3. **MIP (Optimización Entera Mixta)** - Modelo matemático con restricciones
-4. **Algoritmo Genético** - Metaheurística multi-objetivo
+- [Resumen de OSRM](OSRM_RESUMEN.md)
+- [Guía Completa de OSRM](OSRM.md)
+- [Algoritmos de Ruteo](RUTA_REALISTA_ROUTECOMPARISON.md)
 
-### 📊 Modelado Probabilístico
-- Cálculo de probabilidades de falla por enlace
-- Considera múltiples amenazas: sismos, incendios, clima extremo
-- Modelo combinado: `P_total = 1 - ∏(1 - P_i)`
+## 🔧 Troubleshooting
 
-### 🎲 Simulación Monte Carlo
-- Simulación de fallas aleatorias basada en probabilidades
-- Visualización de red post-evento
-- Recálculo de rutas considerando fallas
+- [Error de Conexión Supabase (IPv6)](troubleshooting/SUPABASE_CONNECTION.md)
+- [Problemas con Docker](troubleshooting/DOCKER_ISSUES.md)
 
-## Inicio Rápido
+## � Evaluación y Rúbricas
 
-### Requisitos Previos
-- Node.js 18+
-- PostgreSQL 15+ con PostGIS 3.3+ y pgRouting 3.4+
-- Python 3.11+ (para scripts de optimización)
+- [Evaluación de Base de Datos](../EVALUACION_BD.md)
+- [Rúbrica del Proyecto](../RUBRICA.md)
 
-### Instalación
+## 🤝 Contribuir
 
-```bash
-# 1. Clonar repositorio
-git clone https://github.com/polaarts/algoritmos-de-ruteo-y-redes-resilientes.git
-cd algoritmos-de-ruteo-y-redes-resilientes
+- [Guía de Contribución](../CONTRIBUTING.md)
+- [Reporte de Bugs](https://github.com/polaarts/algoritmos-de-ruteo-y-redes-resilientes/issues)
+
+## � Recursos Externos
+
+- [Supabase Documentation](https://supabase.com/docs)
+- [OSRM Documentation](http://project-osrm.org/)
+- [PostGIS Documentation](https://postgis.net/documentation/)
+- [React Documentation](https://react.dev/)
+- [Leaflet Documentation](https://leafletjs.com/)
+
+---
+
+## Navegación por Categoría
+
+### Para Principiantes
+1. [Inicio Rápido](QUICKSTART.md)
+2. [Configuración con Docker](setup/DOCKER_SETUP.md)
+3. [Guía de Desarrollo](development/LOCAL_DEVELOPMENT.md)
+
+### Para Desarrolladores
+1. [Arquitectura](ARCHITECTURE.md)
+2. [Base de Datos](DATABASE.md)
+3. [API Documentation](api/API.md)
+
+### Para Administradores
+1. [Configuración de Supabase](setup/SUPABASE_SETUP.md)
+
+---
+
+**¿No encuentras lo que buscas?**
+- Busca en el [repositorio](https://github.com/polaarts/algoritmos-de-ruteo-y-redes-resilientes)
+- Revisa los [Issues](https://github.com/polaarts/algoritmos-de-ruteo-y-redes-resilientes/issues)
+- Crea un nuevo [Issue](https://github.com/polaarts/algoritmos-de-ruteo-y-redes-resilientes/issues/new)
 
 # 2. Configurar base de datos
 psql -U postgres -d fiber_network -f database/schema.sql

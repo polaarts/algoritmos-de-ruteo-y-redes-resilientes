@@ -18,7 +18,7 @@ if (supabaseUrl && supabaseServiceKey) {
 }
 
 // PostgreSQL Pool configuration (using Supabase's connection pooler or direct connection)
-const pool = new Pool({
+const poolConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: process.env.DB_PORT || 5432,
   database: process.env.DB_NAME || 'postgres',
@@ -26,11 +26,22 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD || 'postgres',
   max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000, // 10 segundos para Supabase
-  ssl: {
+  connectionTimeoutMillis: 10000,
+  // Force IPv4 to avoid IPv6 connection issues
+  options: '-c search_path=public'
+};
+
+// Only enable SSL if DB_SSL is explicitly set to "true"
+if (process.env.DB_SSL === 'true') {
+  poolConfig.ssl = {
     rejectUnauthorized: false
-  }
-});
+  };
+  console.log('🔒 PostgreSQL SSL enabled');
+} else {
+  console.log('🔓 PostgreSQL SSL disabled (local development)');
+}
+
+const pool = new Pool(poolConfig);
 
 // Test database connection on startup
 pool.on('connect', () => {

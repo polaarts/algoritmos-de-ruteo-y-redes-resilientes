@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { GeoJSON, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import 'leaflet-routing-machine';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import { routingAPI, optimizationAPI } from '../services/api';
 import '../styles/RouteComparison.css';
 
@@ -17,26 +19,29 @@ function RouteComparison({ show = false }) {
 
   // Route data
   const [routes, setRoutes] = useState({
-    dijkstra: null,
     dijkstraResilient: null,
     mip: null,
     genetic: null,
+    realistic: null, // Ruta realista con Leaflet Routing Machine
   });
 
   // Visibility toggles
   const [visibleRoutes, setVisibleRoutes] = useState({
-    dijkstra: true,
     dijkstraResilient: true,
     mip: true,
     genetic: true,
+    realistic: true,
   });
+  
+  // Leaflet Routing Machine control
+  const [routingControl, setRoutingControl] = useState(null);
 
   // UI state
   const [loading, setLoading] = useState({
-    dijkstra: false,
     dijkstraResilient: false,
     mip: false,
     genetic: false,
+    realistic: false,
   });
   const [errors, setErrors] = useState({});
   const [startPoint, setStartPoint] = useState(null);
@@ -60,16 +65,16 @@ function RouteComparison({ show = false }) {
 
   // Route colors
   const routeColors = {
-    dijkstra: '#00ff00',        // Green - Basic
     dijkstraResilient: '#ffaa00', // Orange - Resilient
     mip: '#0088ff',              // Blue - Optimized
     genetic: '#ff00ff',          // Magenta - Metaheuristic
+    realistic: '#ff0000',        // Red - Realistic (siguiendo carreteras)
   };
 
   // Route names
   const routeNames = {
-    dijkstra: 'Dijkstra (Distancia)',
-    dijkstraResilient: 'Dijkstra (Resiliente)',
+    realistic: 'Dijkstra (Resiliente)',
+    dijkstraResilient: 'Dijkstra (Distancia)',
     mip: 'MIP Optimizado',
     genetic: 'Algoritmo Genético',
   };
@@ -117,7 +122,10 @@ function RouteComparison({ show = false }) {
     // Reset errors
     setErrors({});
 
-    // Calculate all routes in parallel
+    // Calculate realistic route first (synchronous with Leaflet Routing Machine)
+    calculateRealisticRoute(startLat, startLon, endLat, endLon);
+
+    // Calculate all backend routes in parallel
     const promises = [
       calculateDijkstraRoute(startLat, startLon, endLat, endLon),
       calculateDijkstraResilientRoute(startLat, startLon, endLat, endLon),
@@ -128,7 +136,7 @@ function RouteComparison({ show = false }) {
     await Promise.allSettled(promises);
 
     // Fit map to show all routes
-    fitMapToRoutes();
+    setTimeout(() => fitMapToRoutes(), 1000); // Pequeño delay para que la ruta realista termine
   };
 
   // Calculate Dijkstra (distance only)
@@ -215,6 +223,92 @@ function RouteComparison({ show = false }) {
     }
   };
 
+  // Calculate Realistic Route using Leaflet Routing Machine (OSRM)
+  const calculateRealisticRoute = (startLat, startLon, endLat, endLon) => {
+    console.log('🔴 [FRONTEND] Calculating Realistic route:', { startLat, startLon, endLat, endLon });
+    setLoading((prev) => ({ ...prev, realistic: true }));
+    
+    try {
+      // Remover control anterior si existe
+      if (routingControl) {
+        map.removeControl(routingControl);
+      }
+
+      // Crear nuevo control de routing
+      const control = L.Routing.control({
+        waypoints: [
+          L.latLng(startLat, startLon),
+          L.latLng(endLat, endLon)
+        ],
+        router: L.Routing.osrmv1({
+          serviceUrl: 'https://router.project-osrm.org/route/v1',
+          profile: 'driving'
+        }),
+        lineOptions: {
+          styles: [
+            { 
+              color: routeColors.realistic,
+              opacity: 0.8,
+              weight: 5
+            }
+          ],
+          extendToWaypoints: true,
+          missingRouteTolerance: 0
+        },
+        show: false, // No mostrar panel de instrucciones
+        addWaypoints: false,
+        routeWhileDragging: false,
+        draggableWaypoints: false,
+        fitSelectedRoutes: false,
+        showAlternatives: false,
+        createMarker: () => null // No crear marcadores (ya tenemos los nuestros)
+      });
+
+      control.on('routesfound', (e) => {
+        const route = e.routes[0];
+        const distanceKm = (route.summary.totalDistance / 1000).toFixed(2);
+        const durationMin = (route.summary.totalTime / 60).toFixed(0);
+        
+        console.log(`✅ [FRONTEND] Realistic route found: ${distanceKm} km, ${durationMin} min`);
+        
+        // Convertir a formato GeoJSON para consistencia
+        const geojsonRoute = {
+          type: 'FeatureCollection',
+          features: [{
+            type: 'Feature',
+            geometry: {
+              type: 'LineString',
+              coordinates: route.coordinates.map(c => [c.lng, c.lat])
+            },
+            properties: {
+              distance_km: parseFloat(distanceKm),
+              duration_min: parseInt(durationMin),
+              algorithm: 'OSRM Realistic',
+              description: 'Ruta realista siguiendo carreteras'
+            }
+          }]
+        };
+        
+        setRoutes((prev) => ({ ...prev, realistic: geojsonRoute }));
+        setLoading((prev) => ({ ...prev, realistic: false }));
+      });
+
+      control.on('routingerror', (e) => {
+        console.error('❌ [FRONTEND] Error calculating Realistic route:', e.error);
+        setErrors((prev) => ({ ...prev, realistic: e.error.message || 'No se pudo calcular ruta realista' }));
+        setLoading((prev) => ({ ...prev, realistic: false }));
+      });
+
+      control.addTo(map);
+      setRoutingControl(control);
+      
+    } catch (error) {
+      console.error('❌ [FRONTEND] Error setting up Realistic route:', error);
+      setErrors((prev) => ({ ...prev, realistic: error.message }));
+      setLoading((prev) => ({ ...prev, realistic: false }));
+    }
+  };
+
   // Fit map to show all visible routes
   const fitMapToRoutes = () => {
     const bounds = L.latLngBounds([]);
@@ -233,10 +327,37 @@ function RouteComparison({ show = false }) {
     }
   };
 
-  // Load example (Santiago - Valparaíso) - Ruta más corta y probable conexión
+  // Cleanup routing control when points change or on unmount
+  useEffect(() => {
+    // Limpiar el control anterior cuando cambien los puntos
+    if (routingControl) {
+      try {
+        map.removeControl(routingControl);
+        setRoutingControl(null);
+        setRoutes((prev) => ({ ...prev, realistic: null }));
+      } catch (e) {
+        // Control already removed
+      }
+    }
+  }, [startPoint, endPoint]);
+
+  // Cleanup routing control on unmount
+  useEffect(() => {
+    return () => {
+      if (routingControl) {
+        try {
+          map.removeControl(routingControl);
+        } catch (e) {
+          // Control already removed
+        }
+      }
+    };
+  }, [routingControl, map]);
+
+  // Load example (Temuco - Los Álamos) - Ruta en la región del Biobío
   const loadExample = () => {
-    setStartPoint({ lat: -33.4489, lon: -70.6693, name: 'Santiago' });
-    setEndPoint({ lat: -33.0472, lon: -71.6127, name: 'Valparaíso' });
+    setStartPoint({ lat: -38.7359, lon: -72.5904, name: 'Temuco' });
+    setEndPoint({ lat: -37.6272, lon: -73.4118, name: 'Los Álamos' });
   };
 
   // Use current location from GPS
@@ -286,17 +407,102 @@ function RouteComparison({ show = false }) {
 
   // Auto-calculate when both points are set
   useEffect(() => {
+    // Limpiar control de routing previo antes de calcular nuevas rutas
+    if (routingControl && map) {
+      try {
+        map.removeControl(routingControl);
+      } catch (error) {
+        console.log('Control already removed or not added to map');
+      }
+      setRoutingControl(null);
+    }
+    
+    // Calcular todas las rutas si hay puntos de inicio y fin
     if (startPoint && endPoint && show) {
       calculateAllRoutes();
     }
   }, [startPoint, endPoint, show]);
 
-  // Style function for each route
-  const getRouteStyle = (routeType) => ({
-    color: routeColors[routeType],
-    weight: 4,
-    opacity: 0.7,
-  });
+  // Recalcular rutas cuando cambien las opciones avanzadas
+  useEffect(() => {
+    // Solo recalcular si ya hay puntos seleccionados
+    if (startPoint && endPoint && show) {
+      console.log('🔄 Opciones cambiadas, recalculando rutas...', options);
+      
+      // Pequeño delay para evitar recálculos excesivos mientras el usuario ajusta sliders
+      const timeoutId = setTimeout(() => {
+        calculateAllRoutes();
+      }, 500); // 500ms de debounce
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, [
+    options.maxFailureProb,
+    options.riskWeight,
+    options.maxProbability,
+    options.timeLimit,
+    options.populationSize,
+    options.generations
+  ]);
+
+  // Style function for each route with distinct characteristics
+  const getRouteStyle = (routeType) => {
+    const baseStyle = {
+      color: routeColors[routeType],
+    };
+
+    // Apply specific styles based on algorithm type
+    switch (routeType) {
+      case 'dijkstra':
+        // Dijkstra básico: línea simple, optimización solo por distancia
+        return {
+          ...baseStyle,
+          weight: 3,
+          opacity: 0.7,
+        };
+      
+      case 'dijkstraResilient':
+        // Dijkstra resiliente: línea discontinua, considera riesgos
+        return {
+          ...baseStyle,
+          weight: 4,
+          opacity: 0.75,
+          dashArray: '10, 10', // Patrón de guiones
+        };
+      
+      case 'mip':
+        // MIP: línea gruesa y sólida, optimización matemática con restricciones
+        return {
+          ...baseStyle,
+          weight: 5,
+          opacity: 0.85,
+        };
+      
+      case 'genetic':
+        // Algoritmo genético: línea punteada, enfoque metaheurístico
+        return {
+          ...baseStyle,
+          weight: 3,
+          opacity: 0.65,
+          dashArray: '5, 10', // Patrón de puntos
+        };
+      
+      case 'realistic':
+        // OSRM: línea gruesa siguiendo carreteras reales
+        return {
+          ...baseStyle,
+          weight: 5,
+          opacity: 0.85,
+        };
+      
+      default:
+        return {
+          ...baseStyle,
+          weight: 4,
+          opacity: 0.7,
+        };
+    }
+  };
 
   // Popup for route segments
   const onEachRouteFeature = (routeType) => (feature, layer) => {
@@ -423,6 +629,14 @@ function RouteComparison({ show = false }) {
         {showOptions && (
           <div className="options-panel">
             <h4>Parámetros de Ruteo</h4>
+            
+            {/* Auto-recalculate indicator */}
+            {startPoint && endPoint && (
+              <div className="auto-recalc-info">
+                <span className="info-icon">ℹ️</span>
+                <span>Las rutas se recalcularán automáticamente al cambiar los parámetros</span>
+              </div>
+            )}
 
             {/* Dijkstra Resilient options */}
             <div className="option-section">
@@ -588,6 +802,87 @@ function RouteComparison({ show = false }) {
           ))}
         </div>
 
+        {/* Algorithm descriptions */}
+        <div className="algorithms-info">
+          <h4>ℹ️ Características de los Algoritmos:</h4>
+          <div className="algorithm-cards">
+            <div className="algorithm-card dijkstra">
+              <div className="card-header">
+                <span className="color-box" style={{ backgroundColor: routeColors.dijkstra }}></span>
+                <strong>Dijkstra (Básico)</strong>
+              </div>
+              <div className="card-content">
+                <p>Optimización por <strong>distancia únicamente</strong></p>
+                <ul>
+                  <li>No considera riesgos ni amenazas</li>
+                  <li>Ruta más corta garantizada</li>
+                  <li>Algoritmo clásico de grafos</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="algorithm-card dijkstra-resilient">
+              <div className="card-header">
+                <span className="color-box" style={{ backgroundColor: routeColors.dijkstraResilient, border: '2px dashed #ffaa00' }}></span>
+                <strong>Dijkstra (Resiliente)</strong>
+              </div>
+              <div className="card-content">
+                <p>Considera <strong>probabilidades de falla</strong></p>
+                <ul>
+                  <li>Penaliza enlaces con alto riesgo</li>
+                  <li>Balance distancia/resiliencia</li>
+                  <li>Estilo discontinuo indica riesgo</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="algorithm-card mip">
+              <div className="card-header">
+                <span className="color-box" style={{ backgroundColor: routeColors.mip }}></span>
+                <strong>MIP (Optimización)</strong>
+              </div>
+              <div className="card-content">
+                <p><strong>Programación matemática</strong> con restricciones</p>
+                <ul>
+                  <li>Considera metadata y amenazas</li>
+                  <li>Optimización global garantizada</li>
+                  <li>Múltiples factores simultáneos</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="algorithm-card genetic">
+              <div className="card-header">
+                <span className="color-box" style={{ backgroundColor: routeColors.genetic, border: '2px dotted #ff00ff' }}></span>
+                <strong>Genético (Metaheurística)</strong>
+              </div>
+              <div className="card-content">
+                <p><strong>Evolución de poblaciones</strong></p>
+                <ul>
+                  <li>Soluciones aproximadas</li>
+                  <li>Bueno para problemas complejos</li>
+                  <li>Estilo punteado indica exploración</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="algorithm-card realistic">
+              <div className="card-header">
+                <span className="color-box" style={{ backgroundColor: routeColors.realistic }}></span>
+                <strong>Realista (OSRM)</strong>
+              </div>
+              <div className="card-content">
+                <p>Sigue <strong>carreteras reales</strong></p>
+                <ul>
+                  <li>Basado en OpenStreetMap</li>
+                  <li>Considera infraestructura vial</li>
+                  <li>Ruta más práctica para construcción</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Toggle comparison table */}
         <div className="table-toggle">
           <button onClick={() => setShowTable(!showTable)} className="btn-secondary">
@@ -611,7 +906,20 @@ function RouteComparison({ show = false }) {
               </thead>
               <tbody>
                 {Object.entries(routes).map(([routeType, route]) => {
-                  const info = route?.route_info || {};
+                  // Para ruta realista, extraer info del feature properties
+                  const info = routeType === 'realistic' 
+                    ? route?.features?.[0]?.properties || {}
+                    : route?.route_info || {};
+                  
+                  // Calcular valores según el tipo de ruta
+                  const distanceKm = routeType === 'realistic' 
+                    ? info.distance_km?.toFixed(2) 
+                    : info.total_cost_km;
+                  
+                  const computeTime = routeType === 'realistic'
+                    ? info.duration_min ? `${info.duration_min} min` : '-'
+                    : info.compute_time_ms ? `${info.compute_time_ms.toFixed(2)} ms` : '-';
+                  
                   return (
                     <tr key={routeType} className={visibleRoutes[routeType] ? 'visible' : ''}>
                       <td>
@@ -621,14 +929,18 @@ function RouteComparison({ show = false }) {
                         ></span>
                         {routeNames[routeType]}
                       </td>
-                      <td>{info.total_cost_km || '-'}</td>
-                      <td>{info.compute_time_ms?.toFixed(2) || '-'}</td>
+                      <td>{distanceKm || '-'}</td>
+                      <td>{computeTime}</td>
                       <td>
-                        {info.avg_failure_prob
-                          ? `${(info.avg_failure_prob * 100).toFixed(2)}%`
-                          : info.considers_threats === false
-                          ? 'N/A'
-                          : '-'}
+                        {routeType === 'realistic' ? (
+                          'N/A'
+                        ) : info.avg_failure_prob ? (
+                          `${(info.avg_failure_prob * 100).toFixed(2)}%`
+                        ) : info.considers_threats === false ? (
+                          'N/A'
+                        ) : (
+                          '-'
+                        )}
                       </td>
                       <td>
                         {loading[routeType] ? (

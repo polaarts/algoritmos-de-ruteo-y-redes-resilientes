@@ -327,4 +327,83 @@ router.get('/regions', async (req, res, next) => {
   }
 });
 
+/**
+ * GET /api/infrastructure/datacenters
+ * Get all datacenters, optionally filtered by region
+ * Query params: region
+ */
+router.get('/datacenters', async (req, res, next) => {
+  try {
+    const { region } = req.query;
+
+    let sql = `
+      SELECT
+        id,
+        name,
+        city,
+        company_name,
+        region,
+        capacity_mw,
+        tier_level,
+        population_served,
+        ST_X(location::geometry) as lon,
+        ST_Y(location::geometry) as lat,
+        ST_AsGeoJSON(location)::json as geometry
+      FROM datacenters
+      WHERE 1=1
+    `;
+
+    const params = [];
+    
+    if (region) {
+      sql += ` AND region = $1`;
+      params.push(region);
+    }
+
+    sql += ` ORDER BY id`;
+
+    const result = await query(sql, params);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Error fetching datacenters:', error);
+    next(error);
+  }
+});
+
+/**
+ * GET /api/infrastructure/datacenters/:id
+ * Get specific datacenter by ID
+ */
+router.get('/datacenters/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const result = await query(`
+      SELECT
+        id,
+        name,
+        city,
+        company_name,
+        region,
+        capacity_mw,
+        tier_level,
+        population_served,
+        ST_X(location::geometry) as lon,
+        ST_Y(location::geometry) as lat,
+        ST_AsGeoJSON(location)::json as geometry
+      FROM datacenters
+      WHERE id = $1
+    `, [id]);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Datacenter not found' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

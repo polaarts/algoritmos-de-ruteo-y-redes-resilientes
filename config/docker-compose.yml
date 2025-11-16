@@ -65,6 +65,24 @@ services:
       - fiber_network
     restart: unless-stopped
 
+  # OSRM (Open Source Routing Machine)
+  osrm:
+    image: ghcr.io/project-osrm/osrm-backend:latest
+    container_name: fiber_network_osrm
+    command: osrm-routed --algorithm mld /data/chile-latest.osrm
+    ports:
+      - "5001:5000"
+    volumes:
+      - ../osrm-data:/data
+    networks:
+      - fiber_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
 volumes:
   postgres_data:
     driver: local
