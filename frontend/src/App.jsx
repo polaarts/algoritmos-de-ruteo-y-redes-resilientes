@@ -162,6 +162,11 @@ function App() {
 
               </section>
 
+               {/* Panel de control de simulación */}
+              {layers.showSimulation && (
+                <SimulationControlsV2 onSimulationChange={handleSimulationChange} />
+              )}
+
               {/* Legend */}
               <section className="legend">
                 <h2>Leyenda</h2>
@@ -275,10 +280,6 @@ function App() {
             )}
           </Map>
 
-          {/* Panel de control de simulación */}
-          {layers.showSimulation && (
-            <SimulationControlsV2 onSimulationChange={handleSimulationChange} />
-          )}
         </main>
       </div>
     </div>
