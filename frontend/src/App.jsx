@@ -5,6 +5,7 @@ import ThreatsLayer from './components/ThreatsLayer';
 import RouteCalculator from './components/RouteCalculator';
 import RouteComparison from './components/RouteComparison';
 import SimulationControlsV2 from './components/SimulationControlsV2';
+import SimulationLayer from './components/SimulationLayer';
 import RealisticFiberLinks from './components/RealisticFiberLinks';
 import './styles/App.css';
 
@@ -19,6 +20,8 @@ function App() {
     showWeatherEvents: false,
     showRoute: true,
     showSimulation: true, // Panel de Monte Carlo visible por defecto
+    showSimulationFailures: true, // Mostrar fallas en el mapa
+    showFailuresOnly: false, // Mostrar solo elementos que fallaron
     showRealisticRoutes: false, // Rutas realistas con Leaflet Routing Machine
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -37,8 +40,17 @@ function App() {
     setRouteInfo(routeData.route_info);
   };
 
-  const handleSimulationComplete = (simData) => {
+  const handleSimulationChange = (simData) => {
+    console.log('Simulation data updated:', simData);
     setSimulationData(simData);
+    
+    // Auto-activar visualización de fallas cuando hay simulación
+    if (simData) {
+      setLayers(prev => ({
+        ...prev,
+        showSimulationFailures: true
+      }));
+    }
   };
 
   return (
@@ -115,6 +127,38 @@ function App() {
                   </label>
                 </div>
 
+                <div className="control-group">
+                  <h3>Simulación</h3>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={layers.showSimulation}
+                      onChange={() => toggleLayer('showSimulation')}
+                    />
+                    Panel de Simulación
+                  </label>
+                  {simulationData && (
+                    <>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={layers.showSimulationFailures}
+                          onChange={() => toggleLayer('showSimulationFailures')}
+                        />
+                        Mostrar Fallas en Mapa
+                      </label>
+                      <label style={{ paddingLeft: '20px' }}>
+                        <input
+                          type="checkbox"
+                          checked={layers.showFailuresOnly}
+                          onChange={() => toggleLayer('showFailuresOnly')}
+                        />
+                        Solo Elementos Fallidos
+                      </label>
+                    </>
+                  )}
+                </div>
+
               </section>
 
               {/* Legend */}
@@ -148,6 +192,30 @@ function App() {
                   <span className="legend-color" style={{ backgroundColor: '#00ff00' }}></span>
                   <span>Ruta calculada</span>
                 </div>
+
+                {simulationData && (
+                  <>
+                    <h3 style={{ fontSize: '14px', marginTop: '15px', marginBottom: '5px', color: '#555' }}>
+                      Simulación de Fallas
+                    </h3>
+                    <div className="legend-item">
+                      <span className="legend-color" style={{ backgroundColor: '#8b0000' }}></span>
+                      <span>Falla por sismo</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color" style={{ backgroundColor: '#ff4500' }}></span>
+                      <span>Falla por incendio</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color" style={{ backgroundColor: '#1e90ff' }}></span>
+                      <span>Falla por inundación</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color" style={{ backgroundColor: '#4682b4' }}></span>
+                      <span>Falla por clima</span>
+                    </div>
+                  </>
+                )}
               </section>
 
               {/* Info */}
@@ -184,6 +252,15 @@ function App() {
               showFireZones={layers.showFireZones}
               showWeatherEvents={layers.showWeatherEvents}
             />
+            
+            {/* Simulación de fallas */}
+            {layers.showSimulationFailures && simulationData && (
+              <SimulationLayer
+                simulationData={simulationData}
+                showFailuresOnly={layers.showFailuresOnly}
+              />
+            )}
+            
             {routeMode === 'simple' ? (
               <RouteCalculator
                 showRoute={layers.showRoute}
@@ -193,6 +270,11 @@ function App() {
               <RouteComparison show={layers.showRoute} />
             )}
           </Map>
+
+          {/* Panel de control de simulación */}
+          {layers.showSimulation && (
+            <SimulationControlsV2 onSimulationChange={handleSimulationChange} />
+          )}
         </main>
       </div>
     </div>
