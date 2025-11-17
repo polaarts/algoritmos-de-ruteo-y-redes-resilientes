@@ -13,6 +13,7 @@ const probabilitiesRoutes = require('./routes/probabilities');
 const simulationRoutes = require('./routes/simulation');
 const optimizationRoutes = require('./routes/optimization');
 const osrmRoutes = require('./routes/osrm');
+const regionalFiberRoutes = require('./routes/regional-fiber');
 
 const app = express();
 const PORT = 5001;
@@ -42,6 +43,7 @@ app.use('/api/probabilities', probabilitiesRoutes);
 app.use('/api/simulation', simulationRoutes);
 app.use('/api/optimization', optimizationRoutes);
 app.use('/api/osrm', osrmRoutes);
+app.use('/api/regional-fiber', regionalFiberRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -55,7 +57,8 @@ app.get('/', (req, res) => {
       routing: '/api/routing',
       probabilities: '/api/probabilities',
       simulation: '/api/simulation',
-      optimization: '/api/optimization'
+      optimization: '/api/optimization',
+      regionalFiber: '/api/regional-fiber'
     },
     documentation: 'https://github.com/polaarts/algoritmos-de-ruteo-y-redes-resilientes'
   });

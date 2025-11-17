@@ -6,12 +6,12 @@ import RouteCalculator from './components/RouteCalculator';
 import RouteComparison from './components/RouteComparison';
 import SimulationControlsV2 from './components/SimulationControlsV2';
 import RealisticFiberLinks from './components/RealisticFiberLinks';
+import RegionalFiberLayer from './components/RegionalFiberLayer';
 import './styles/App.css';
 
 function App() {
   const [mapInstance, setMapInstance] = useState(null);
   const [layers, setLayers] = useState({
-    showEdges: false,
     showNodes: false,
     showDatacenters: true,
     showEarthquakes: true,
@@ -20,6 +20,7 @@ function App() {
     showRoute: true,
     showSimulation: true, // Panel de Monte Carlo visible por defecto
     showRealisticRoutes: false, // Rutas realistas con Leaflet Routing Machine
+    showRegionalFiber: false, // Enlaces de fibra óptica regional
   });
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [routeInfo, setRouteInfo] = useState(null);
@@ -64,8 +65,8 @@ function App() {
                   <label>
                     <input
                       type="checkbox"
-                      checked={layers.showEdges}
-                      onChange={() => toggleLayer('showEdges')}
+                      checked={layers.showRegionalFiber}
+                      onChange={() => toggleLayer('showRegionalFiber')}
                     />
                     Enlaces de Fibra
                   </label>
@@ -165,8 +166,11 @@ function App() {
         {/* Map */}
         <main className="map-container">
           <Map onMapReady={setMapInstance}>
+            {/* Enlaces de fibra regionales desde GeoJSON */}
+            <RegionalFiberLayer visible={layers.showRegionalFiber} />
+            
             <InfrastructureLayer
-              showEdges={layers.showEdges}
+              showEdges={false}
               showNodes={layers.showNodes}
               showDatacenters={layers.showDatacenters}
             />
